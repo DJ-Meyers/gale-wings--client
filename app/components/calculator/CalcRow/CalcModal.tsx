@@ -1,3 +1,4 @@
+import { formatSummary } from '~/components/calculator/CalcRow/formatSummary'
 import { FieldConditionsSection } from '~/components/calculator/FieldConditionsSection'
 import { ModifiersSection } from '~/components/calculator/ModifiersSection'
 import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
@@ -18,6 +19,9 @@ export const CalcModal = () => {
     mode,
     playerSide,
     opponentSide,
+    attackerSide,
+    defenderSide,
+    result,
     onOpponentUpdate,
     onNameChange,
     onNotesChange,
@@ -40,10 +44,20 @@ export const CalcModal = () => {
       ? opponentSide.pokemon.species
       : playerSide.pokemon.species
 
+  const defenderMaxHp = result?.defenderMaxHp ?? 1
+  const title = formatSummary(
+    attackerSide,
+    defenderSide,
+    mode,
+    result,
+    defenderMaxHp,
+    calc.fieldConditions,
+  )
+
   return (
     <Modal
       open={isOpen}
-      title={calc.name || `${topSpecies} vs ${bottomSpecies}`}
+      title={title}
       onClose={() => setExpandedId(null)}
     >
       <div className="mb-1 flex items-end gap-1 leading-none">

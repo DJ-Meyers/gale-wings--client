@@ -1,14 +1,29 @@
+import { formatSummary } from '~/components/calculator/CalcRow/formatSummary'
 import { FavoriteButton } from '~/components/FavoriteButton'
 import { useCalc } from '~/hooks/calc/useCalc'
 import { useExpandedCalc } from '~/hooks/calc/useExpandedCalc'
 
 export const CalcSummaryRow = () => {
-  const { calc, result, onRemove, onToggleFavorite } = useCalc()
+  const {
+    calc,
+    mode,
+    attackerSide,
+    defenderSide,
+    result,
+    onRemove,
+    onToggleFavorite,
+  } = useCalc()
   const { setExpandedId } = useExpandedCalc()
 
-  const summary = result
-    ? `${result.desc} — ${result.range[0]}–${result.range[1]} HP (${result.koChance})`
-    : 'Configure attacker and defender to see damage'
+  const defenderMaxHp = result?.defenderMaxHp ?? 1
+  const summary = formatSummary(
+    attackerSide,
+    defenderSide,
+    mode,
+    result,
+    defenderMaxHp,
+    calc.fieldConditions,
+  )
 
   return (
     <div className="bg-surface mb-2 overflow-hidden rounded-md shadow-sm">
@@ -21,7 +36,7 @@ export const CalcSummaryRow = () => {
           onClick={onToggleFavorite}
         />
         <span
-          className={`min-w-0 flex-1 truncate text-sm ${result ? '' : 'text-text-dim italic'}`}
+          className={`min-w-0 flex-1 text-sm ${result ? '' : 'text-text-dim italic'}`}
         >
           {summary}
         </span>
