@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 const IndexPage = () => (
   <div className="py-12 text-center">
@@ -6,12 +6,12 @@ const IndexPage = () => (
     <p className="text-text-muted mx-auto mb-6 max-w-[600px] text-lg">
       A VGC damage calculator built for teambuilding.
     </p>
-    <button
-      className="bg-primary hover:bg-primary-hover rounded px-5 py-2 font-semibold text-white"
-      type="button"
+    <Link
+      className="bg-primary hover:bg-primary-hover rounded px-5 py-2 font-semibold text-white no-underline"
+      to="/teams"
     >
       Get Started
-    </button>
+    </Link>
   </div>
 )
 
