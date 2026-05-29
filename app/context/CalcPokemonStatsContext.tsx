@@ -6,11 +6,16 @@ export interface CalcPokemonStatsContextValue {
   pokemon: ChampionsPokemon
   speciesAbilities: string[]
   label: string
+  name: string
+  notes: string
+  compact?: boolean
   onSpeciesChange: (species: string) => void
   onNatureChange: (nature: string) => void
   onAbilityChange: (ability: string) => void
   onItemChange: (item: string) => void
   onStatPointChange: (stat: StatKey, value: number) => void
+  onNameChange?: (name: string) => void
+  onNotesChange?: (notes: string) => void
   onMoveChange?: (slot: number, move: string) => void
 }
 
