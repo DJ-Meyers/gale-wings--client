@@ -5,7 +5,7 @@ import { CalcRow } from '~/components/calculator/CalcRow'
 import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
 import { SpeedCalcRow } from '~/components/SpeedCalcRow'
 import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
-import { useSpeciesAbilities } from '~/hooks/useSpeciesAbilities'
+import { useSpeciesAbilities } from '~/hooks/api/data'
 import { SANDBOX_FIXTURES, SANDBOX_PLAYER } from '~/sandbox/fixtures'
 import { SandboxProvider, useSandbox } from '~/sandbox/SandboxContext'
 import type { SandboxCalc } from '~/sandbox/types'
@@ -13,13 +13,13 @@ import type { ChampionsPokemon } from '~/types'
 
 const PlayerPokemonPanel = () => {
   const { state, dispatch } = useSandbox()
-  const speciesAbilities = useSpeciesAbilities(state.player.species)
+  const { speciesAbilities } = useSpeciesAbilities(state.player.species)
 
   return (
     <CalcPokemonStatsProvider
       value={{
         pokemon: state.player,
-        speciesAbilities,
+        speciesAbilities: speciesAbilities ?? [],
         compact: false,
         label: 'Text-to-Pokémon',
         name: '',
