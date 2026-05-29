@@ -1,0 +1,82 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Galewings redesign palette */
+  --color-bright-orange: #e76d3f;
+  --color-pale-orange: #f09e70;
+  --color-yellow: #f6e34f;
+  --color-white: #f7f9fb;
+  --color-light-gray: #aeb0b2;
+  --color-ash: #837a73;
+  --color-slate: #4e4c4c;
+  --color-charcoal: #403c3b;
+
+  --color-bg: var(--color-slate);
+  --color-surface: var(--color-slate);
+  --color-surface-hover: var(--color-ash);
+  --color-text: var(--color-white);
+  --color-text-muted: var(--color-light-gray);
+  --color-primary: var(--color-bright-orange);
+  --color-primary-hover: var(--color-pale-orange);
+  --color-accent: var(--color-yellow);
+  --color-error: #d43030;
+  --breakpoint-md: 800px;
+  --color-border: color-mix(in srgb, var(--color-text-muted) 30%, transparent);
+  --color-border-light: color-mix(
+    in srgb,
+    var(--color-text-muted) 20%,
+    transparent
+  );
+  --color-border-lighter: color-mix(
+    in srgb,
+    var(--color-text-muted) 15%,
+    transparent
+  );
+  --color-border-section: color-mix(
+    in srgb,
+    var(--color-text-muted) 25%,
+    transparent
+  );
+  --color-text-dim: color-mix(in srgb, var(--color-text) 60%, transparent);
+  --color-text-faint: color-mix(in srgb, var(--color-text) 40%, transparent);
+  --color-text-heading: var(--color-text);
+  --color-text-label: color-mix(in srgb, var(--color-text) 80%, transparent);
+  --color-detail-bg: var(--color-surface);
+  --color-hover-bg: var(--color-surface-hover);
+  --color-highlight: var(--color-surface-hover);
+  --color-ko-guaranteed-ohko: #4caf50;
+  --color-ko-chance-ohko: #a3c44a;
+  --color-ko-guaranteed-2hko: #e8d44d;
+  --color-ko-chance-2hko: #e8913a;
+  --color-ko-no-2hko: #e05555;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  color-scheme: dark;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+[data-mode='light'] {
+  --color-bg: var(--color-white);
+  --color-surface: color-mix(
+    in srgb,
+    var(--color-white) 92%,
+    var(--color-ash)
+  );
+  --color-surface-hover: var(--color-light-gray);
+  --color-text: var(--color-charcoal);
+  --color-text-muted: var(--color-ash);
+  --color-primary: var(--color-bright-orange);
+  --color-primary-hover: var(--color-pale-orange);
+  --color-accent: var(--color-yellow);
+  --color-error: #c83030;
+  color-scheme: light;
+}
