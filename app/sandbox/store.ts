@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import { defaultPlayer } from './defaults'
+import { SANDBOX_FIXTURES, SANDBOX_PLAYER } from './fixtures'
 import type {
   SandboxCalc,
   SandboxStore,
@@ -18,9 +18,9 @@ const updateCalc = (
 }
 
 export const useSandboxStore = create<SandboxStore>((set) => ({
-  player: defaultPlayer,
-  calcs: {},
-  calcOrder: [],
+  player: SANDBOX_PLAYER,
+  calcs: Object.fromEntries(SANDBOX_FIXTURES.map((c) => [c.id, c])),
+  calcOrder: SANDBOX_FIXTURES.map((c) => c.id),
   expandedCalcId: null,
 
   setPlayer: (patch) =>
