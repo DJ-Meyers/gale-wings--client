@@ -10,6 +10,7 @@
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
+    "@dj-meyers/galewings": "link:../galewings-api/packages/shared-types",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-router": "^1.166.7",
     "react": "^19.2.0",
