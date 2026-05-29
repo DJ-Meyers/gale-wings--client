@@ -18,7 +18,7 @@ export const PokemonInfoSelectors = () => {
   } = usePokemonStats()
   const { species, nature, ability, item, moves } = pokemon
 
-  const learnableMoves = useLearnableMoves(species)
+  const { learnableMoves } = useLearnableMoves(species)
 
   return (
     <div className="flex flex-col">
@@ -36,7 +36,7 @@ export const PokemonInfoSelectors = () => {
             <MoveSelectField
               key={slot}
               label={`Move ${slot + 1}`}
-              options={learnableMoves}
+              options={learnableMoves ?? []}
               value={moves[slot] ?? ''}
               onChange={(m) => onMoveChange(slot, m)}
             />
