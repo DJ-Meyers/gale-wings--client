@@ -1,3 +1,10 @@
+import type {
+  ChampionsAbility,
+  ChampionsItem,
+  ChampionsMove,
+  ChampionsSpecies,
+} from '@dj-meyers/galewings/types'
+
 import { useNamedQuery } from '~/hooks/useNamedQuery'
 import { useTRPC } from '~/trpc/client'
 
@@ -17,7 +24,7 @@ interface SearchOptions {
  */
 export const useListSpecies = () => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsSpecies[]>(
     trpc.data.listSpecies.queryOptions(undefined, FOREVER),
     'species',
   )
@@ -28,7 +35,7 @@ export const useListSpecies = () => {
  */
 export const useListMoves = () => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsMove[]>(
     trpc.data.listMoves.queryOptions(undefined, FOREVER),
     'moves',
   )
@@ -39,7 +46,7 @@ export const useListMoves = () => {
  */
 export const useListItems = () => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsItem[]>(
     trpc.data.listItems.queryOptions(undefined, FOREVER),
     'items',
   )
@@ -50,7 +57,7 @@ export const useListItems = () => {
  */
 export const useListAbilities = () => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsAbility[]>(
     trpc.data.listAbilities.queryOptions(undefined, FOREVER),
     'abilities',
   )
@@ -62,7 +69,7 @@ export const useListAbilities = () => {
  */
 export const useSpeciesAbilities = (species: string) => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsAbility[]>(
     trpc.data.speciesAbilities.queryOptions(
       { species },
       { ...FOREVER, enabled: Boolean(species) },
@@ -81,7 +88,7 @@ export const useSpeciesAbilities = (species: string) => {
  */
 export const useLearnableMovesForSpecies = (species: string) => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsMove[]>(
     trpc.data.learnableMoves.queryOptions(
       { species },
       { ...FOREVER, enabled: Boolean(species) },
@@ -95,7 +102,7 @@ export const useLearnableMovesForSpecies = (species: string) => {
  */
 export const useSearchSpecies = (query: string, opts: SearchOptions = {}) => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsSpecies[]>(
     trpc.data.searchSpecies.queryOptions(
       { query, limit: opts.limit },
       SEARCH_STALE,
@@ -109,7 +116,7 @@ export const useSearchSpecies = (query: string, opts: SearchOptions = {}) => {
  */
 export const useSearchMoves = (query: string, opts: SearchOptions = {}) => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsMove[]>(
     trpc.data.searchMoves.queryOptions(
       { query, limit: opts.limit },
       SEARCH_STALE,
@@ -123,7 +130,7 @@ export const useSearchMoves = (query: string, opts: SearchOptions = {}) => {
  */
 export const useSearchItems = (query: string, opts: SearchOptions = {}) => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsItem[]>(
     trpc.data.searchItems.queryOptions(
       { query, limit: opts.limit },
       SEARCH_STALE,
@@ -143,7 +150,7 @@ export const useSearchAbilities = (
   opts: SearchOptions = {},
 ) => {
   const trpc = useTRPC()
-  return useNamedQuery<string[]>(
+  return useNamedQuery<ChampionsAbility[]>(
     trpc.data.searchAbilities.queryOptions(
       { query, species, limit: opts.limit },
       SEARCH_STALE,
