@@ -1,43 +1,106 @@
-import type { CalcParameters, ChampionsPokemon } from '~/types'
+import type { CalcParameters, ChampionsPokemon, FieldConditions } from '~/types'
 
 import { defaultCalcParameters, defaultFieldConditions } from './defaults'
 import type { SandboxCalc } from './types'
 
-// Canonical opponents for the Incineroar-led sandbox. None of these
-// species are in the vgc-2026-m-a regulation literal — cast through
-// unknown so we can keep the canonical Pokemon/ability pairings (per
-// §8.7) without expanding the regulation list client-side.
-const flutterMane = {
-  species: 'Flutter Mane',
+export const SANDBOX_PLAYER: ChampionsPokemon = {
+  species: 'Charizard-Mega-Y',
   nature: 'Timid',
-  ability: 'Protosynthesis',
+  ability: 'Drought',
+  item: 'Charizardite Y',
   statPoints: { hp: 0, atk: 0, def: 0, spa: 32, spd: 0, spe: 32 },
   moves: [],
-} as unknown as ChampionsPokemon
+}
 
-const ironHands = {
-  species: 'Iron Hands',
-  nature: 'Adamant',
-  ability: 'Quark Drive',
-  statPoints: { hp: 32, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+const basculegion2HP: ChampionsPokemon = {
+  species: 'Basculegion',
+  nature: 'Serious',
+  ability: 'Adaptability',
+  statPoints: { hp: 2, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
   moves: [],
-} as unknown as ChampionsPokemon
+}
 
-const urshifuRapid = {
-  species: 'Urshifu-Rapid-Strike',
+const basculegionOffensive: ChampionsPokemon = {
+  species: 'Basculegion',
+  nature: 'Adamant',
+  ability: 'Adaptability',
+  statPoints: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: [],
+}
+
+const basculegionScarf: ChampionsPokemon = {
+  species: 'Basculegion',
   nature: 'Jolly',
-  ability: 'Unseen Fist',
-  statPoints: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 32 },
+  ability: 'Swift Swim',
+  item: 'Choice Scarf',
+  statPoints: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 32 },
   moves: [],
-} as unknown as ChampionsPokemon
+}
 
-const rillaboom = {
-  species: 'Rillaboom',
-  nature: 'Adamant',
-  ability: 'Grassy Surge',
-  statPoints: { hp: 32, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+const kingambitBulky: ChampionsPokemon = {
+  species: 'Kingambit',
+  nature: 'Serious',
+  ability: 'Defiant',
+  statPoints: { hp: 32, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
   moves: [],
-} as unknown as ChampionsPokemon
+}
+
+const kingambitOffensive: ChampionsPokemon = {
+  species: 'Kingambit',
+  nature: 'Adamant',
+  ability: 'Defiant',
+  statPoints: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: [],
+}
+
+const kingambitSlow: ChampionsPokemon = {
+  species: 'Kingambit',
+  nature: 'Adamant',
+  ability: 'Defiant',
+  statPoints: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: [],
+}
+
+const tsareena: ChampionsPokemon = {
+  species: 'Tsareena',
+  nature: 'Serious',
+  ability: 'Queenly Majesty',
+  statPoints: { hp: 2, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: [],
+}
+
+const mirrorCharY: ChampionsPokemon = {
+  species: 'Charizard-Mega-Y',
+  nature: 'Timid',
+  ability: 'Drought',
+  item: 'Charizardite Y',
+  statPoints: { hp: 2, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: [],
+}
+
+const aerodactyl: ChampionsPokemon = {
+  species: 'Aerodactyl',
+  nature: 'Serious',
+  ability: 'Rock Head',
+  statPoints: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: [],
+}
+
+const garchompOffensive: ChampionsPokemon = {
+  species: 'Garchomp',
+  nature: 'Adamant',
+  ability: 'Rough Skin',
+  statPoints: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: [],
+}
+
+const floetteFast: ChampionsPokemon = {
+  species: 'Floette-Eternal',
+  nature: 'Timid',
+  ability: 'Flower Veil',
+  statPoints: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 32 },
+  moves: [],
+}
 
 const cloneParams = (): CalcParameters => ({
   ...defaultCalcParameters,
@@ -48,6 +111,12 @@ const withMove = (move: string): CalcParameters => ({
   ...cloneParams(),
   move: move as CalcParameters['move'],
 })
+
+const sunField: FieldConditions = { weather: 'Sun' }
+
+const opponentTailwind: FieldConditions = {
+  defenderSide: { isTailwind: true },
+}
 
 const makeFixture = (
   id: string,
@@ -64,55 +133,76 @@ const makeFixture = (
 })
 
 export const SANDBOX_FIXTURES: SandboxCalc[] = [
+  // Offensive — Mega Char Y in sun
   makeFixture('fix-off-1', {
     type: 'offensive',
-    name: 'Flare Blitz vs Flutter Mane',
-    opponent: flutterMane,
-    playerCalcParameters: withMove('Flare Blitz'),
+    name: 'Solar Beam vs 2/0 Basculegion',
+    opponent: basculegion2HP,
+    playerCalcParameters: withMove('Solar Beam'),
+    fieldConditions: { ...sunField },
   }),
   makeFixture('fix-off-2', {
     type: 'offensive',
-    name: 'Knock Off vs Iron Hands',
-    opponent: ironHands,
-    playerCalcParameters: withMove('Knock Off'),
+    name: 'Heat Wave vs 32 HP 0 SpD Kingambit',
+    opponent: kingambitBulky,
+    playerCalcParameters: withMove('Heat Wave'),
+    fieldConditions: { ...sunField },
   }),
   makeFixture('fix-off-3', {
     type: 'offensive',
-    name: 'Snarl vs Urshifu',
-    opponent: urshifuRapid,
-    playerCalcParameters: withMove('Snarl'),
+    name: 'Weather Ball vs 2 HP Tsareena',
+    opponent: tsareena,
+    playerCalcParameters: withMove('Weather Ball'),
+    fieldConditions: { ...sunField },
   }),
+  makeFixture('fix-off-4', {
+    type: 'offensive',
+    name: 'Ancient Power vs 2/0 Charizard Y',
+    opponent: mirrorCharY,
+    playerCalcParameters: withMove('Ancient Power'),
+    fieldConditions: { ...sunField },
+  }),
+  // Defensive — opponent attacks Mega Char Y
   makeFixture('fix-def-1', {
     type: 'defensive',
-    name: 'Moonblast from Flutter Mane',
-    opponent: flutterMane,
-    opponentCalcParameters: withMove('Moonblast'),
+    name: '32+ Atk Basculegion Wave Crash in sun',
+    opponent: basculegionOffensive,
+    opponentCalcParameters: withMove('Wave Crash'),
+    fieldConditions: { ...sunField },
   }),
   makeFixture('fix-def-2', {
     type: 'defensive',
-    name: 'Close Combat from Iron Hands',
-    opponent: ironHands,
-    opponentCalcParameters: withMove('Close Combat'),
+    name: '32+ Atk Kingambit Sucker Punch',
+    opponent: kingambitOffensive,
+    opponentCalcParameters: withMove('Sucker Punch'),
   }),
   makeFixture('fix-def-3', {
     type: 'defensive',
-    name: 'Surging Strikes from Urshifu',
-    opponent: urshifuRapid,
-    opponentCalcParameters: withMove('Surging Strikes'),
+    name: '32 Atk Aerodactyl Rock Slide',
+    opponent: aerodactyl,
+    opponentCalcParameters: withMove('Rock Slide'),
   }),
+  makeFixture('fix-def-4', {
+    type: 'defensive',
+    name: '32+ Atk Garchomp Rock Slide',
+    opponent: garchompOffensive,
+    opponentCalcParameters: withMove('Rock Slide'),
+  }),
+  // Speed comparisons
   makeFixture('fix-spd-1', {
     type: 'speed',
-    name: 'Flutter Mane',
-    opponent: flutterMane,
+    name: 'Max Spe Scarf Basculegion',
+    opponent: basculegionScarf,
   }),
   makeFixture('fix-spd-2', {
     type: 'speed',
-    name: 'Urshifu',
-    opponent: urshifuRapid,
+    name: 'Max Spe Mega Floette',
+    opponent: floetteFast,
   }),
   makeFixture('fix-spd-3', {
     type: 'speed',
-    name: 'Rillaboom',
-    opponent: rillaboom,
+    name: 'Tailwind 0 Spe Kingambit',
+    opponent: kingambitSlow,
+    fieldConditions: { ...opponentTailwind },
   }),
 ]

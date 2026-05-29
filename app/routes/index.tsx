@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 
 import { CalcRow } from '~/components/calculator/CalcRow'
 import { SpeedCalcRow } from '~/components/SpeedCalcRow'
-import { SANDBOX_FIXTURES } from '~/sandbox/fixtures'
+import { SANDBOX_FIXTURES, SANDBOX_PLAYER } from '~/sandbox/fixtures'
 import { SandboxProvider, useSandbox } from '~/sandbox/SandboxContext'
 import type { SandboxCalc } from '~/sandbox/types'
 
@@ -12,6 +12,7 @@ const SandboxLayout = () => {
 
   useEffect(() => {
     if (state.calcs.length === 0) {
+      dispatch({ type: 'PLAYER_UPDATE', patch: SANDBOX_PLAYER })
       for (const fixture of SANDBOX_FIXTURES) {
         dispatch({ type: 'CALC_ADD', calc: fixture })
       }
