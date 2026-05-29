@@ -3,9 +3,15 @@ import { RouterProvider } from '@tanstack/react-router'
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
+import { prefetchStaticData } from '~/data/prefetch'
 import { getRouter } from '~/router'
 
 const router = getRouter()
+
+// Fire-and-forget so first useQuery() against listSpecies / listMoves /
+// listItems / listAbilities either hits the warm cache or de-dupes onto
+// this in-flight request rather than triggering another network round trip.
+void prefetchStaticData()
 
 const App = () => {
   const auth = useAuth()
