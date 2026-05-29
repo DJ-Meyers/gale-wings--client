@@ -38,15 +38,6 @@ const incineroar: ChampionsPokemon = {
   moves: [],
 }
 
-const basculegion: ChampionsPokemon = {
-  species: 'Basculegion',
-  nature: 'Adamant',
-  ability: 'Adaptability',
-  item: 'Leftovers',
-  statPoints: { hp: 16, atk: 32, def: 4, spa: 0, spd: 8, spe: 0 },
-  moves: [],
-}
-
 describe('computeDamage', () => {
   it('produces a non-null result for a valid attacker/defender/move', () => {
     const r = computeDamage(
@@ -140,18 +131,19 @@ describe('shouldActivateAbility', () => {
   })
 
   it('activates Quark Drive on Electric terrain', () => {
-    // basculegion is Adaptability by default; override the ability inline
-    // since this test only exercises the Paradox terrain trigger.
-    const quarkBasculegion: ChampionsPokemon = {
-      ...basculegion,
+    // Iron Hands is the canonical Quark Drive user but isn't in the
+    // current Champions regulation's species literal — cast through
+    // unknown so the type narrowing doesn't reject it.
+    const ironHands = {
+      species: 'Iron Hands',
+      nature: 'Adamant',
       ability: 'Quark Drive',
-    }
+      item: 'Leftovers',
+      statPoints: { hp: 16, atk: 32, def: 4, spa: 0, spd: 8, spe: 0 },
+      moves: [],
+    } as unknown as ChampionsPokemon
     expect(
-      shouldActivateAbility(
-        quarkBasculegion,
-        baseParams,
-        { terrain: 'Electric' },
-      ),
+      shouldActivateAbility(ironHands, baseParams, { terrain: 'Electric' }),
     ).toBe(true)
   })
 
