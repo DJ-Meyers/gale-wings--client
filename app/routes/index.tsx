@@ -2,10 +2,73 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef } from 'react'
 
 import { CalcRow } from '~/components/calculator/CalcRow'
+import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
 import { SpeedCalcRow } from '~/components/SpeedCalcRow'
+import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
+import { useSpeciesAbilities } from '~/hooks/useSpeciesAbilities'
 import { SANDBOX_FIXTURES, SANDBOX_PLAYER } from '~/sandbox/fixtures'
 import { SandboxProvider, useSandbox } from '~/sandbox/SandboxContext'
 import type { SandboxCalc } from '~/sandbox/types'
+import type { ChampionsPokemon } from '~/types'
+
+const PlayerPokemonPanel = () => {
+  const { state, dispatch } = useSandbox()
+  const speciesAbilities = useSpeciesAbilities(state.player.species)
+
+  return (
+    <CalcPokemonStatsProvider
+      value={{
+        pokemon: state.player,
+        speciesAbilities,
+        compact: false,
+        label: 'Text-to-Pokémon',
+        name: '',
+        notes: '',
+        onSpeciesChange: (species) =>
+          dispatch({
+            type: 'PLAYER_UPDATE',
+            patch: { species: species as ChampionsPokemon['species'] },
+          }),
+        onNatureChange: (nature) =>
+          dispatch({
+            type: 'PLAYER_UPDATE',
+            patch: { nature: nature as ChampionsPokemon['nature'] },
+          }),
+        onAbilityChange: (ability) =>
+          dispatch({
+            type: 'PLAYER_UPDATE',
+            patch: { ability: ability as ChampionsPokemon['ability'] },
+          }),
+        onItemChange: (item) =>
+          dispatch({
+            type: 'PLAYER_UPDATE',
+            patch: {
+              item: (item || undefined) as ChampionsPokemon['item'],
+            },
+          }),
+        onStatPointChange: (stat, value) =>
+          dispatch({
+            type: 'PLAYER_UPDATE',
+            patch: {
+              statPoints: { ...state.player.statPoints, [stat]: value },
+            },
+          }),
+        onMoveChange: (slot, move) => {
+          const moves = [...state.player.moves] as string[]
+          moves[slot] = move
+          dispatch({
+            type: 'PLAYER_UPDATE',
+            patch: {
+              moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
+            },
+          })
+        },
+      }}
+    >
+      <PokemonInfoSection />
+    </CalcPokemonStatsProvider>
+  )
+}
 
 const SandboxLayout = () => {
   const { state, dispatch } = useSandbox()
@@ -44,6 +107,12 @@ const SandboxLayout = () => {
           VGC damage calculator sandbox — {state.player.species}-led.
         </p>
       </header>
+      <div className="mb-6 max-w-md">
+        <h2 className="text-text-heading border-primary mb-3 border-b-2 pb-1 text-base">
+          Your Pokémon
+        </h2>
+        <PlayerPokemonPanel />
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <CalcColumn label="Offensive" calcs={offensiveCalcs} />
         <CalcColumn label="Defensive" calcs={defensiveCalcs} />
