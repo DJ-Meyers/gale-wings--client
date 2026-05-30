@@ -2,9 +2,55 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useMemo } from 'react'
 
 import { CalcRow } from '~/components/calculator/CalcRow'
+import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
 import { SpeedCalcRow } from '~/components/SpeedCalcRow'
+import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
+import { useSpeciesAbilities } from '~/hooks/api/data'
 import { useSandboxStore } from '~/sandbox/store'
 import type { CalcRowMode, SandboxCalc } from '~/sandbox/types'
+import type { ChampionsPokemon } from '~/types'
+
+const PlayerPokemonPanel = () => {
+  const player = useSandboxStore((s) => s.player)
+  const setPlayer = useSandboxStore((s) => s.setPlayer)
+  const { speciesAbilities } = useSpeciesAbilities(player.species)
+
+  return (
+    <CalcPokemonStatsProvider
+      value={{
+        pokemon: player,
+        speciesAbilities: speciesAbilities ?? [],
+        compact: false,
+        label: 'Text-to-Pokémon',
+        name: '',
+        notes: '',
+        onSpeciesChange: (species) =>
+          setPlayer({ species: species as ChampionsPokemon['species'] }),
+        onNatureChange: (nature) =>
+          setPlayer({ nature: nature as ChampionsPokemon['nature'] }),
+        onAbilityChange: (ability) =>
+          setPlayer({ ability: ability as ChampionsPokemon['ability'] }),
+        onItemChange: (item) =>
+          setPlayer({
+            item: (item || undefined) as ChampionsPokemon['item'],
+          }),
+        onStatPointChange: (stat, value) =>
+          setPlayer({
+            statPoints: { ...player.statPoints, [stat]: value },
+          }),
+        onMoveChange: (slot, move) => {
+          const moves = [...player.moves] as string[]
+          moves[slot] = move
+          setPlayer({
+            moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
+          })
+        },
+      }}
+    >
+      <PokemonInfoSection />
+    </CalcPokemonStatsProvider>
+  )
+}
 
 const SandboxLayout = () => {
   const playerSpecies = useSandboxStore((s) => s.player.species)
@@ -32,6 +78,12 @@ const SandboxLayout = () => {
           VGC damage calculator sandbox — {playerSpecies}-led.
         </p>
       </header>
+      <div className="mb-6 max-w-md">
+        <h2 className="text-text-heading border-primary mb-3 border-b-2 pb-1 text-base">
+          Your Pokémon
+        </h2>
+        <PlayerPokemonPanel />
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <CalcColumn label="Offensive" mode="offensive" calcs={offensive} />
         <CalcColumn label="Defensive" mode="defensive" calcs={defensive} />
