@@ -18,7 +18,7 @@ export const FieldConditionSelect = <T extends string>({
     <label className="flex items-center gap-1.5">
       <span className="text-text-dim text-[0.7rem] font-semibold">{label}</span>
       <select
-        className="border-border bg-surface focus:border-primary rounded border px-1 py-0.5 text-xs focus:outline-none"
+        className="border-border bg-surface focus:border-primary h-6 rounded border px-1 text-xs focus:outline-none"
         value={value ?? ''}
         onChange={handleChange}
       >
