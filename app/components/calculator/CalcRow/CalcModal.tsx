@@ -1,14 +1,19 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { FieldConditionsSection } from '~/components/calculator/FieldConditionsSection'
 import { ModifiersSection } from '~/components/calculator/ModifiersSection'
 import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
 import { PokemonIcon } from '~/components/icons'
 import { Modal } from '~/components/layout/Modal'
+import { UnsavedChangesDialog } from '~/components/ui/UnsavedChangesDialog'
 import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
 import { useCalcRowContext } from '~/context/CalcRowContext'
 import { useCalcRow } from '~/hooks/calc/useCalcRow'
 import { useExpandedCalc } from '~/hooks/calc/useExpandedCalc'
 import { useSpeciesAbilities } from '~/hooks/api/data'
+import { useSuppressUnsavedWarning } from '~/hooks/useSuppressUnsavedWarning'
 import { useSandboxStore } from '~/sandbox/store'
+import type { SandboxCalc } from '~/sandbox/types'
 import type { ChampionsPokemon } from '~/types'
 
 const pokemonIconClass =
@@ -20,7 +25,48 @@ export const CalcModal = () => {
   const { expandedId, setExpandedId } = useExpandedCalc()
   const setOpponent = useSandboxStore((s) => s.setOpponent)
   const patchCalc = useSandboxStore((s) => s.patchCalc)
+  const replaceCalc = useSandboxStore((s) => s.replaceCalc)
+  const { suppressed } = useSuppressUnsavedWarning()
   const isOpen = expandedId === calcId
+
+  const snapshotRef = useRef<SandboxCalc | null>(null)
+  const calcRef = useRef(calc)
+  calcRef.current = calc
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  useEffect(() => {
+    if (isOpen && snapshotRef.current === null) {
+      snapshotRef.current = structuredClone(calc)
+    } else if (!isOpen) {
+      snapshotRef.current = null
+    }
+    // Only react to isOpen transitions — re-cloning every calc change
+    // during editing would defeat the snapshot's purpose.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
+
+  const isCalcDirty = useCallback(
+    () =>
+      snapshotRef.current !== null &&
+      JSON.stringify(snapshotRef.current) !== JSON.stringify(calcRef.current),
+    [],
+  )
+
+  const forceClose = () => {
+    if (snapshotRef.current && isCalcDirty()) {
+      replaceCalc(calcId, snapshotRef.current)
+    }
+    setShowConfirm(false)
+    setExpandedId(null)
+  }
+
+  const handleClose = () => {
+    if (!isCalcDirty() || suppressed) {
+      forceClose()
+      return
+    }
+    setShowConfirm(true)
+  }
 
   const { speciesAbilities: opponentAbilities } = useSpeciesAbilities(
     calc.opponent.species,
@@ -41,65 +87,74 @@ export const CalcModal = () => {
     setOpponent(calcId, patch)
 
   return (
-    <Modal
-      open={isOpen}
-      title={calc.name || `${topSpecies} vs ${bottomSpecies}`}
-      onClose={() => setExpandedId(null)}
-    >
-      <div className="mb-1 flex items-end gap-1 leading-none">
-        <PokemonIcon className={pokemonIconClass} species={topSpecies} />
-        <span className="text-text-dim text-sm font-semibold">
-          {topSpecies} Modifiers
-        </span>
-      </div>
-      <ModifiersSection side={topSide} />
-      <FieldConditionsSection />
-      <CalcPokemonStatsProvider
-        value={{
-          pokemon: calc.opponent,
-          speciesAbilities: opponentAbilities ?? [],
-          compact: true,
-          label: 'Text-to-Pokémon',
-          name: calc.name,
-          notes: calc.notes,
-          onSpeciesChange: (species) =>
-            onOpponentUpdate({
-              species: species as ChampionsPokemon['species'],
-            }),
-          onNatureChange: (nature) =>
-            onOpponentUpdate({ nature: nature as ChampionsPokemon['nature'] }),
-          onAbilityChange: (ability) =>
-            onOpponentUpdate({
-              ability: ability as ChampionsPokemon['ability'],
-            }),
-          onItemChange: (item) =>
-            onOpponentUpdate({
-              item: (item || undefined) as ChampionsPokemon['item'],
-            }),
-          onStatPointChange: (stat, value) =>
-            onOpponentUpdate({
-              statPoints: { ...calc.opponent.statPoints, [stat]: value },
-            }),
-          onNameChange: (name) => patchCalc(calcId, { name }),
-          onNotesChange: (notes) => patchCalc(calcId, { notes }),
-          onMoveChange: (slot, move) => {
-            const moves = [...calc.opponent.moves] as string[]
-            moves[slot] = move
-            onOpponentUpdate({
-              moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
-            })
-          },
-        }}
+    <>
+      <Modal
+        open={isOpen}
+        title={calc.name || `${topSpecies} vs ${bottomSpecies}`}
+        onClose={handleClose}
       >
-        <PokemonInfoSection />
-      </CalcPokemonStatsProvider>
-      <div className="mt-2 mb-1 flex items-end gap-1 leading-none">
-        <PokemonIcon className={pokemonIconClass} species={bottomSpecies} />
-        <span className="text-text-dim text-sm font-semibold">
-          {bottomSpecies} Modifiers
-        </span>
-      </div>
-      <ModifiersSection side={bottomSide} />
-    </Modal>
+        <div className="mb-1 flex items-end gap-1 leading-none">
+          <PokemonIcon className={pokemonIconClass} species={topSpecies} />
+          <span className="text-text-dim text-sm font-semibold">
+            {topSpecies} Modifiers
+          </span>
+        </div>
+        <ModifiersSection side={topSide} />
+        <FieldConditionsSection />
+        <CalcPokemonStatsProvider
+          value={{
+            pokemon: calc.opponent,
+            speciesAbilities: opponentAbilities ?? [],
+            compact: true,
+            label: 'Text-to-Pokémon',
+            name: calc.name,
+            notes: calc.notes,
+            onSpeciesChange: (species) =>
+              onOpponentUpdate({
+                species: species as ChampionsPokemon['species'],
+              }),
+            onNatureChange: (nature) =>
+              onOpponentUpdate({
+                nature: nature as ChampionsPokemon['nature'],
+              }),
+            onAbilityChange: (ability) =>
+              onOpponentUpdate({
+                ability: ability as ChampionsPokemon['ability'],
+              }),
+            onItemChange: (item) =>
+              onOpponentUpdate({
+                item: (item || undefined) as ChampionsPokemon['item'],
+              }),
+            onStatPointChange: (stat, value) =>
+              onOpponentUpdate({
+                statPoints: { ...calc.opponent.statPoints, [stat]: value },
+              }),
+            onNameChange: (name) => patchCalc(calcId, { name }),
+            onNotesChange: (notes) => patchCalc(calcId, { notes }),
+            onMoveChange: (slot, move) => {
+              const moves = [...calc.opponent.moves] as string[]
+              moves[slot] = move
+              onOpponentUpdate({
+                moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
+              })
+            },
+          }}
+        >
+          <PokemonInfoSection />
+        </CalcPokemonStatsProvider>
+        <div className="mt-2 mb-1 flex items-end gap-1 leading-none">
+          <PokemonIcon className={pokemonIconClass} species={bottomSpecies} />
+          <span className="text-text-dim text-sm font-semibold">
+            {bottomSpecies} Modifiers
+          </span>
+        </div>
+        <ModifiersSection side={bottomSide} />
+      </Modal>
+      <UnsavedChangesDialog
+        open={showConfirm}
+        onDiscard={forceClose}
+        onStay={() => setShowConfirm(false)}
+      />
+    </>
   )
 }

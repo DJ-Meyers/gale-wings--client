@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ComponentType, SVGProps } from 'react'
 
-type ButtonVariant = 'primary' | 'secondary' | 'tertiary'
+type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'danger'
 type ButtonSize = 'sm' | 'md'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -16,6 +16,8 @@ const variantClasses: Record<ButtonVariant, string> = {
     'border border-border bg-transparent text-text-dim hover:text-text disabled:opacity-50 disabled:hover:text-text-dim',
   tertiary:
     'bg-transparent text-text-muted hover:text-text disabled:opacity-50 disabled:hover:text-text-muted',
+  danger:
+    'bg-red-600 hover:bg-red-700 text-white disabled:opacity-50 disabled:hover:bg-red-600',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
