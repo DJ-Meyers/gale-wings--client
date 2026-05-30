@@ -21,7 +21,7 @@ export const BoostsSection = ({ side }: Properties) => {
   const { showCrit } = useModifiers(side)
 
   return (
-    <Fieldset className="items-end" legend="Boosts">
+    <Fieldset className="justify-around" legend="Boosts">
       {BOOSTABLE_STATS.map(({ stat, label }) => (
         <StatBoostField key={stat} label={label} side={side} stat={stat} />
       ))}
