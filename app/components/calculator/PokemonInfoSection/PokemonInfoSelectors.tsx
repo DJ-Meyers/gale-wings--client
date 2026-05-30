@@ -10,6 +10,7 @@ export const PokemonInfoSelectors = () => {
   const {
     pokemon,
     speciesAbilities,
+    collapsibleMoves,
     onSpeciesChange,
     onNatureChange,
     onAbilityChange,
@@ -19,6 +20,20 @@ export const PokemonInfoSelectors = () => {
   const { species, nature, ability, item, moves } = pokemon
 
   const { learnableMoves } = useLearnableMoves(species)
+
+  const moveFields = onMoveChange && (
+    <div className="flex flex-col gap-1">
+      {[0, 1, 2, 3].map((slot) => (
+        <MoveSelectField
+          key={slot}
+          label={`Move ${slot + 1}`}
+          options={learnableMoves ?? []}
+          value={moves[slot] ?? ''}
+          onChange={(m) => onMoveChange(slot, m)}
+        />
+      ))}
+    </div>
+  )
 
   return (
     <div className="flex flex-col">
@@ -30,19 +45,17 @@ export const PokemonInfoSelectors = () => {
         onChange={onAbilityChange}
       />
       <ItemSelectField value={item ?? ''} onChange={onItemChange} />
-      {onMoveChange && (
-        <div className="flex flex-col gap-1">
-          {[0, 1, 2, 3].map((slot) => (
-            <MoveSelectField
-              key={slot}
-              label={`Move ${slot + 1}`}
-              options={learnableMoves ?? []}
-              value={moves[slot] ?? ''}
-              onChange={(m) => onMoveChange(slot, m)}
-            />
-          ))}
-        </div>
-      )}
+      {moveFields &&
+        (collapsibleMoves ? (
+          <details className="mt-1">
+            <summary className="text-text-dim cursor-pointer text-xs font-semibold select-none">
+              Moves
+            </summary>
+            <div className="mt-1">{moveFields}</div>
+          </details>
+        ) : (
+          moveFields
+        ))}
     </div>
   )
 }

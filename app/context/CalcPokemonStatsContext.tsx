@@ -9,6 +9,7 @@ export interface CalcPokemonStatsContextValue {
   name: string
   notes: string
   compact?: boolean
+  collapsibleMoves?: boolean
   onSpeciesChange: (species: string) => void
   onNatureChange: (nature: string) => void
   onAbilityChange: (ability: string) => void
