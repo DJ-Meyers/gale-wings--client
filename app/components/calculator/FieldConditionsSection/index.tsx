@@ -11,7 +11,7 @@ export const FieldConditionsSection = () => (
         <RuinAbilitiesSection />
       </div>
     )}
-    <div className="flex flex-wrap items-start gap-2">
+    <div className="flex flex-wrap items-stretch gap-2">
       <WeatherTerrainSection />
       <AttackerSideSection />
     </div>
