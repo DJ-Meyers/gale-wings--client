@@ -6,7 +6,7 @@ interface Properties {
 }
 
 export const ModifiersSection = ({ side }: Properties) => (
-  <div className="mb-2 py-2">
+  <div className="my-2 flex flex-col gap-1.5">
     <StandardModifiersSection side={side} />
     <BoostsSection side={side} />
   </div>

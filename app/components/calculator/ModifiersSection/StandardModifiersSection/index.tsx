@@ -12,7 +12,7 @@ export const StandardModifiersSection = ({ side }: Properties) => {
   const { showMove } = useModifiers(side)
 
   return (
-    <div className="mb-2 flex flex-wrap items-end gap-2">
+    <div className="flex flex-wrap items-end gap-2">
       {showMove && <ModifierMoveSelector side={side} />}
       {TERA_ENABLED && <ModifierTeraField side={side} />}
       <ModifierStatusField side={side} />
