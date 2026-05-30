@@ -4,7 +4,7 @@ import { Fieldset } from '~/components/ui/Fieldset'
 
 export const WeatherTerrainSection = () => (
   <Fieldset
-    className="flex-1 items-center justify-around"
+    className="flex-1 justify-around"
     legend="Field Conditions"
   >
     <WeatherSelect />
