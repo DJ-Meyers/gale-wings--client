@@ -1,5 +1,6 @@
 import { CritCheckbox } from '~/components/calculator/ModifiersSection/BoostsSection/CritCheckbox'
 import { StatBoostField } from '~/components/calculator/ModifiersSection/BoostsSection/StatBoostField'
+import { Fieldset } from '~/components/ui/Fieldset'
 import { useModifiers } from '~/hooks/calc/useModifiers'
 
 import type { StatBoostKey } from '~/sandbox/types'
@@ -20,11 +21,11 @@ export const BoostsSection = ({ side }: Properties) => {
   const { showCrit } = useModifiers(side)
 
   return (
-    <div className="flex items-end gap-2">
+    <Fieldset className="items-end" legend="Boosts">
       {BOOSTABLE_STATS.map(({ stat, label }) => (
         <StatBoostField key={stat} label={label} side={side} stat={stat} />
       ))}
       {showCrit && <CritCheckbox side={side} />}
-    </div>
+    </Fieldset>
   )
 }
