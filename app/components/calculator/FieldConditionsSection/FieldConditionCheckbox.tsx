@@ -11,5 +11,10 @@ export const FieldConditionCheckbox = ({
   checked,
   onChange,
 }: Properties) => (
-  <CheckboxField checked={checked} label={label} onChange={() => onChange()} />
+  <CheckboxField
+    checked={checked}
+    className="border border-transparent py-0.5"
+    label={label}
+    onChange={() => onChange()}
+  />
 )
