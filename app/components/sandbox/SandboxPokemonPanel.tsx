@@ -1,6 +1,7 @@
 import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
 import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
 import { useSpeciesAbilities } from '~/hooks/api/data'
+import { useLearnableMoves } from '~/hooks/useLearnableMoves'
 import { useSandboxStore } from '~/sandbox/store'
 import type { ChampionsPokemon } from '~/types'
 
@@ -18,7 +19,29 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
   const setPokemon = useSandboxStore((s) =>
     side === 'attacker' ? s.setAttacker : s.setDefender,
   )
+  const attackerCalcParameters = useSandboxStore(
+    (s) => s.attackerCalcParameters,
+  )
+  const defenderCalcParameters = useSandboxStore(
+    (s) => s.defenderCalcParameters,
+  )
+  const setAttackerParams = useSandboxStore((s) => s.setAttackerParams)
   const { speciesAbilities } = useSpeciesAbilities(pokemon.species)
+  const { learnableMoves } = useLearnableMoves(pokemon.species)
+
+  const moveOverride =
+    side === 'attacker'
+      ? {
+          value: attackerCalcParameters.move ?? '',
+          onChange: (move: string) => setAttackerParams({ move }),
+          disabled: false,
+          options: learnableMoves ?? [],
+        }
+      : {
+          value: defenderCalcParameters.move ?? '',
+          onChange: () => {},
+          disabled: true,
+        }
 
   return (
     <CalcPokemonStatsProvider
@@ -30,6 +53,7 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
         label: LABELS[side],
         name: '',
         notes: '',
+        moveOverride,
         onSpeciesChange: (species) =>
           setPokemon({ species: species as ChampionsPokemon['species'] }),
         onNatureChange: (nature) =>

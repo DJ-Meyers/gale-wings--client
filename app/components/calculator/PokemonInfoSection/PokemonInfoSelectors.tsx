@@ -11,6 +11,7 @@ export const PokemonInfoSelectors = () => {
     pokemon,
     speciesAbilities,
     collapsibleMoves,
+    moveOverride,
     onSpeciesChange,
     onNatureChange,
     onAbilityChange,
@@ -45,7 +46,15 @@ export const PokemonInfoSelectors = () => {
         onChange={onAbilityChange}
       />
       <ItemSelectField value={item ?? ''} onChange={onItemChange} />
-      {moveFields &&
+      {moveOverride ? (
+        <MoveSelectField
+          disabled={moveOverride.disabled}
+          options={moveOverride.options}
+          value={moveOverride.value}
+          onChange={moveOverride.onChange}
+        />
+      ) : (
+        moveFields &&
         (collapsibleMoves ? (
           <details className="mt-1">
             <summary className="text-text-dim cursor-pointer text-xs font-semibold select-none">
@@ -55,7 +64,8 @@ export const PokemonInfoSelectors = () => {
           </details>
         ) : (
           moveFields
-        ))}
+        ))
+      )}
     </div>
   )
 }
