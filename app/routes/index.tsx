@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
+import { CalcSummaryResult } from '~/components/sandbox/CalcSummaryResult'
 import { SandboxPokemonPanel } from '~/components/sandbox/SandboxPokemonPanel'
 import { useParseVs } from '~/hooks/api/data'
 import { useDebouncedValue } from '~/hooks/useDebouncedValue'
@@ -55,6 +56,7 @@ const IndexPage = () => (
       </p>
     </header>
     <VsParseInput />
+    <CalcSummaryResult />
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <SandboxPokemonPanel side="attacker" />
       <SandboxPokemonPanel side="defender" />
