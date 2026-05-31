@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '~/components/ui/Button'
 import { Fieldset } from '~/components/ui/Fieldset'
@@ -77,19 +77,33 @@ const KO_TIERS: SwatchSpec[] = [
   { name: 'ko-no-2hko', token: '--color-ko-no-2hko' },
 ]
 
-const Swatch = ({ name, token, note }: SwatchSpec) => (
-  <div className="border-border overflow-hidden rounded border">
-    <div
-      className="h-16 w-full"
-      style={{ backgroundColor: `var(${token})` }}
-    />
-    <div className="bg-surface px-2 py-1.5 text-xs">
-      <div className="text-text-heading truncate font-mono">{name}</div>
-      <div className="text-text-muted truncate font-mono">{token}</div>
-      {note && <div className="text-text-faint truncate">{note}</div>}
+const Swatch = ({ name, token, note }: SwatchSpec) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [rgb, setRgb] = useState('')
+  useEffect(() => {
+    if (ref.current) {
+      setRgb(getComputedStyle(ref.current).backgroundColor)
+    }
+  }, [])
+  return (
+    <div className="border-border overflow-hidden rounded border">
+      <div
+        ref={ref}
+        className="relative flex h-16 w-full items-center justify-center"
+        style={{ backgroundColor: `var(${token})` }}
+      >
+        <span className="rounded bg-black/50 px-2 py-0.5 font-mono text-xs text-white">
+          {rgb || '—'}
+        </span>
+      </div>
+      <div className="bg-surface px-2 py-1.5 text-xs">
+        <div className="text-text-heading truncate font-mono">{name}</div>
+        <div className="text-text-muted truncate font-mono">{token}</div>
+        {note && <div className="text-text-faint truncate">{note}</div>}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const Section = ({
   title,
