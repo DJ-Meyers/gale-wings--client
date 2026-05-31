@@ -51,9 +51,8 @@ const VsParseInput = () => {
 const IndexPage = () => (
   <div className="mx-auto flex max-w-[1400px] flex-col gap-4 py-6">
     <header>
-      <h1 className="text-3xl font-bold">
-        <span className="text-primary">Gale</span>{' '}
-        <span className="text-accent">Wings</span>
+      <h1 className="from-primary to-accent inline-block bg-linear-to-r bg-clip-text text-3xl font-bold text-transparent">
+        Gale Wings
       </h1>
       <p className="text-text-muted text-sm">
         VGC damage calculator — text-to-Pokémon vs-input.
