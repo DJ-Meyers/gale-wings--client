@@ -10,6 +10,7 @@
   --color-ash: #837a73;
   --color-slate: #4e4c4c;
   --color-charcoal: #403c3b;
+  --color-carbon: #2a2a2a;
 
   --color-bg: var(--color-charcoal);
   --color-surface: var(--color-slate);
