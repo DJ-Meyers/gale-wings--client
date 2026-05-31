@@ -1,14 +1,14 @@
 import { useCalcRowContext } from '~/context/CalcRowContext'
-import { useSandboxStore } from '~/sandbox/store'
+import { useCalcStore } from '~/calc/store'
 
 export const useFieldConditions = () => {
   const { calcId } = useCalcRowContext()
-  const fc = useSandboxStore((s) => s.calcs[calcId].fieldConditions)
-  const setWeather = useSandboxStore((s) => s.setWeather)
-  const setTerrain = useSandboxStore((s) => s.setTerrain)
-  const toggleRuin = useSandboxStore((s) => s.toggleRuin)
-  const toggleAttackerSide = useSandboxStore((s) => s.toggleAttackerSide)
-  const toggleDefenderSide = useSandboxStore((s) => s.toggleDefenderSide)
+  const fc = useCalcStore((s) => s.calcs[calcId].fieldConditions)
+  const setWeather = useCalcStore((s) => s.setWeather)
+  const setTerrain = useCalcStore((s) => s.setTerrain)
+  const toggleRuin = useCalcStore((s) => s.toggleRuin)
+  const toggleAttackerSide = useCalcStore((s) => s.toggleAttackerSide)
+  const toggleDefenderSide = useCalcStore((s) => s.toggleDefenderSide)
 
   return {
     weather: fc.weather,

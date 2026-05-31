@@ -13,8 +13,8 @@ import { useCalcRow } from '~/hooks/calc/useCalcRow'
 import { useExpandedCalc } from '~/hooks/calc/useExpandedCalc'
 import { useSpeciesAbilities } from '~/hooks/api/data'
 import { useSuppressUnsavedWarning } from '~/hooks/useSuppressUnsavedWarning'
-import { useSandboxStore } from '~/sandbox/store'
-import type { SandboxCalc } from '~/sandbox/types'
+import { useCalcStore } from '~/calc/store'
+import type { Calc } from '~/calc/types'
 import type { ChampionsPokemon } from '~/types'
 
 const pokemonIconClass =
@@ -31,13 +31,13 @@ export const CalcModal = () => {
     result,
   } = useCalcRow(calcId, mode)
   const { expandedId, setExpandedId } = useExpandedCalc()
-  const setOpponent = useSandboxStore((s) => s.setOpponent)
-  const patchCalc = useSandboxStore((s) => s.patchCalc)
-  const replaceCalc = useSandboxStore((s) => s.replaceCalc)
+  const setOpponent = useCalcStore((s) => s.setOpponent)
+  const patchCalc = useCalcStore((s) => s.patchCalc)
+  const replaceCalc = useCalcStore((s) => s.replaceCalc)
   const { suppressed } = useSuppressUnsavedWarning()
   const isOpen = expandedId === calcId
 
-  const snapshotRef = useRef<SandboxCalc | null>(null)
+  const snapshotRef = useRef<Calc | null>(null)
   const calcRef = useRef(calc)
   calcRef.current = calc
   const [showConfirm, setShowConfirm] = useState(false)

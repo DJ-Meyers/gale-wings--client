@@ -1,9 +1,9 @@
 import type { CalcParameters, ChampionsPokemon, FieldConditions } from '~/types'
 
 import { defaultCalcParameters, defaultFieldConditions } from './defaults'
-import type { SandboxCalc } from './types'
+import type { Calc } from './types'
 
-export const SANDBOX_PLAYER: ChampionsPokemon = {
+export const CALC_PLAYER: ChampionsPokemon = {
   species: 'Charizard-Mega-Y',
   nature: 'Timid',
   ability: 'Drought',
@@ -120,9 +120,9 @@ const opponentTailwind: FieldConditions = {
 
 const makeFixture = (
   id: string,
-  partial: Partial<SandboxCalc> &
-    Pick<SandboxCalc, 'type' | 'name' | 'opponent'>,
-): SandboxCalc => ({
+  partial: Partial<Calc> &
+    Pick<Calc, 'type' | 'name' | 'opponent'>,
+): Calc => ({
   id,
   notes: '',
   playerCalcParameters: cloneParams(),
@@ -132,7 +132,7 @@ const makeFixture = (
   ...partial,
 })
 
-export const SANDBOX_FIXTURES: SandboxCalc[] = [
+export const CALC_FIXTURES: Calc[] = [
   // Offensive — Mega Char Y in sun
   makeFixture('fix-off-1', {
     type: 'offensive',

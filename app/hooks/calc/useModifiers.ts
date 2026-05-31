@@ -1,22 +1,22 @@
 import type { CalcParameters } from '~/types'
 
 import { useCalcRowContext } from '~/context/CalcRowContext'
-import { useSandboxStore } from '~/sandbox/store'
-import type { StatBoostKey } from '~/sandbox/types'
+import { useCalcStore } from '~/calc/store'
+import type { StatBoostKey } from '~/calc/types'
 
 type Side = 'player' | 'opponent'
 
 export const useModifiers = (side: Side) => {
   const { calcId, mode } = useCalcRowContext()
-  const params = useSandboxStore((s) =>
+  const params = useCalcStore((s) =>
     side === 'player'
       ? s.calcs[calcId].playerCalcParameters
       : s.calcs[calcId].opponentCalcParameters,
   )
-  const setPlayerParams = useSandboxStore((s) => s.setPlayerParams)
-  const setOpponentParams = useSandboxStore((s) => s.setOpponentParams)
-  const setPlayerBoost = useSandboxStore((s) => s.setPlayerBoost)
-  const setOpponentBoost = useSandboxStore((s) => s.setOpponentBoost)
+  const setPlayerParams = useCalcStore((s) => s.setPlayerParams)
+  const setOpponentParams = useCalcStore((s) => s.setOpponentParams)
+  const setPlayerBoost = useCalcStore((s) => s.setPlayerBoost)
+  const setOpponentBoost = useCalcStore((s) => s.setOpponentBoost)
 
   const updateParams =
     side === 'player' ? setPlayerParams : setOpponentParams

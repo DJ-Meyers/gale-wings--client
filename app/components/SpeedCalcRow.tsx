@@ -2,7 +2,7 @@ import { FavoriteButton } from '~/components/FavoriteButton'
 import { WindIcon } from '~/components/icons'
 import { PokemonWithItemIcon } from '~/components/icons/PokemonWithItemIcon'
 import { useSpeedCalc, type SpeedTier } from '~/hooks/calc/useSpeedCalc'
-import { useSandboxStore } from '~/sandbox/store'
+import { useCalcStore } from '~/calc/store'
 
 const TIER_COLORS: Record<SpeedTier, string> = {
   faster: 'text-ko-no-2hko',
@@ -15,11 +15,11 @@ interface Properties {
 }
 
 export const SpeedCalcRow = ({ calcId }: Properties) => {
-  const calc = useSandboxStore((s) => s.calcs[calcId])
-  const toggleFavorite = useSandboxStore((s) => s.toggleFavorite)
-  const setOpponentBoost = useSandboxStore((s) => s.setOpponentBoost)
-  const toggleDefenderSide = useSandboxStore((s) => s.toggleDefenderSide)
-  const removeCalc = useSandboxStore((s) => s.removeCalc)
+  const calc = useCalcStore((s) => s.calcs[calcId])
+  const toggleFavorite = useCalcStore((s) => s.toggleFavorite)
+  const setOpponentBoost = useCalcStore((s) => s.setOpponentBoost)
+  const toggleDefenderSide = useCalcStore((s) => s.toggleDefenderSide)
+  const removeCalc = useCalcStore((s) => s.removeCalc)
   const { opponentSpeed, tier, opponentHasTailwind } = useSpeedCalc(calcId)
 
   const { opponent } = calc

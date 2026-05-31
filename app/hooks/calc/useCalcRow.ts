@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 
 import { computeDamage, type CalcSide } from '~/calc/compute-damage'
-import { useSandboxStore } from '~/sandbox/store'
-import type { CalcRowMode } from '~/sandbox/types'
+import { useCalcStore } from '~/calc/store'
+import type { CalcRowMode } from '~/calc/types'
 
 export const useCalcRow = (calcId: string, mode: CalcRowMode) => {
-  const calc = useSandboxStore((s) => s.calcs[calcId])
-  const player = useSandboxStore((s) => s.player)
+  const calc = useCalcStore((s) => s.calcs[calcId])
+  const player = useCalcStore((s) => s.player)
 
   const sides = useMemo(() => {
     const playerSide: CalcSide = {

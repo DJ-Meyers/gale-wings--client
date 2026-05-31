@@ -1,7 +1,7 @@
-import { useSandboxStore } from '~/sandbox/store'
+import { useCalcStore } from '~/calc/store'
 
 export const useExpandedCalc = () => {
-  const expandedId = useSandboxStore((s) => s.expandedCalcId)
-  const setExpandedId = useSandboxStore((s) => s.setExpandedId)
+  const expandedId = useCalcStore((s) => s.expandedCalcId)
+  const setExpandedId = useCalcStore((s) => s.setExpandedId)
   return { expandedId, setExpandedId }
 }

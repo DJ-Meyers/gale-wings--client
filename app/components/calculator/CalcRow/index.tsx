@@ -1,7 +1,7 @@
 import { CalcModal } from '~/components/calculator/CalcRow/CalcModal'
 import { CalcSummaryRow } from '~/components/calculator/CalcRow/CalcSummaryRow'
 import { CalcRowContext } from '~/context/CalcRowContext'
-import type { CalcRowMode } from '~/sandbox/types'
+import type { CalcRowMode } from '~/calc/types'
 
 interface Properties {
   calcId: string

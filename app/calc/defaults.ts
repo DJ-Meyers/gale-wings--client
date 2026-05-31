@@ -1,6 +1,6 @@
 import type { CalcParameters, ChampionsPokemon, FieldConditions } from '~/types'
 
-import type { CalcMode, SandboxCalc } from './types'
+import type { Calc, CalcMode } from './types'
 
 export const defaultCalcParameters: CalcParameters = {
   move: '',
@@ -35,7 +35,7 @@ const cloneCalcParameters = (): CalcParameters => ({
   boosts: { ...defaultCalcParameters.boosts },
 })
 
-export const makeCalc = (type: CalcMode): SandboxCalc => ({
+export const makeCalc = (type: CalcMode): Calc => ({
   id: crypto.randomUUID(),
   type,
   name: '',
