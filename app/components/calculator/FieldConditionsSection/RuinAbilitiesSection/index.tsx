@@ -1,4 +1,5 @@
 import { FieldConditionCheckbox } from '~/components/calculator/FieldConditionsSection/FieldConditionCheckbox'
+import { Fieldset } from '~/components/ui/Fieldset'
 import { useFieldConditions } from '~/hooks/calc/useFieldConditions'
 
 export const RuinAbilitiesSection = () => {
@@ -11,10 +12,7 @@ export const RuinAbilitiesSection = () => {
   } = useFieldConditions()
 
   return (
-    <fieldset className="border-border-section flex flex-wrap gap-x-2.5 gap-y-1 rounded border px-2 pt-1 pb-1.5">
-      <legend className="text-text-dim px-1 text-[0.7rem] font-semibold">
-        Ruin Abilities
-      </legend>
+    <Fieldset legend="Ruin Abilities">
       <FieldConditionCheckbox
         checked={isBeadsOfRuin}
         label="Beads"
@@ -35,6 +33,6 @@ export const RuinAbilitiesSection = () => {
         label="Vessel"
         onChange={() => toggleRuin('isVesselOfRuin')}
       />
-    </fieldset>
+    </Fieldset>
   )
 }

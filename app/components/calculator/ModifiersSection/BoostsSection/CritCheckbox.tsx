@@ -9,8 +9,11 @@ export const CritCheckbox = ({ side }: Properties) => {
   const { isCrit, toggleCrit } = useModifiers(side)
 
   return (
-    <div className="flex items-center">
-      <CheckboxField checked={isCrit} label="Crit" onChange={toggleCrit} />
-    </div>
+    <CheckboxField
+      checked={isCrit}
+      className="h-6"
+      label="Crit"
+      onChange={toggleCrit}
+    />
   )
 }

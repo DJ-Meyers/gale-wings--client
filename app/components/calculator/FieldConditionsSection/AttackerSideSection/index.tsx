@@ -1,14 +1,12 @@
 import { FieldConditionCheckbox } from '~/components/calculator/FieldConditionsSection/FieldConditionCheckbox'
+import { Fieldset } from '~/components/ui/Fieldset'
 import { useFieldConditions } from '~/hooks/calc/useFieldConditions'
 
 export const AttackerSideSection = () => {
   const { attackerSide, toggleAttackerSide } = useFieldConditions()
 
   return (
-    <fieldset className="border-border-section flex flex-1 flex-wrap justify-around gap-x-2.5 gap-y-1 rounded border px-2 pt-1 pb-1.5">
-      <legend className="text-text-dim px-1 text-[0.7rem] font-semibold">
-        Attacker Side
-      </legend>
+    <Fieldset className="flex-1 justify-around" legend="Attacker Side">
       <FieldConditionCheckbox
         checked={!!attackerSide.isHelpingHand}
         label="Helping Hand"
@@ -19,6 +17,6 @@ export const AttackerSideSection = () => {
         label="Tailwind"
         onChange={() => toggleAttackerSide('isTailwind')}
       />
-    </fieldset>
+    </Fieldset>
   )
 }
