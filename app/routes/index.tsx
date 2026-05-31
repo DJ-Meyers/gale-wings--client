@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
+import { SandboxPokemonPanel } from '~/components/sandbox/SandboxPokemonPanel'
 import { useParseVs } from '~/hooks/api/data'
 import { useDebouncedValue } from '~/hooks/useDebouncedValue'
 import { useSandboxStore } from '~/sandbox/store'
@@ -46,14 +47,18 @@ const VsParseInput = () => {
 }
 
 const IndexPage = () => (
-  <div className="mx-auto max-w-[1400px] py-6">
-    <header className="mb-4">
+  <div className="mx-auto flex max-w-[1400px] flex-col gap-4 py-6">
+    <header>
       <h1 className="text-3xl font-bold">Galewings</h1>
       <p className="text-text-muted text-sm">
         VGC damage calculator — text-to-Pokémon vs-input.
       </p>
     </header>
     <VsParseInput />
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <SandboxPokemonPanel side="attacker" />
+      <SandboxPokemonPanel side="defender" />
+    </div>
   </div>
 )
 
