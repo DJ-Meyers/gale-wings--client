@@ -26,13 +26,13 @@ const VsParseInput = () => {
       <label htmlFor="vs-input" className="text-text-heading text-sm font-medium">
         Vs input
       </label>
-      <textarea
+      <input
         id="vs-input"
+        type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-        rows={3}
-        className="border-border bg-background w-full rounded-sm border p-2 font-mono text-sm"
+        className="border-border bg-background w-full rounded-sm border px-3 py-3 font-mono text-base"
       />
       <div className="text-text-muted text-xs">
         {debouncedInput && isParseVsPending && <span>Parsing…</span>}
