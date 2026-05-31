@@ -32,6 +32,7 @@ import {
 type SwatchSpec = { name: string; token: string; note?: string }
 
 const BASE_PALETTE: SwatchSpec[] = [
+  { name: 'red', token: '--color-red' },
   { name: 'bright-orange', token: '--color-bright-orange' },
   { name: 'pale-orange', token: '--color-pale-orange' },
   { name: 'yellow', token: '--color-yellow' },

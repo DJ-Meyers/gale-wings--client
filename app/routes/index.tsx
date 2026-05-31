@@ -46,10 +46,10 @@ const VsParseInput = () => {
 const IndexPage = () => (
   <div className="mx-auto flex max-w-[1400px] flex-col gap-4 py-6">
     <header>
-      <h1 className="from-primary to-accent inline-block bg-linear-to-r bg-clip-text pb-2 text-7xl leading-tight font-bold text-transparent">
+      <h1 className="from-red via-primary to-accent inline-block bg-linear-to-r bg-clip-text pb-2 text-7xl leading-tight font-bold text-transparent">
         Gale Wings
       </h1>
-      <p className="text-text-muted text-xl">
+      <p className="text-pale-orange text-xl font-semibold">
         The fastest (probably) VGC calculator
       </p>
     </header>
