@@ -24,7 +24,7 @@ const VsParseInput = () => {
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor="vs-input" className="text-text-heading text-sm font-medium">
-        Vs input
+        Quick Calc
       </label>
       <input
         id="vs-input"
@@ -39,11 +39,6 @@ const VsParseInput = () => {
           Parse failed: {parseVsError.message}
         </div>
       )}
-      {!debouncedInput && (
-        <div className="text-text-muted text-xs">
-          Type a Showdown-style "X vs. Y" calc.
-        </div>
-      )}
     </div>
   )
 }
@@ -51,11 +46,11 @@ const VsParseInput = () => {
 const IndexPage = () => (
   <div className="mx-auto flex max-w-[1400px] flex-col gap-4 py-6">
     <header>
-      <h1 className="from-primary to-accent inline-block bg-linear-to-r bg-clip-text text-3xl font-bold text-transparent">
+      <h1 className="from-primary to-accent inline-block bg-linear-to-r bg-clip-text text-7xl font-bold text-transparent">
         Gale Wings
       </h1>
       <p className="text-text-muted text-sm">
-        VGC damage calculator — text-to-Pokémon vs-input.
+        The fastest (probably) VGC calculator
       </p>
     </header>
     <VsParseInput />
