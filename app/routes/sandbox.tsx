@@ -74,7 +74,7 @@ const SandboxLayout = () => {
   return (
     <div className="mx-auto max-w-[1400px] py-6">
       <header className="mb-4">
-        <h1 className="text-3xl font-bold">Galewings</h1>
+        <h1 className="text-3xl font-bold">Gale Wings</h1>
         <p className="text-text-muted text-sm">
           VGC damage calculator sandbox — {playerSpecies}-led.
         </p>
