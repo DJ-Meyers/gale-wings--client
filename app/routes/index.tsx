@@ -31,7 +31,7 @@ const VsParseInput = () => {
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+        placeholder="32+ ZardY Heat wave vs 32/0 Ttar in sand"
         className="border-border bg-background w-full rounded-sm border px-3 py-3 font-mono text-base"
       />
       {parseVsError && (
