@@ -57,7 +57,7 @@ const ToggleIconButton = ({
     aria-label={label}
     aria-pressed={active}
     onClick={onClick}
-    className={`rounded-sm p-1 text-2xl leading-none transition ${
+    className={`cursor-pointer rounded-sm p-1 text-2xl leading-none transition ${
       active
         ? 'ring-primary bg-primary/10 ring-2'
         : 'opacity-40 hover:opacity-100'
