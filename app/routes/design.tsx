@@ -40,6 +40,7 @@ const BASE_PALETTE: SwatchSpec[] = [
   { name: 'ash', token: '--color-ash' },
   { name: 'slate', token: '--color-slate' },
   { name: 'charcoal', token: '--color-charcoal' },
+  { name: 'carbon', token: '--color-carbon' },
 ]
 
 const SEMANTIC_PALETTE: SwatchSpec[] = [
