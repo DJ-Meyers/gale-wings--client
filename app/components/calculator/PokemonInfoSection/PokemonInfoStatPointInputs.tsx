@@ -9,7 +9,7 @@ import { MAX_TOTAL_SP, STAT_KEYS, rawStatsFor } from '~/utils/pokemonStats'
 const natureMap = new Map(naturesList.map((n) => [n.name, n]))
 
 export const PokemonInfoStatPointInputs = () => {
-  const { pokemon, onStatPointChange } = usePokemonStats()
+  const { pokemon, compact, onStatPointChange } = usePokemonStats()
   const { statPoints, nature } = pokemon
 
   const totalSp = STAT_KEYS.reduce((sum, key) => sum + statPoints[key], 0)
@@ -17,7 +17,7 @@ export const PokemonInfoStatPointInputs = () => {
   const n = nature ? natureMap.get(nature) : undefined
 
   return (
-    <div className="mt-3 flex flex-col gap-1">
+    <div className={`${compact ? 'mt-1' : 'mt-3'} flex flex-col gap-1`}>
       <div className={FIELD_LABEL_CLASS}>
         SP: {totalSp} / {MAX_TOTAL_SP}
       </div>
