@@ -2,8 +2,11 @@ import { TerrainSelect } from '~/components/calculator/FieldConditionsSection/We
 import { WeatherSelect } from '~/components/calculator/FieldConditionsSection/WeatherTerrainSection/WeatherSelect'
 
 export const WeatherTerrainSection = () => (
-  <div className="flex flex-wrap gap-2">
+  <fieldset className="border-border-section flex flex-1 flex-wrap items-center justify-around gap-x-2.5 gap-y-1 rounded border px-2 pt-1 pb-1.5">
+    <legend className="text-text-dim px-1 text-[0.7rem] font-semibold">
+      Field Conditions
+    </legend>
     <WeatherSelect />
     <TerrainSelect />
-  </div>
+  </fieldset>
 )

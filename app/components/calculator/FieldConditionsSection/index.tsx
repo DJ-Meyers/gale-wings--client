@@ -6,15 +6,15 @@ import { RUIN_ENABLED } from '~/data/mechanics'
 
 export const FieldConditionsSection = () => (
   <div className="border-border-section my-2 flex flex-col gap-1.5 border-y py-2">
-    <WeatherTerrainSection />
     {RUIN_ENABLED && (
       <div className="flex flex-wrap gap-2">
         <RuinAbilitiesSection />
       </div>
     )}
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap items-start gap-2">
+      <WeatherTerrainSection />
       <AttackerSideSection />
-      <DefenderSideSection />
     </div>
+    <DefenderSideSection />
   </div>
 )

@@ -11,5 +11,10 @@ export const FieldConditionCheckbox = ({
   checked,
   onChange,
 }: Properties) => (
-  <CheckboxField checked={checked} label={label} onChange={() => onChange()} />
+  <CheckboxField
+    checked={checked}
+    className="h-6"
+    label={label}
+    onChange={() => onChange()}
+  />
 )
