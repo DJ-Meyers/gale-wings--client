@@ -78,16 +78,18 @@ const SandboxLayout = () => {
           VGC damage calculator sandbox — {playerSpecies}-led.
         </p>
       </header>
-      <div className="mb-6 max-w-md">
-        <h2 className="text-text-heading border-primary mb-3 border-b-2 pb-1 text-base">
-          Your Pokémon
-        </h2>
-        <PlayerPokemonPanel />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="min-w-0">
+          <h2 className="text-text-heading border-primary mb-3 border-b-2 pb-1 text-base">
+            Your Pokémon
+          </h2>
+          <PlayerPokemonPanel />
+        </div>
+        <SpeedColumn label="Speed" calcs={speed} />
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <CalcColumn label="Offensive" mode="offensive" calcs={offensive} />
         <CalcColumn label="Defensive" mode="defensive" calcs={defensive} />
-        <SpeedColumn label="Speed" calcs={speed} />
       </div>
     </div>
   )
