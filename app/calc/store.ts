@@ -1,26 +1,22 @@
 import { create } from 'zustand'
 
-import { SANDBOX_FIXTURES, SANDBOX_PLAYER } from './fixtures'
-import type {
-  SandboxCalc,
-  SandboxStore,
-  SandboxStoreState,
-} from './types'
+import { CALC_FIXTURES, CALC_PLAYER } from './fixtures'
+import type { Calc, CalcStore, CalcStoreState } from './types'
 
 const updateCalc = (
-  state: SandboxStoreState,
+  state: CalcStoreState,
   id: string,
-  fn: (calc: SandboxCalc) => SandboxCalc,
-): SandboxStoreState => {
+  fn: (calc: Calc) => Calc,
+): CalcStoreState => {
   const existing = state.calcs[id]
   if (!existing) return state
   return { ...state, calcs: { ...state.calcs, [id]: fn(existing) } }
 }
 
-export const useSandboxStore = create<SandboxStore>((set) => ({
-  player: SANDBOX_PLAYER,
-  calcs: Object.fromEntries(SANDBOX_FIXTURES.map((c) => [c.id, c])),
-  calcOrder: SANDBOX_FIXTURES.map((c) => c.id),
+export const useCalcStore = create<CalcStore>((set) => ({
+  player: CALC_PLAYER,
+  calcs: Object.fromEntries(CALC_FIXTURES.map((c) => [c.id, c])),
+  calcOrder: CALC_FIXTURES.map((c) => c.id),
   expandedCalcId: null,
 
   setPlayer: (patch) =>

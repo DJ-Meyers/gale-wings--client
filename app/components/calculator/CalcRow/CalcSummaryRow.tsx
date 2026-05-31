@@ -3,14 +3,14 @@ import { FavoriteButton } from '~/components/FavoriteButton'
 import { useCalcRowContext } from '~/context/CalcRowContext'
 import { useCalcRow } from '~/hooks/calc/useCalcRow'
 import { useExpandedCalc } from '~/hooks/calc/useExpandedCalc'
-import { useSandboxStore } from '~/sandbox/store'
+import { useCalcStore } from '~/calc/store'
 
 export const CalcSummaryRow = () => {
   const { calcId, mode } = useCalcRowContext()
   const { calc, attackerSide, defenderSide, result } = useCalcRow(calcId, mode)
   const { setExpandedId } = useExpandedCalc()
-  const removeCalc = useSandboxStore((s) => s.removeCalc)
-  const toggleFavorite = useSandboxStore((s) => s.toggleFavorite)
+  const removeCalc = useCalcStore((s) => s.removeCalc)
+  const toggleFavorite = useCalcStore((s) => s.toggleFavorite)
 
   const defenderMaxHp = result?.defenderMaxHp ?? 1
   const summary = formatSummary(

@@ -1,12 +1,12 @@
 import { computeEffectiveSpeed } from '~/calc/calc-speed'
 import type { CalcSide } from '~/calc/compute-damage'
-import { useSandboxStore } from '~/sandbox/store'
+import { useCalcStore } from '~/calc/store'
 
 export type SpeedTier = 'faster' | 'tie' | 'slower'
 
 export const useSpeedCalc = (calcId: string) => {
-  const player = useSandboxStore((s) => s.player)
-  const calc = useSandboxStore((s) => s.calcs[calcId])
+  const player = useCalcStore((s) => s.player)
+  const calc = useCalcStore((s) => s.calcs[calcId])
 
   const playerSide: CalcSide = {
     pokemon: player,

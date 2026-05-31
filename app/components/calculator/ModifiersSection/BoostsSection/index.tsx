@@ -3,7 +3,7 @@ import { StatBoostField } from '~/components/calculator/ModifiersSection/BoostsS
 import { Fieldset } from '~/components/ui/Fieldset'
 import { useModifiers } from '~/hooks/calc/useModifiers'
 
-import type { StatBoostKey } from '~/sandbox/types'
+import type { StatBoostKey } from '~/calc/types'
 
 interface Properties {
   side: 'player' | 'opponent'

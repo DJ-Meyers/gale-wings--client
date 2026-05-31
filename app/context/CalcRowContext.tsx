@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 
-import type { CalcRowMode } from '~/sandbox/types'
+import type { CalcRowMode } from '~/calc/types'
 
 export interface CalcRowContextValue {
   calcId: string

@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { defaultPlayer, makeCalc } from './defaults'
-import { useSandboxStore } from './store'
-import type { SandboxCalc } from './types'
+import { useCalcStore } from './store'
+import type { Calc } from './types'
 
-const resetStore = (calcs: SandboxCalc[] = []) => {
-  useSandboxStore.setState({
+const resetStore = (calcs: Calc[] = []) => {
+  useCalcStore.setState({
     player: { ...defaultPlayer },
     calcs: Object.fromEntries(calcs.map((c) => [c.id, c])),
     calcOrder: calcs.map((c) => c.id),
@@ -13,9 +13,9 @@ const resetStore = (calcs: SandboxCalc[] = []) => {
   })
 }
 
-const get = () => useSandboxStore.getState()
+const get = () => useCalcStore.getState()
 
-describe('useSandboxStore', () => {
+describe('useCalcStore', () => {
   beforeEach(() => resetStore())
 
   it('setPlayer patches the shared player without touching calcs', () => {

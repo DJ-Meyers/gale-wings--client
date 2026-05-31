@@ -3,7 +3,7 @@ import { MoveSelectField } from '~/components/fields/MoveSelectField'
 import { useCalcRowContext } from '~/context/CalcRowContext'
 import { useModifiers } from '~/hooks/calc/useModifiers'
 import { useLearnableMoves } from '~/hooks/useLearnableMoves'
-import { useSandboxStore } from '~/sandbox/store'
+import { useCalcStore } from '~/calc/store'
 
 interface Properties {
   side: 'player' | 'opponent'
@@ -12,7 +12,7 @@ interface Properties {
 export const ModifierMoveSelector = ({ side }: Properties) => {
   const { calcId, mode } = useCalcRowContext()
   const { move, setMove } = useModifiers(side)
-  const attackerSpecies = useSandboxStore((s) =>
+  const attackerSpecies = useCalcStore((s) =>
     mode === 'offensive' ? s.player.species : s.calcs[calcId].opponent.species,
   )
   const { learnableMoves } = useLearnableMoves(attackerSpecies)

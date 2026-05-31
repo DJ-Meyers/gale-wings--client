@@ -21,7 +21,7 @@ export type AttackerSideKey = keyof NonNullable<FieldConditions['attackerSide']>
 
 export type DefenderSideKey = keyof NonNullable<FieldConditions['defenderSide']>
 
-export interface SandboxCalc {
+export interface Calc {
   id: string
   type: CalcMode
   name: string
@@ -33,17 +33,17 @@ export interface SandboxCalc {
   isFavorite: boolean
 }
 
-export interface SandboxStoreState {
+export interface CalcStoreState {
   player: ChampionsPokemon
-  calcs: Record<string, SandboxCalc>
+  calcs: Record<string, Calc>
   calcOrder: string[]
   expandedCalcId: string | null
 }
 
-export interface SandboxStoreActions {
+export interface CalcStoreActions {
   setPlayer: (patch: Partial<ChampionsPokemon>) => void
-  patchCalc: (id: string, patch: Partial<SandboxCalc>) => void
-  replaceCalc: (id: string, calc: SandboxCalc) => void
+  patchCalc: (id: string, patch: Partial<Calc>) => void
+  replaceCalc: (id: string, calc: Calc) => void
   setOpponent: (id: string, patch: Partial<ChampionsPokemon>) => void
   setPlayerParams: (id: string, patch: Partial<CalcParameters>) => void
   setOpponentParams: (id: string, patch: Partial<CalcParameters>) => void
@@ -55,10 +55,10 @@ export interface SandboxStoreActions {
   toggleRuin: (id: string, key: RuinKey) => void
   toggleAttackerSide: (id: string, key: AttackerSideKey) => void
   toggleDefenderSide: (id: string, key: DefenderSideKey) => void
-  addCalc: (calc: SandboxCalc) => void
+  addCalc: (calc: Calc) => void
   removeCalc: (id: string) => void
   setExpandedId: (id: string | null) => void
   toggleFavorite: (id: string) => void
 }
 
-export type SandboxStore = SandboxStoreState & SandboxStoreActions
+export type CalcStore = CalcStoreState & CalcStoreActions
