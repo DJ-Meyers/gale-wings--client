@@ -21,6 +21,7 @@ const PlayerPokemonPanel = () => {
         pokemon: player,
         speciesAbilities: speciesAbilities ?? [],
         compact: false,
+        collapsibleMoves: true,
         label: 'Text-to-Pokémon',
         name: '',
         notes: '',
