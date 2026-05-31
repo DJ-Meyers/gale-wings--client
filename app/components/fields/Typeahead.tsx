@@ -12,6 +12,7 @@ interface Properties {
   emptyLabel?: string
   getLabel?: (value: string) => string
   className?: string
+  disabled?: boolean
 }
 
 export const Typeahead = ({
@@ -24,6 +25,7 @@ export const Typeahead = ({
   emptyLabel = '(none)',
   getLabel,
   className,
+  disabled = false,
 }: Properties) => {
   const displayValue = useCallback(
     (v: string) => (getLabel ? getLabel(v) : v),
@@ -64,10 +66,12 @@ export const Typeahead = ({
   }
 
   const handleFocus = () => {
+    if (disabled) return
     setOpen(true)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (disabled) return
     if (!open) {
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         setOpen(true)
@@ -110,6 +114,7 @@ export const Typeahead = ({
   }, [highlightIndex])
 
   useEffect(() => {
+    if (disabled) return
     const handler = (e: MouseEvent) => {
       if (
         containerReference.current &&
@@ -122,7 +127,7 @@ export const Typeahead = ({
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
-  }, [value, displayValue])
+  }, [value, displayValue, disabled])
 
   return (
     <div
@@ -132,7 +137,8 @@ export const Typeahead = ({
       <FieldLabel>{label}</FieldLabel>
       <input
         autoComplete="off"
-        className="border-border bg-surface focus:border-primary focus:ring-primary/20 block w-full rounded border px-2 py-1.5 text-sm font-normal focus:ring-2 focus:outline-none"
+        className={`border-border bg-surface focus:border-primary focus:ring-primary/20 block w-full rounded border px-2 py-1.5 text-sm font-normal focus:ring-2 focus:outline-none ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
+        disabled={disabled}
         placeholder={placeholder}
         type="text"
         value={query}
@@ -140,7 +146,7 @@ export const Typeahead = ({
         onFocus={handleFocus}
         onKeyDown={handleKeyDown}
       />
-      {open && (
+      {open && !disabled && (
         <ul
           className="bg-surface border-border absolute right-0 left-0 z-20 max-h-[200px] list-none overflow-y-auto rounded-b border border-t-0 shadow-md"
           ref={listReference}
