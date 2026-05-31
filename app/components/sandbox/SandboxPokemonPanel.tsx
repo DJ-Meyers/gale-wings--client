@@ -1,0 +1,59 @@
+import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
+import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
+import { useSpeciesAbilities } from '~/hooks/api/data'
+import { useSandboxStore } from '~/sandbox/store'
+import type { ChampionsPokemon } from '~/types'
+
+type Side = 'attacker' | 'defender'
+
+const LABELS: Record<Side, string> = {
+  attacker: 'Attacker',
+  defender: 'Defender',
+}
+
+export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
+  const pokemon = useSandboxStore((s) =>
+    side === 'attacker' ? s.attacker : s.defender,
+  )
+  const setPokemon = useSandboxStore((s) =>
+    side === 'attacker' ? s.setAttacker : s.setDefender,
+  )
+  const { speciesAbilities } = useSpeciesAbilities(pokemon.species)
+
+  return (
+    <CalcPokemonStatsProvider
+      value={{
+        pokemon,
+        speciesAbilities: speciesAbilities ?? [],
+        compact: false,
+        collapsibleMoves: true,
+        label: LABELS[side],
+        name: '',
+        notes: '',
+        onSpeciesChange: (species) =>
+          setPokemon({ species: species as ChampionsPokemon['species'] }),
+        onNatureChange: (nature) =>
+          setPokemon({ nature: nature as ChampionsPokemon['nature'] }),
+        onAbilityChange: (ability) =>
+          setPokemon({ ability: ability as ChampionsPokemon['ability'] }),
+        onItemChange: (item) =>
+          setPokemon({
+            item: (item || undefined) as ChampionsPokemon['item'],
+          }),
+        onStatPointChange: (stat, value) =>
+          setPokemon({
+            statPoints: { ...pokemon.statPoints, [stat]: value },
+          }),
+        onMoveChange: (slot, move) => {
+          const moves = [...pokemon.moves] as string[]
+          moves[slot] = move
+          setPokemon({
+            moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
+          })
+        },
+      }}
+    >
+      <PokemonInfoSection />
+    </CalcPokemonStatsProvider>
+  )
+}
