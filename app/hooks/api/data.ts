@@ -3,6 +3,8 @@ import type {
   ChampionsItem,
   ChampionsMove,
   ChampionsSpecies,
+  FieldConditions,
+  ParseInputResult,
 } from '@dj-meyers/galewings/types'
 
 import { useNamedQuery } from '~/hooks/useNamedQuery'
@@ -14,8 +16,21 @@ const FOREVER = { staleTime: Infinity, gcTime: Infinity } as const
 // User-driven search results — moderate freshness window.
 const SEARCH_STALE = { staleTime: 5 * 60_000 } as const
 
+// Input-deterministic parse results — cache key already encodes the answer,
+// so re-fetch never needs to fire. Default gcTime lets stale inputs evict.
+const PARSE_CACHE = { staleTime: Infinity } as const
+
 interface SearchOptions {
   limit?: number
+}
+
+// Mirrors `parseVsInput`'s return shape in galewings-api/packages/server/src/parser/parser.ts.
+// Not re-exported through @dj-meyers/galewings/types; safe to mirror because the
+// three fields are themselves shared-types exports.
+export interface VsParseResult {
+  attacker: ParseInputResult
+  defender: ParseInputResult
+  fieldConditions: FieldConditions
 }
 
 /**
@@ -156,5 +171,23 @@ export const useSearchAbilities = (
       SEARCH_STALE,
     ),
     'searchAbilities',
+  )
+}
+
+/**
+ * Showdown-style "X vs Y" parse. Returns attacker + defender ParseInputResults
+ * and merged fieldConditions. Disabled while `input` is empty.
+ *
+ * The caller is responsible for debouncing — the home-page textarea passes a
+ * debounced value so each keystroke doesn't fire a request.
+ */
+export const useParseVs = (input: string) => {
+  const trpc = useTRPC()
+  return useNamedQuery<VsParseResult>(
+    trpc.parser.parseVs.queryOptions(
+      { input },
+      { ...PARSE_CACHE, enabled: Boolean(input) },
+    ),
+    'parseVs',
   )
 }
