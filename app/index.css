@@ -11,7 +11,7 @@
   --color-slate: #4e4c4c;
   --color-charcoal: #403c3b;
 
-  --color-bg: var(--color-slate);
+  --color-bg: var(--color-charcoal);
   --color-surface: var(--color-slate);
   --color-surface-hover: var(--color-ash);
   --color-text: var(--color-white);
