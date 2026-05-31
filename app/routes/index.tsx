@@ -15,7 +15,7 @@ const VsParseInput = () => {
   const applyParseResult = useSandboxStore((s) => s.applyParseResult)
 
   const debouncedInput = useDebouncedValue(input, PARSE_DEBOUNCE_MS)
-  const { parseVs, isParseVsPending, parseVsError } = useParseVs(debouncedInput)
+  const { parseVs, parseVsError } = useParseVs(debouncedInput)
 
   useEffect(() => {
     if (parseVs) applyParseResult(parseVs)
@@ -34,15 +34,16 @@ const VsParseInput = () => {
         placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
         className="border-border bg-background w-full rounded-sm border px-3 py-3 font-mono text-base"
       />
-      <div className="text-text-muted text-xs">
-        {debouncedInput && isParseVsPending && <span>Parsing…</span>}
-        {parseVsError && (
-          <span className="text-red-600">
-            Parse failed: {parseVsError.message}
-          </span>
-        )}
-        {!debouncedInput && <span>Type a Showdown-style "X vs. Y" calc.</span>}
-      </div>
+      {parseVsError && (
+        <div className="text-xs text-red-600">
+          Parse failed: {parseVsError.message}
+        </div>
+      )}
+      {!debouncedInput && (
+        <div className="text-text-muted text-xs">
+          Type a Showdown-style "X vs. Y" calc.
+        </div>
+      )}
     </div>
   )
 }
