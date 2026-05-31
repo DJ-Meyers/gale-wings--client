@@ -29,9 +29,9 @@ import {
   XIcon,
 } from '~/components/icons'
 
-type Swatch = { name: string; token: string; note?: string }
+type SwatchSpec = { name: string; token: string; note?: string }
 
-const BASE_PALETTE: Swatch[] = [
+const BASE_PALETTE: SwatchSpec[] = [
   { name: 'bright-orange', token: '--color-bright-orange' },
   { name: 'pale-orange', token: '--color-pale-orange' },
   { name: 'yellow', token: '--color-yellow' },
@@ -42,7 +42,7 @@ const BASE_PALETTE: Swatch[] = [
   { name: 'charcoal', token: '--color-charcoal' },
 ]
 
-const SEMANTIC_PALETTE: Swatch[] = [
+const SEMANTIC_PALETTE: SwatchSpec[] = [
   { name: 'bg', token: '--color-bg', note: 'page background' },
   { name: 'surface', token: '--color-surface' },
   { name: 'surface-hover', token: '--color-surface-hover' },
@@ -53,14 +53,14 @@ const SEMANTIC_PALETTE: Swatch[] = [
   { name: 'highlight', token: '--color-highlight' },
 ]
 
-const BORDER_PALETTE: Swatch[] = [
+const BORDER_PALETTE: SwatchSpec[] = [
   { name: 'border', token: '--color-border' },
   { name: 'border-light', token: '--color-border-light' },
   { name: 'border-lighter', token: '--color-border-lighter' },
   { name: 'border-section', token: '--color-border-section' },
 ]
 
-const TEXT_SHADES: Swatch[] = [
+const TEXT_SHADES: SwatchSpec[] = [
   { name: 'text', token: '--color-text' },
   { name: 'text-heading', token: '--color-text-heading' },
   { name: 'text-label', token: '--color-text-label' },
@@ -69,7 +69,7 @@ const TEXT_SHADES: Swatch[] = [
   { name: 'text-faint', token: '--color-text-faint' },
 ]
 
-const KO_TIERS: Swatch[] = [
+const KO_TIERS: SwatchSpec[] = [
   { name: 'ko-guaranteed-ohko', token: '--color-ko-guaranteed-ohko' },
   { name: 'ko-chance-ohko', token: '--color-ko-chance-ohko' },
   { name: 'ko-guaranteed-2hko', token: '--color-ko-guaranteed-2hko' },
@@ -77,13 +77,13 @@ const KO_TIERS: Swatch[] = [
   { name: 'ko-no-2hko', token: '--color-ko-no-2hko' },
 ]
 
-const Swatch = ({ name, token, note }: Swatch) => (
-  <div className="border-border bg-surface flex items-center gap-3 rounded border p-2">
+const Swatch = ({ name, token, note }: SwatchSpec) => (
+  <div className="border-border overflow-hidden rounded border">
     <div
-      className="border-border-light h-10 w-10 shrink-0 rounded border"
+      className="h-16 w-full"
       style={{ backgroundColor: `var(${token})` }}
     />
-    <div className="min-w-0 text-xs">
+    <div className="bg-surface px-2 py-1.5 text-xs">
       <div className="text-text-heading truncate font-mono">{name}</div>
       <div className="text-text-muted truncate font-mono">{token}</div>
       {note && <div className="text-text-faint truncate">{note}</div>}
