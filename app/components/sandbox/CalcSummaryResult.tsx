@@ -76,47 +76,60 @@ const FieldToggles = () => {
   const toggleDefenderSide = useSandboxStore((s) => s.toggleDefenderSide)
 
   return (
-    <div className="border-border mt-3 flex flex-wrap items-center gap-3 border-t pt-3">
-      <div className="flex items-center gap-1">
-        {WEATHER_OPTS.map((w) => (
-          <ToggleIconButton
-            key={w}
-            active={weather === w}
-            label={w}
-            onClick={() => setWeather(weather === w ? undefined : w)}
-          >
-            <WeatherIcon weather={w} />
-          </ToggleIconButton>
-        ))}
-      </div>
-      <span className="border-border h-5 border-l" aria-hidden />
-      <div className="flex items-center gap-1">
-        {TERRAIN_OPTS.map((t) => {
-          const Icon = TERRAIN_ICONS[t]
-          return (
+    <div className="border-border mt-3 flex flex-wrap items-start gap-4 border-t pt-3">
+      <div className="flex flex-col gap-1">
+        <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
+          Weather
+        </span>
+        <div className="flex items-center gap-1">
+          {WEATHER_OPTS.map((w) => (
             <ToggleIconButton
-              key={t}
-              active={terrain === t}
-              label={`${t} Terrain`}
-              onClick={() => setTerrain(terrain === t ? undefined : t)}
+              key={w}
+              active={weather === w}
+              label={w}
+              onClick={() => setWeather(weather === w ? undefined : w)}
+            >
+              <WeatherIcon weather={w} />
+            </ToggleIconButton>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
+          Terrain
+        </span>
+        <div className="flex items-center gap-1">
+          {TERRAIN_OPTS.map((t) => {
+            const Icon = TERRAIN_ICONS[t]
+            return (
+              <ToggleIconButton
+                key={t}
+                active={terrain === t}
+                label={`${t} Terrain`}
+                onClick={() => setTerrain(terrain === t ? undefined : t)}
+              >
+                <Icon />
+              </ToggleIconButton>
+            )
+          })}
+        </div>
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
+          Screens
+        </span>
+        <div className="flex items-center gap-1">
+          {SCREEN_OPTS.map(({ key, label, Icon }) => (
+            <ToggleIconButton
+              key={key}
+              active={!!defenderSide?.[key]}
+              label={label}
+              onClick={() => toggleDefenderSide(key)}
             >
               <Icon />
             </ToggleIconButton>
-          )
-        })}
-      </div>
-      <span className="border-border h-5 border-l" aria-hidden />
-      <div className="flex items-center gap-1">
-        {SCREEN_OPTS.map(({ key, label, Icon }) => (
-          <ToggleIconButton
-            key={key}
-            active={!!defenderSide?.[key]}
-            label={label}
-            onClick={() => toggleDefenderSide(key)}
-          >
-            <Icon />
-          </ToggleIconButton>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
