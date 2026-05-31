@@ -32,7 +32,7 @@ const VsParseInput = () => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="32+ ZardY Heat wave vs 32/0 Ttar in sand"
-        className="border-border bg-background w-full rounded-sm border px-3 py-3 font-mono text-base"
+        className="border-border bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
       />
       {parseVsError && (
         <div className="text-xs text-red-600">
