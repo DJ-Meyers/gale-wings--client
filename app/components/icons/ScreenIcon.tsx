@@ -5,87 +5,52 @@ const darken = (hex: string, amount: number): string => {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
 }
 
-const ScreenIcon = ({
-  color,
-  className,
-}: {
-  color: string
-  className?: string
-}) => {
-  const mid = darken(color, 45)
-  const dark = darken(color, 90)
+const WHITE = '#FFFFFF'
+const WHITE_MID = darken(WHITE, 45)
+const WHITE_DARK = darken(WHITE, 90)
 
-  return (
+const ScreenIcon = ({ bg, title }: { bg: string; title: string }) => (
+  <span
+    className="mx-[0.1em] inline-flex items-center justify-center rounded-sm align-[-0.15em]"
+    style={{ backgroundColor: bg, width: '1.3em', height: '1.3em' }}
+    title={title}
+  >
     <svg
-      className={className}
+      className="h-[1em] w-[1em]"
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
       viewBox="0 0 64 64"
     >
-      <defs>
-        <filter
-          height="130%"
-          id={`shadow-${color}`}
-          width="130%"
-          x="-10%"
-          y="-10%"
-        >
-          <feDropShadow
-            dx="1"
-            dy="1"
-            floodColor="#000"
-            floodOpacity="0.25"
-            stdDeviation="1.5"
-          />
-        </filter>
-      </defs>
-
       <polygon
-        fill={dark}
+        fill={WHITE_DARK}
         fillOpacity="0.7"
-        filter={`url(#shadow-${color})`}
-        points="24,12 48,8 48,54 24,50"
-        stroke={dark}
+        points="32,12 56,8 56,54 32,50"
+        stroke={WHITE_DARK}
         strokeWidth="1"
       />
       <polygon
-        fill={mid}
+        fill={WHITE_MID}
         fillOpacity="0.7"
-        filter={`url(#shadow-${color})`}
-        points="12,7 38,2 38,60 12,55"
-        stroke={mid}
+        points="20,7 46,2 46,60 20,55"
+        stroke={WHITE_MID}
         strokeWidth="1"
       />
       <polygon
-        fill={color}
+        fill={WHITE}
         fillOpacity="0.7"
-        filter={`url(#shadow-${color})`}
-        points="0,5 28,0 28,64 0,59"
-        stroke={color}
+        points="8,5 36,0 36,64 8,59"
+        stroke={WHITE}
         strokeWidth="1"
       />
     </svg>
-  )
-}
-
-const screenIconClass =
-  'inline-block w-[1.3em] h-[1.3em] align-[-0.15em] mx-[0.1em]'
-
-export const ReflectIcon = () => (
-  <span title="Reflect">
-    <ScreenIcon className={screenIconClass} color="#F0D060" />
   </span>
 )
 
+export const ReflectIcon = () => <ScreenIcon bg="#F0D060" title="Reflect" />
 export const LightScreenIcon = () => (
-  <span title="Light Screen">
-    <ScreenIcon className={screenIconClass} color="#C8A2C8" />
-  </span>
+  <ScreenIcon bg="#C8A2C8" title="Light Screen" />
 )
-
 export const AuroraVeilIcon = () => (
-  <span title="Aurora Veil">
-    <ScreenIcon className={screenIconClass} color="#9BD8F0" />
-  </span>
+  <ScreenIcon bg="#9BD8F0" title="Aurora Veil" />
 )
