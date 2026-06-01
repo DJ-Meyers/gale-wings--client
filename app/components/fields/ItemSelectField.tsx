@@ -7,7 +7,11 @@ interface Properties {
   compact?: boolean
 }
 
-export const ItemSelectField = ({ value, onChange, compact }: Properties) => {
+export const ItemSelectField = ({
+  value,
+  onChange,
+  compact,
+}: Properties) => {
   const { items } = useListItems()
   return (
     <Typeahead

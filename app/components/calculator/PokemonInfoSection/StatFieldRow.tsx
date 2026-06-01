@@ -12,6 +12,9 @@ interface Properties {
   onStatPointChange: (value: number) => void
 }
 
+const inputClass =
+  'bg-slate text-text focus:ring-(--field-accent)/30 min-w-16 flex-1 rounded-r px-2 py-1.5 text-sm focus:ring-2 focus:outline-none'
+
 export const StatFieldRow = ({
   stat,
   sp,
@@ -27,7 +30,7 @@ export const StatFieldRow = ({
       variant="labeled"
     />
     <NumberField
-      className="border-border bg-surface text-text focus:border-primary focus:ring-primary/20 min-w-16 flex-1 rounded border px-2 py-1.5 text-sm focus:ring-2 focus:outline-none"
+      className={inputClass}
       max={MAX_SP_PER_STAT}
       min={0}
       step={SP_STEP}
