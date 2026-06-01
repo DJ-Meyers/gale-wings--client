@@ -3,8 +3,11 @@ import { useMemo, type ReactNode } from 'react'
 import { computeDamage, type CalcSide } from '~/calc/compute-damage'
 import {
   AuroraVeilIcon,
+  CritIcon,
   ElectricTerrainIcon,
+  FriendGuardIcon,
   GrassyTerrainIcon,
+  HelpingHandIcon,
   LightScreenIcon,
   MistyTerrainIcon,
   PsychicTerrainIcon,
@@ -16,7 +19,11 @@ import type { FieldConditions } from '~/types'
 
 type Weather = NonNullable<FieldConditions['weather']>
 type Terrain = NonNullable<FieldConditions['terrain']>
-type ScreenKey = 'isReflect' | 'isLightScreen' | 'isAuroraVeil'
+type MitigationKey =
+  | 'isReflect'
+  | 'isLightScreen'
+  | 'isAuroraVeil'
+  | 'isFriendGuard'
 
 const WEATHER_OPTS: Weather[] = ['Sun', 'Rain', 'Sand', 'Snow']
 const TERRAIN_OPTS: Terrain[] = ['Electric', 'Grassy', 'Psychic', 'Misty']
@@ -28,10 +35,11 @@ const TERRAIN_ICONS: Record<Terrain, () => ReactNode> = {
   Misty: MistyTerrainIcon,
 }
 
-const SCREEN_OPTS: { key: ScreenKey; label: string; Icon: () => ReactNode }[] = [
+const MITIGATION_OPTS: { key: MitigationKey; label: string; Icon: () => ReactNode }[] = [
   { key: 'isReflect', label: 'Reflect (defender)', Icon: ReflectIcon },
   { key: 'isLightScreen', label: 'Light Screen (defender)', Icon: LightScreenIcon },
   { key: 'isAuroraVeil', label: 'Aurora Veil (defender)', Icon: AuroraVeilIcon },
+  { key: 'isFriendGuard', label: 'Friend Guard (defender)', Icon: FriendGuardIcon },
 ]
 
 const formatRange = (range: [number, number], maxHp: number): string => {
@@ -70,18 +78,43 @@ const ToggleIconButton = ({
 const FieldToggles = () => {
   const weather = useSandboxStore((s) => s.fieldConditions.weather)
   const terrain = useSandboxStore((s) => s.fieldConditions.terrain)
+  const attackerSide = useSandboxStore((s) => s.fieldConditions.attackerSide)
   const defenderSide = useSandboxStore((s) => s.fieldConditions.defenderSide)
+  const isCrit = useSandboxStore((s) => s.attackerCalcParameters.isCrit)
   const setWeather = useSandboxStore((s) => s.setWeather)
   const setTerrain = useSandboxStore((s) => s.setTerrain)
+  const setAttackerParams = useSandboxStore((s) => s.setAttackerParams)
+  const toggleAttackerSide = useSandboxStore((s) => s.toggleAttackerSide)
   const toggleDefenderSide = useSandboxStore((s) => s.toggleDefenderSide)
 
   return (
-    <div className="border-border mt-3 flex flex-wrap items-start gap-4 border-t pt-3">
-      <div className="flex flex-col gap-1">
+    <div className="border-border mt-3 flex flex-wrap items-start gap-2 border-t pt-3">
+      <div className="flex flex-col gap-0.5">
+        <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
+          Boosts
+        </span>
+        <div className="flex items-center gap-0.5">
+          <ToggleIconButton
+            active={!!isCrit}
+            label="Critical Hit"
+            onClick={() => setAttackerParams({ isCrit: !isCrit })}
+          >
+            <CritIcon />
+          </ToggleIconButton>
+          <ToggleIconButton
+            active={!!attackerSide?.isHelpingHand}
+            label="Helping Hand (attacker)"
+            onClick={() => toggleAttackerSide('isHelpingHand')}
+          >
+            <HelpingHandIcon />
+          </ToggleIconButton>
+        </div>
+      </div>
+      <div className="flex flex-col gap-0.5">
         <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
           Weather
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           {WEATHER_OPTS.map((w) => (
             <ToggleIconButton
               key={w}
@@ -94,11 +127,11 @@ const FieldToggles = () => {
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-0.5">
         <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
           Terrain
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           {TERRAIN_OPTS.map((t) => {
             const Icon = TERRAIN_ICONS[t]
             return (
@@ -114,12 +147,12 @@ const FieldToggles = () => {
           })}
         </div>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-0.5">
         <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
-          Screens
+          Mitigation
         </span>
-        <div className="flex items-center gap-1">
-          {SCREEN_OPTS.map(({ key, label, Icon }) => (
+        <div className="flex items-center gap-0.5">
+          {MITIGATION_OPTS.map(({ key, label, Icon }) => (
             <ToggleIconButton
               key={key}
               active={!!defenderSide?.[key]}
