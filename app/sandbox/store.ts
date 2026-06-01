@@ -105,4 +105,7 @@ export const useSandboxStore = create<SandboxStore>((set) => ({
         },
       }
     }),
+
+  toggleSingleTarget: () =>
+    set((state) => ({ ...state, isSingleTarget: !state.isSingleTarget })),
 }))

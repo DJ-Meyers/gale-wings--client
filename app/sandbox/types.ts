@@ -14,6 +14,7 @@ export interface SandboxState {
   attackerCalcParameters: CalcParameters
   defenderCalcParameters: CalcParameters
   fieldConditions: FieldConditions
+  isSingleTarget: boolean
 }
 
 export interface SandboxActions {
@@ -31,6 +32,7 @@ export interface SandboxActions {
   toggleRuin: (key: RuinKey) => void
   toggleAttackerSide: (key: AttackerSideKey) => void
   toggleDefenderSide: (key: DefenderSideKey) => void
+  toggleSingleTarget: () => void
 }
 
 export type SandboxStore = SandboxState & SandboxActions

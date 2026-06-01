@@ -5,6 +5,7 @@ import {
   classifyKoTier,
 } from '~/calc/classify-ko-range'
 import { computeDamage, type CalcSide } from '~/calc/compute-damage'
+import { isSpreadMove } from '~/calc/is-spread-move'
 import {
   AuroraVeilIcon,
   CritIcon,
@@ -16,6 +17,7 @@ import {
   MistyTerrainIcon,
   PsychicTerrainIcon,
   ReflectIcon,
+  SingleTargetIcon,
   WeatherIcon,
 } from '~/components/icons'
 import { useSandboxStore } from '~/sandbox/store'
@@ -152,11 +154,13 @@ const ToggleIconButton = ({
   active,
   label,
   onClick,
+  disabled = false,
   children,
 }: {
   active: boolean
   label: string
   onClick: () => void
+  disabled?: boolean
   children: ReactNode
 }) => (
   <button
@@ -164,11 +168,14 @@ const ToggleIconButton = ({
     title={label}
     aria-label={label}
     aria-pressed={active}
+    disabled={disabled}
     onClick={onClick}
-    className={`cursor-pointer rounded-sm text-2xl leading-none transition duration-100 ease-out [&>span]:transition [&>span]:duration-100 [&>span]:ease-out ${
-      active
-        ? '[&>span]:ring-1 [&>span]:ring-white [&>span]:ring-inset'
-        : 'opacity-40 hover:opacity-100'
+    className={`rounded-sm text-2xl leading-none transition duration-100 ease-out [&>span]:transition [&>span]:duration-100 [&>span]:ease-out ${
+      disabled
+        ? 'cursor-not-allowed opacity-20 grayscale [&>span]:!bg-neutral-500'
+        : active
+          ? 'cursor-pointer [&>span]:ring-1 [&>span]:ring-white [&>span]:ring-inset'
+          : 'cursor-pointer opacity-40 hover:opacity-100'
     }`}
   >
     {children}
@@ -181,11 +188,16 @@ const FieldToggles = () => {
   const attackerSide = useSandboxStore((s) => s.fieldConditions.attackerSide)
   const defenderSide = useSandboxStore((s) => s.fieldConditions.defenderSide)
   const isCrit = useSandboxStore((s) => s.attackerCalcParameters.isCrit)
+  const move = useSandboxStore((s) => s.attackerCalcParameters.move)
+  const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
   const setWeather = useSandboxStore((s) => s.setWeather)
   const setTerrain = useSandboxStore((s) => s.setTerrain)
   const setAttackerParams = useSandboxStore((s) => s.setAttackerParams)
   const toggleAttackerSide = useSandboxStore((s) => s.toggleAttackerSide)
   const toggleDefenderSide = useSandboxStore((s) => s.toggleDefenderSide)
+  const toggleSingleTarget = useSandboxStore((s) => s.toggleSingleTarget)
+
+  const moveIsSpread = isSpreadMove(move)
 
   return (
     <div className="border-border mt-3 border-t pt-3">
@@ -208,6 +220,18 @@ const FieldToggles = () => {
               onClick={() => toggleAttackerSide('isHelpingHand')}
             >
               <HelpingHandIcon />
+            </ToggleIconButton>
+            <ToggleIconButton
+              active={moveIsSpread && isSingleTarget}
+              disabled={!moveIsSpread}
+              label={
+                moveIsSpread
+                  ? 'Single Target (no spread reduction)'
+                  : 'Single Target (only available for spread moves)'
+              }
+              onClick={toggleSingleTarget}
+            >
+              <SingleTargetIcon />
             </ToggleIconButton>
           </div>
         </div>
