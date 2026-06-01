@@ -23,6 +23,7 @@
   --color-primary-hover: var(--color-pale-orange);
   --color-accent: var(--color-yellow);
   --color-error: #d43030;
+  --breakpoint-sm: 420px;
   --breakpoint-md: 800px;
   --color-border: color-mix(in srgb, var(--color-text-muted) 30%, transparent);
   --color-border-light: color-mix(
