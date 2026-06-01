@@ -30,3 +30,12 @@ export const KO_TIER_LABELS_DEFENSIVE: Record<KoTier, string> = {
   4: 'Survives (3HKO+)',
   5: 'No result',
 }
+
+export const KO_TIER_COLORS_OFFENSIVE: Record<KoTier, string> = {
+  0: 'text-ko-guaranteed-ohko',
+  1: 'text-ko-chance-ohko',
+  2: 'text-ko-guaranteed-2hko',
+  3: 'text-ko-chance-2hko',
+  4: 'text-ko-no-2hko',
+  5: 'text-text-muted',
+}
