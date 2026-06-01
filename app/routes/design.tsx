@@ -388,6 +388,106 @@ const DesignPage = () => {
         </div>
       </Section>
 
+      <Section title="Panel input — variants">
+        <p className="text-text-muted mb-4 text-sm">
+          Compare visual treatments for the panel inputs (Typeahead and
+          NumberField) on the home page. Each variant is an inert mock at the
+          compact size used inside <code className="font-mono text-xs">SandboxPokemonPanel</code>.
+          Pick one and we&apos;ll apply it to the panel fields.
+        </p>
+        <div className="flex flex-col gap-5">
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              Current (baseline) — border-border bg-background border px-2 py-1 text-sm
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="border-border bg-background w-full rounded-sm border px-2 py-1 font-mono text-sm"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="border-border bg-background w-16 rounded-sm border px-2 py-1 font-mono text-sm"
+              />
+            </div>
+          </div>
+
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              Combo full — bg-surface-hover + border-l-4 accent + shadow-inner + focus ring
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-16 rounded-sm border border-l-4 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              Combo thinner accent — same but border-l-2
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-2 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-16 rounded-sm border border-l-2 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              No accent — bg-surface-hover + shadow-inner + focus ring
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              Minimal — bg-surface-hover + focus ring only
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+      </Section>
+
       <Section title="Fieldset">
         <Fieldset legend="Example fieldset">
           <CheckboxField label="One" checked={false} onChange={() => {}} />
