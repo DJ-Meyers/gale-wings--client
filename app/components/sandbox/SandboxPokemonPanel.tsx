@@ -44,40 +44,47 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
         }
 
   return (
-    <CalcPokemonStatsProvider
-      value={{
-        pokemon,
-        speciesAbilities: speciesAbilities ?? [],
-        compact: false,
-        collapsibleMoves: true,
-        label: LABELS[side],
-        name: '',
-        notes: '',
-        moveOverride,
-        onSpeciesChange: (species) =>
-          setPokemon({ species: species as ChampionsPokemon['species'] }),
-        onNatureChange: (nature) =>
-          setPokemon({ nature: nature as ChampionsPokemon['nature'] }),
-        onAbilityChange: (ability) =>
-          setPokemon({ ability: ability as ChampionsPokemon['ability'] }),
-        onItemChange: (item) =>
-          setPokemon({
-            item: (item || undefined) as ChampionsPokemon['item'],
-          }),
-        onStatPointChange: (stat, value) =>
-          setPokemon({
-            statPoints: { ...pokemon.statPoints, [stat]: value },
-          }),
-        onMoveChange: (slot, move) => {
-          const moves = [...pokemon.moves] as string[]
-          moves[slot] = move
-          setPokemon({
-            moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
-          })
-        },
-      }}
-    >
-      <PokemonInfoSection />
-    </CalcPokemonStatsProvider>
+    <section aria-labelledby={`panel-heading-${side}`}>
+      <h2
+        id={`panel-heading-${side}`}
+        className="text-text-heading mb-2 text-sm font-semibold"
+      >
+        {LABELS[side]}
+      </h2>
+      <CalcPokemonStatsProvider
+        value={{
+          pokemon,
+          speciesAbilities: speciesAbilities ?? [],
+          compact: false,
+          collapsibleMoves: true,
+          name: '',
+          notes: '',
+          moveOverride,
+          onSpeciesChange: (species) =>
+            setPokemon({ species: species as ChampionsPokemon['species'] }),
+          onNatureChange: (nature) =>
+            setPokemon({ nature: nature as ChampionsPokemon['nature'] }),
+          onAbilityChange: (ability) =>
+            setPokemon({ ability: ability as ChampionsPokemon['ability'] }),
+          onItemChange: (item) =>
+            setPokemon({
+              item: (item || undefined) as ChampionsPokemon['item'],
+            }),
+          onStatPointChange: (stat, value) =>
+            setPokemon({
+              statPoints: { ...pokemon.statPoints, [stat]: value },
+            }),
+          onMoveChange: (slot, move) => {
+            const moves = [...pokemon.moves] as string[]
+            moves[slot] = move
+            setPokemon({
+              moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
+            })
+          },
+        }}
+      >
+        <PokemonInfoSection />
+      </CalcPokemonStatsProvider>
+    </section>
   )
 }
