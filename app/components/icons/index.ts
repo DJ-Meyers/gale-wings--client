@@ -1,5 +1,6 @@
 export { CalculatorIcon } from './CalculatorIcon'
 export { ClockIcon } from './ClockIcon'
+export { CritIcon } from './CritIcon'
 export { EditIcon } from './EditIcon'
 export { FriendGuardIcon } from './FriendGuardIcon'
 export { ImportIcon } from './ImportIcon'
