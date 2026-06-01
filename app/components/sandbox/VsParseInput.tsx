@@ -25,7 +25,7 @@ export const VsParseInput = () => {
     <div className="flex flex-col gap-2">
       <label
         htmlFor="vs-input"
-        className="text-text-heading text-sm font-medium"
+        className="text-text-heading text-xl font-medium"
       >
         Quick Calc
       </label>
