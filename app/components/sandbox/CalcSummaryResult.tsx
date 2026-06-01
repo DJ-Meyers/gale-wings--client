@@ -46,6 +46,70 @@ const MITIGATION_OPTS: { key: MitigationKey; label: string; Icon: () => ReactNod
   { key: 'isFriendGuard', label: 'Friend Guard (defender)', Icon: FriendGuardIcon },
 ]
 
+// Items that multiply move damage in the calc. Stat-doublers (Light Ball,
+// Thick Club), megastones, and utility items (Choice Scarf, Sitrus Berry,
+// Assault Vest, Focus Sash, Leftovers, etc.) are intentionally omitted.
+const POWER_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
+  'Choice Band',
+  'Choice Specs',
+  'Life Orb',
+  'Expert Belt',
+  'Muscle Band',
+  'Wise Glasses',
+  'Punching Glove',
+  'Loaded Dice',
+  'Metronome',
+  'Charcoal',
+  'Mystic Water',
+  'Miracle Seed',
+  'Magnet',
+  'Twisted Spoon',
+  'Black Belt',
+  'Black Glasses',
+  'Sharp Beak',
+  'Poison Barb',
+  'Soft Sand',
+  'Hard Stone',
+  'Silver Powder',
+  'Spell Tag',
+  'Metal Coat',
+  'Dragon Fang',
+  'Never-Melt Ice',
+  'Silk Scarf',
+  'Sea Incense',
+  'Wave Incense',
+  'Rose Incense',
+  'Odd Incense',
+  'Rock Incense',
+  'Soul Dew',
+  'Adamant Orb',
+  'Adamant Crystal',
+  'Lustrous Orb',
+  'Lustrous Globe',
+  'Griseous Orb',
+  'Griseous Core',
+  'Draco Plate',
+  'Dread Plate',
+  'Earth Plate',
+  'Fist Plate',
+  'Flame Plate',
+  'Icicle Plate',
+  'Insect Plate',
+  'Iron Plate',
+  'Meadow Plate',
+  'Mind Plate',
+  'Pixie Plate',
+  'Sky Plate',
+  'Splash Plate',
+  'Spooky Plate',
+  'Stone Plate',
+  'Toxic Plate',
+  'Zap Plate',
+])
+
+const powerItem = (item: string | undefined): string =>
+  item && POWER_BOOSTING_ITEMS.has(item) ? `${item} ` : ''
+
 const formatRange = (range: [number, number], maxHp: number): string => {
   const lo = ((range[0] / maxHp) * 100).toFixed(1)
   const hi = ((range[1] / maxHp) * 100).toFixed(1)
@@ -215,9 +279,9 @@ export const CalcSummaryResult = () => {
       {result ? (
         <>
           <div className="text-text-heading mb-2 text-sm font-medium">
-            {attacker.item && `${attacker.item} `}
+            {powerItem(attacker.item)}
             {attacker.species} {attackerParams.move} vs{' '}
-            {defender.item && `${defender.item} `}
+            {powerItem(defender.item)}
             {defender.species}
           </div>
           <div
