@@ -35,7 +35,7 @@ export const NatureSelectField = ({
 }: Properties) => (
   <Typeahead
     compact={compact}
-    getLabel={(v) => natureLabelMap.get(v) ?? v}
+    getLabel={(v) => (compact ? v : (natureLabelMap.get(v) ?? v))}
     label="Nature"
     options={natureNames}
     placeholder="Search natures..."
