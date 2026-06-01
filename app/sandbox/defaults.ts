@@ -81,4 +81,5 @@ export const makeDefaultSandboxState = () => ({
     ...defaultFieldConditions,
     weather: 'Sand',
   } satisfies FieldConditions,
+  isSingleTarget: false,
 })
