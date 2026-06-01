@@ -30,6 +30,7 @@ export const VsParseInput = () => {
         Quick Calc
       </label>
       <input
+        autoFocus
         id="vs-input"
         type="text"
         value={input}
