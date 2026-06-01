@@ -16,7 +16,7 @@ const IndexPage = () => (
     </header>
     <VsParseInput />
     <CalcSummaryResult />
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(236px,1fr))] gap-4">
       <SandboxPokemonPanel side="attacker" />
       <SandboxPokemonPanel side="defender" />
     </div>
