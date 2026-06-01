@@ -23,6 +23,7 @@ import {
   ReflectIcon,
   RuinIcon,
   StarIcon,
+  SwapIcon,
   TrashIcon,
   TypeIcon,
   WeatherIcon,
@@ -550,6 +551,9 @@ const DesignPage = () => {
           </IconCell>
           <IconCell name="CalculatorIcon">
             <CalculatorIcon className="h-5 w-5" />
+          </IconCell>
+          <IconCell name="SwapIcon">
+            <SwapIcon className="h-5 w-5" />
           </IconCell>
         </div>
       </Section>
