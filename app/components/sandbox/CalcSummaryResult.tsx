@@ -1,5 +1,9 @@
 import { useDeferredValue, useMemo, type ReactNode } from 'react'
 
+import {
+  KO_TIER_COLORS_OFFENSIVE,
+  classifyKoTier,
+} from '~/calc/classify-ko-range'
 import { computeDamage, type CalcSide } from '~/calc/compute-damage'
 import {
   AuroraVeilIcon,
@@ -211,21 +215,19 @@ export const CalcSummaryResult = () => {
       {result ? (
         <>
           <div className="text-text-heading mb-2 text-sm font-medium">
-            {attackerParams.move} vs. {defender.species}
+            {attacker.item && `${attacker.item} `}
+            {attacker.species} {attackerParams.move} vs{' '}
+            {defender.item && `${defender.item} `}
+            {defender.species}
           </div>
-          <div className="flex items-baseline gap-3">
-            <span className="text-2xl font-bold tabular-nums">
-              {formatRange(result.range, result.defenderMaxHp)}
-            </span>
-            <span className="text-text-muted text-sm tabular-nums">
-              ({result.range[0]} – {result.range[1]} / {result.defenderMaxHp})
-            </span>
+          <div
+            className={`text-2xl font-bold tabular-nums ${KO_TIER_COLORS_OFFENSIVE[classifyKoTier(result)]}`}
+          >
+            {formatRange(result.range, result.defenderMaxHp)}
           </div>
-          {result.koChance && (
-            <div className="text-text-muted mt-1 text-sm">{result.koChance}</div>
-          )}
-          <div className="text-text-muted mt-2 font-mono text-xs">
-            {result.desc}
+          <div className="text-text-muted mt-1 text-sm tabular-nums">
+            {result.range[0]} to {result.range[1]} damage out of{' '}
+            {result.defenderMaxHp} HP
           </div>
         </>
       ) : (
