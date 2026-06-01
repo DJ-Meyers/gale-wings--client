@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react'
+
 import { PokemonInfoStatPointInputs } from '~/components/calculator/PokemonInfoSection/PokemonInfoStatPointInputs'
 import { AbilitySelectField } from '~/components/fields/AbilitySelectField'
 import { ItemSelectField } from '~/components/fields/ItemSelectField'
@@ -52,6 +54,13 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
     <section
       aria-labelledby={`panel-heading-${side}`}
       className="bg-surface rounded-lg p-4 shadow-md"
+      style={
+        {
+          '--field-accent': isAttacker
+            ? 'var(--color-blue)'
+            : 'var(--color-yellow)',
+        } as CSSProperties
+      }
     >
       <h2
         id={`panel-heading-${side}`}
@@ -126,3 +135,4 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
     </section>
   )
 }
+
