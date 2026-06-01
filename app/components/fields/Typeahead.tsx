@@ -9,7 +9,7 @@ interface Properties {
   label: string
   value: string
   onChange: (value: string) => void
-  options: string[]
+  options: readonly string[]
   placeholder?: string
   allowEmpty?: boolean
   emptyLabel?: string

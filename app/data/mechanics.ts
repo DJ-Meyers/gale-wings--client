@@ -1,6 +1,6 @@
-import { currentRegulation } from '@dj-meyers/galewings/constants'
-import { championsAbilitiesSchema } from '@dj-meyers/galewings/schemas'
-import type { Mechanic } from '@dj-meyers/galewings/types'
+import { currentRegulation } from '@dj-meyers/gale-wings/constants'
+import { championsAbilitiesSchema } from '@dj-meyers/gale-wings/schemas'
+import type { Mechanic } from '@dj-meyers/gale-wings/types'
 
 const legalMechanics = new Set<Mechanic>(currentRegulation.legalMechanics)
 export const TERA_ENABLED = legalMechanics.has('terastallization')

@@ -1,8 +1,7 @@
 import {
   useQuery,
   useSuspenseQuery,
-  type DefinedInitialDataOptions,
-  type UndefinedInitialDataOptions,
+  type UseQueryOptions,
   type UseSuspenseQueryOptions,
 } from '@tanstack/react-query'
 
@@ -34,6 +33,19 @@ type SuspenseNamedQueryResult<TData, TError, Name extends string> = {
   [K in `${Name}Error`]: TError | null
 }
 
+// The four `any`s in the constraint match any TanStack-shaped options object
+// (including tRPC's `UnusedSkipTokenTRPCQueryOptionsOut`, whose TQueryFnData
+// is the wire type and whose TQueryKey is a branded mutable tuple — neither
+// assigns to the strict `useQuery` generics in invariant positions). TData
+// and TError are recovered from the options via conditional inference, so
+// the result stays end-to-end typed.
+type DataOf<O> = O extends UseQueryOptions<any, any, infer D, any> ? D : never
+type ErrorOf<O> = O extends UseQueryOptions<any, infer E, any, any> ? E : never
+type SuspenseDataOf<O> =
+  O extends UseSuspenseQueryOptions<any, any, infer D, any> ? D : never
+type SuspenseErrorOf<O> =
+  O extends UseSuspenseQueryOptions<any, infer E, any, any> ? E : never
+
 /**
  * Wraps `useQuery` and remaps its return properties under a descriptive name.
  *
@@ -47,14 +59,12 @@ type SuspenseNamedQueryResult<TData, TError, Name extends string> = {
  * ```
  */
 export const useNamedQuery = <
-  TQueryFnData = unknown,
-  TError = Error,
-  TData = TQueryFnData,
-  TQueryKey extends readonly unknown[] = readonly unknown[],
-  Name extends string = string,
->(options:
-    | UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>
-    | DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>, name: Name): NamedQueryResult<TData, TError, Name> => {
+  O extends UseQueryOptions<any, any, any, any>,
+  Name extends string,
+>(
+  options: O,
+  name: Name,
+): NamedQueryResult<DataOf<O>, ErrorOf<O>, Name> => {
   const query = useQuery(options)
   const capitalized = name[0].toUpperCase() + name.slice(1)
 
@@ -68,8 +78,8 @@ export const useNamedQuery = <
       if (prop === `${name}Error`) return target.error
       return target[prop as keyof typeof target]
     },
-  }) as unknown as NamedQueryResult<TData, TError, Name>
-};
+  }) as unknown as NamedQueryResult<DataOf<O>, ErrorOf<O>, Name>
+}
 
 /**
  * Wraps `useSuspenseQuery` and remaps its return properties under a descriptive name.
@@ -78,12 +88,12 @@ export const useNamedQuery = <
  * guarantees data is available.
  */
 export const useSuspenseNamedQuery = <
-  TQueryFnData = unknown,
-  TError = Error,
-  TData = TQueryFnData,
-  TQueryKey extends readonly unknown[] = readonly unknown[],
-  Name extends string = string,
->(options: UseSuspenseQueryOptions<TQueryFnData, TError, TData, TQueryKey>, name: Name): SuspenseNamedQueryResult<TData, TError, Name> => {
+  O extends UseSuspenseQueryOptions<any, any, any, any>,
+  Name extends string,
+>(
+  options: O,
+  name: Name,
+): SuspenseNamedQueryResult<SuspenseDataOf<O>, SuspenseErrorOf<O>, Name> => {
   const query = useSuspenseQuery(options)
   const capitalized = name[0].toUpperCase() + name.slice(1)
 
@@ -97,5 +107,9 @@ export const useSuspenseNamedQuery = <
       if (prop === `${name}Error`) return target.error
       return target[prop as keyof typeof target]
     },
-  }) as unknown as SuspenseNamedQueryResult<TData, TError, Name>
-};
+  }) as unknown as SuspenseNamedQueryResult<
+    SuspenseDataOf<O>,
+    SuspenseErrorOf<O>,
+    Name
+  >
+}

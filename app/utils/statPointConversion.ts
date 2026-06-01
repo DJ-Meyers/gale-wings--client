@@ -1,4 +1,4 @@
-import type { StatKey, StatPoints } from '@dj-meyers/galewings/types'
+import type { StatKey, StatPoints } from '@dj-meyers/gale-wings/types'
 
 const STAT_KEYS: readonly StatKey[] = [
   'hp',

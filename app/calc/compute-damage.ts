@@ -1,6 +1,6 @@
 import { Field, Move, calculate, toID } from '@smogon/calc'
 
-import type { FieldConditions } from '@dj-meyers/galewings/types'
+import type { FieldConditions } from '@dj-meyers/gale-wings/types'
 
 import { isSpreadMove } from '~/calc/is-spread-move'
 import { gen, toSmogonName } from '~/data/gen'

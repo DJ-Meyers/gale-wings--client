@@ -12,7 +12,7 @@ const FOREVER = { staleTime: Infinity, gcTime: Infinity } as const
 export const prefetchStaticData = (): Promise<unknown> =>
   Promise.all([
     queryClient.prefetchQuery(
-      trpcProxy.data.listSpecies.queryOptions(undefined, FOREVER),
+      trpcProxy.data.listChampionsSpecies.queryOptions(undefined, FOREVER),
     ),
     queryClient.prefetchQuery(
       trpcProxy.data.listMoves.queryOptions(undefined, FOREVER),

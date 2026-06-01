@@ -1,4 +1,4 @@
-import type { AppRouter } from '@dj-meyers/galewings/router'
+import type { AppRouter } from '@dj-meyers/gale-wings--api-types'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 
 import { trpcClient } from '~/trpc/client'

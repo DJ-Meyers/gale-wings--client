@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { FieldConditions } from '@dj-meyers/galewings/types'
+import type { FieldConditions } from '@dj-meyers/gale-wings/types'
 
 import {
   computeDamage,

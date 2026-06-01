@@ -1,4 +1,4 @@
-import type { FieldConditions } from '@dj-meyers/galewings/types'
+import type { FieldConditions } from '@dj-meyers/gale-wings/types'
 
 import sunIcon from '~/assets/weather/Harsh_sunlight_icon_SV.png'
 import rainIcon from '~/assets/weather/Rain_icon_SV.png'

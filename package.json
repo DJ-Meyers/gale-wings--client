@@ -1,5 +1,5 @@
 {
-  "name": "galewings-client",
+  "name": "gale-wings--client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@clerk/react": "^6.1.0",
-    "@dj-meyers/galewings": "link:../galewings-api/packages/shared-types",
+    "@dj-meyers/gale-wings": "^1.0.0",
+    "@dj-meyers/gale-wings--api-types": "^0.2.0",
     "@smogon/calc": "^0.10.0",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.90.21",

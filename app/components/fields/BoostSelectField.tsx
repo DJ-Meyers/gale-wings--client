@@ -1,4 +1,4 @@
-// TODO: swap for `statBoostValueSchema` from @dj-meyers/galewings/schemas
+// TODO: swap for `statBoostValueSchema` from @dj-meyers/gale-wings/schemas
 // once it lands as a public export; derive the array from its bounds.
 const BOOST_VALUES = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
 

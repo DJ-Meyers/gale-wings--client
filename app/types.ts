@@ -4,4 +4,4 @@ export type {
   ChampionsPokemon,
   FieldConditions,
   StatKey,
-} from '@dj-meyers/galewings/types'
+} from '@dj-meyers/gale-wings/types'

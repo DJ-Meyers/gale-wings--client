@@ -1,4 +1,4 @@
-import type { AppRouter } from '@dj-meyers/galewings/router'
+import type { AppRouter } from '@dj-meyers/gale-wings--api-types'
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 import superjson from 'superjson'

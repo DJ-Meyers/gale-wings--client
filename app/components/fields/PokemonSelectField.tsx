@@ -1,5 +1,5 @@
 import { Typeahead } from '~/components/fields/Typeahead'
-import { useListSpecies } from '~/hooks/api/data'
+import { useListChampionsSpecies } from '~/hooks/api/data'
 
 interface Properties {
   value: string
@@ -12,7 +12,7 @@ export const PokemonSelectField = ({
   onChange,
   compact,
 }: Properties) => {
-  const { species } = useListSpecies()
+  const { species } = useListChampionsSpecies()
   return (
     <Typeahead
       compact={compact}
