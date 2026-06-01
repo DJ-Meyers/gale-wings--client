@@ -8,6 +8,7 @@ interface Properties {
   label?: string
   options?: string[]
   disabled?: boolean
+  compact?: boolean
 }
 
 export const MoveSelectField = ({
@@ -17,11 +18,13 @@ export const MoveSelectField = ({
   label,
   options,
   disabled,
+  compact,
 }: Properties) => {
   const { moves } = useListMoves()
   return (
     <Typeahead
       className={className}
+      compact={compact}
       disabled={disabled}
       label={label ?? 'Move'}
       options={options ?? moves ?? []}

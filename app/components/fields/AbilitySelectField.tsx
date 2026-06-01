@@ -7,12 +7,14 @@ interface Properties {
   value: string
   onChange: (ability: string) => void
   speciesAbilities?: string[]
+  compact?: boolean
 }
 
 export const AbilitySelectField = ({
   value,
   onChange,
   speciesAbilities = [],
+  compact,
 }: Properties) => {
   const { abilities } = useListAbilities()
 
@@ -25,6 +27,7 @@ export const AbilitySelectField = ({
 
   return (
     <Typeahead
+      compact={compact}
       label="Ability"
       options={options}
       placeholder="Search abilities..."

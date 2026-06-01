@@ -10,6 +10,7 @@ export const PokemonInfoSelectors = () => {
   const {
     pokemon,
     speciesAbilities,
+    compact,
     collapsibleMoves,
     moveOverride,
     onSpeciesChange,
@@ -27,6 +28,7 @@ export const PokemonInfoSelectors = () => {
       {[0, 1, 2, 3].map((slot) => (
         <MoveSelectField
           key={slot}
+          compact={compact}
           label={`Move ${slot + 1}`}
           options={learnableMoves ?? []}
           value={moves[slot] ?? ''}
@@ -38,16 +40,30 @@ export const PokemonInfoSelectors = () => {
 
   return (
     <div className="flex flex-col">
-      <PokemonSelectField value={species} onChange={onSpeciesChange} />
-      <NatureSelectField value={nature} onChange={onNatureChange} />
+      <PokemonSelectField
+        compact={compact}
+        value={species}
+        onChange={onSpeciesChange}
+      />
+      <NatureSelectField
+        compact={compact}
+        value={nature}
+        onChange={onNatureChange}
+      />
       <AbilitySelectField
+        compact={compact}
         speciesAbilities={speciesAbilities}
         value={ability}
         onChange={onAbilityChange}
       />
-      <ItemSelectField value={item ?? ''} onChange={onItemChange} />
+      <ItemSelectField
+        compact={compact}
+        value={item ?? ''}
+        onChange={onItemChange}
+      />
       {moveOverride ? (
         <MoveSelectField
+          compact={compact}
           disabled={moveOverride.disabled}
           options={moveOverride.options}
           value={moveOverride.value}

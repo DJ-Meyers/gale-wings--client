@@ -4,6 +4,7 @@ import { naturesList } from '~/data/natures'
 interface Properties {
   value: string
   onChange: (nature: string) => void
+  compact?: boolean
 }
 
 const STAT_LABELS: Record<string, string> = {
@@ -27,8 +28,13 @@ const natureLabelMap = new Map(
   }),
 )
 
-export const NatureSelectField = ({ value, onChange }: Properties) => (
+export const NatureSelectField = ({
+  value,
+  onChange,
+  compact,
+}: Properties) => (
   <Typeahead
+    compact={compact}
     getLabel={(v) => natureLabelMap.get(v) ?? v}
     label="Nature"
     options={natureNames}

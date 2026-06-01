@@ -55,7 +55,7 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
         value={{
           pokemon,
           speciesAbilities: speciesAbilities ?? [],
-          compact: false,
+          compact: true,
           collapsibleMoves: true,
           name: '',
           notes: '',

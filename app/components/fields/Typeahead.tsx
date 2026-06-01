@@ -13,6 +13,7 @@ interface Properties {
   getLabel?: (value: string) => string
   className?: string
   disabled?: boolean
+  compact?: boolean
 }
 
 export const Typeahead = ({
@@ -26,6 +27,7 @@ export const Typeahead = ({
   getLabel,
   className,
   disabled = false,
+  compact = false,
 }: Properties) => {
   const displayValue = useCallback(
     (v: string) => (getLabel ? getLabel(v) : v),
@@ -131,7 +133,7 @@ export const Typeahead = ({
 
   return (
     <div
-      className={`relative mb-3 ${className ?? ''}`}
+      className={`relative ${compact ? 'mb-1' : 'mb-3'} ${className ?? ''}`}
       ref={containerReference}
     >
       <FieldLabel>{label}</FieldLabel>
