@@ -3,6 +3,7 @@
 @theme {
   /* Galewings redesign palette */
   --color-red: #ec5f44;
+  --color-blue: #4a90e2;
   --color-bright-orange: #e76d3f;
   --color-pale-orange: #f09e70;
   --color-yellow: #f6e34f;
@@ -51,6 +52,8 @@
   --color-ko-guaranteed-2hko: #e8d44d;
   --color-ko-chance-2hko: #e8913a;
   --color-ko-no-2hko: #e05555;
+
+  --field-accent: var(--color-primary);
 }
 
 body {
