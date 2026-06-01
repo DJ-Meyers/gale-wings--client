@@ -312,6 +312,82 @@ const DesignPage = () => {
         </div>
       </Section>
 
+      <Section title="Quick Calc input — variants">
+        <p className="text-text-muted mb-4 text-sm">
+          Compare visual treatments for the parse input on the home page. Each
+          variant is an inert mock — typing is allowed but nothing is wired up.
+          Pick one and we&apos;ll apply it to{' '}
+          <code className="font-mono text-xs">routes/index.tsx</code>.
+        </p>
+        <div className="flex flex-col gap-5">
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Current (broken — bg-background is undefined)
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="border-border bg-background w-full rounded-sm border px-3 py-3 font-mono text-base"
+            />
+          </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Surface-hover (plain)
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="border-border bg-surface-hover w-full rounded-sm border px-3 py-3 font-mono text-base"
+            />
+          </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Surface-hover + focus ring
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="border-border bg-surface-hover focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-3 py-3 font-mono text-base focus:ring-2 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Surface-hover + left accent border
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="border-border bg-surface-hover border-l-primary w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base"
+            />
+          </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Surface-hover + inner shadow
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="border-border bg-surface-hover w-full rounded-sm border px-3 py-3 font-mono text-base shadow-inner"
+            />
+          </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Combo — surface-hover + focus ring + left accent + inner shadow
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="border-border bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
+            />
+          </div>
+        </div>
+      </Section>
+
       <Section title="Fieldset">
         <Fieldset legend="Example fieldset">
           <CheckboxField label="One" checked={false} onChange={() => {}} />
