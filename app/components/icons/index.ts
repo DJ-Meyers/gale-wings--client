@@ -8,6 +8,7 @@ export { PokemonWithItemIcon } from './PokemonWithItemIcon'
 export { RuinIcon } from './RuinIcon'
 export { AuroraVeilIcon, LightScreenIcon, ReflectIcon } from './ScreenIcon'
 export { StarIcon } from './StarIcon'
+export { SwapIcon } from './SwapIcon'
 export {
   ElectricTerrainIcon,
   GrassyTerrainIcon,
