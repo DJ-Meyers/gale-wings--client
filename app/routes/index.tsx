@@ -7,10 +7,10 @@ import { VsParseInput } from '~/components/sandbox/VsParseInput'
 const IndexPage = () => (
   <div className="mx-auto flex max-w-[1400px] flex-col gap-4 py-6">
     <header>
-      <h1 className="from-red via-primary via-65% to-accent inline-block bg-linear-to-r bg-clip-text pb-2 text-7xl leading-tight font-bold text-transparent">
+      <h1 className="from-red via-primary via-65% to-accent inline-block bg-linear-to-r bg-clip-text pb-2 text-5xl leading-tight font-bold text-transparent sm:text-6xl md:text-7xl">
         Gale Wings
       </h1>
-      <p className="text-white text-xl font-semibold">
+      <p className="text-white text-base font-semibold md:text-xl">
         The fastest (probably) VGC calculator
       </p>
     </header>
