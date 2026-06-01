@@ -46,12 +46,15 @@ const MITIGATION_OPTS: { key: MitigationKey; label: string; Icon: () => ReactNod
   { key: 'isFriendGuard', label: 'Friend Guard (defender)', Icon: FriendGuardIcon },
 ]
 
-// Items that multiply move damage in the calc. Stat-doublers (Light Ball,
-// Thick Club), megastones, and utility items (Choice Scarf, Sitrus Berry,
-// Assault Vest, Focus Sash, Leftovers, etc.) are intentionally omitted.
+// Items that boost a Pokémon's damage output (move-power multipliers and
+// species-locked stat doublers). Megastones and utility items (Choice Scarf,
+// Sitrus Berry, Assault Vest, Focus Sash, Leftovers, etc.) are omitted.
 const POWER_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
   'Choice Band',
   'Choice Specs',
+  'Light Ball',
+  'Thick Club',
+  'Deep Sea Tooth',
   'Life Orb',
   'Expert Belt',
   'Muscle Band',
