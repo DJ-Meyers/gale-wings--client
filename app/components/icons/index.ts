@@ -1,3 +1,4 @@
+export { CalculatorIcon } from './CalculatorIcon'
 export { ClockIcon } from './ClockIcon'
 export { EditIcon } from './EditIcon'
 export { ImportIcon } from './ImportIcon'
