@@ -16,6 +16,7 @@ export const StatDisplay = ({
   natureMod,
   className,
   variant = 'compact',
+  flushRight = false,
 }: {
   stat: StatKey
   sp?: number
@@ -23,18 +24,21 @@ export const StatDisplay = ({
   natureMod?: '+' | '-'
   className?: string
   variant?: 'compact' | 'labeled'
+  flushRight?: boolean
 }) => {
   const { label, color } = STAT_STYLES[stat]
   const suffix = natureMod ?? ''
+  const radiusClass = flushRight ? 'rounded-l' : 'rounded'
+  const labeledSizeClass = flushRight ? 'h-[32px] w-[34px] shrink-0' : 'size-[34px] shrink-0'
 
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded px-2 py-1.5 ${variant === 'labeled' ? 'size-[34px] shrink-0' : ''} ${className ?? ''}`}
+      className={`flex flex-col items-center justify-center px-2 py-1.5 ${radiusClass} ${variant === 'labeled' ? labeledSizeClass : ''} ${className ?? ''}`}
       style={{ backgroundColor: `${color}22` }}
     >
       {variant === 'labeled' ? (
         <>
-          <span className="text-text-muted text-[8px] leading-tight">
+          <span className="text-text text-[8px] leading-tight">
             {label}
           </span>
           <span
@@ -52,7 +56,7 @@ export const StatDisplay = ({
           >
             {total ?? '?'}
           </span>
-          <span className="text-text-muted text-[8px] leading-tight">
+          <span className="text-text text-[8px] leading-tight">
             {sp || suffix ? `${sp}${suffix}` : label}
           </span>
         </>
