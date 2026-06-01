@@ -9,6 +9,7 @@ import { TextAreaField } from '~/components/fields/TextAreaField'
 import { TextField } from '~/components/fields/TextField'
 import {
   AuroraVeilIcon,
+  CalculatorIcon,
   ClockIcon,
   EditIcon,
   ElectricTerrainIcon,
@@ -546,6 +547,9 @@ const DesignPage = () => {
           </IconCell>
           <IconCell name="ClockIcon">
             <ClockIcon className="h-5 w-5" />
+          </IconCell>
+          <IconCell name="CalculatorIcon">
+            <CalculatorIcon className="h-5 w-5" />
           </IconCell>
         </div>
       </Section>
