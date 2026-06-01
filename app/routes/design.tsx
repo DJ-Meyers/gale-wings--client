@@ -16,6 +16,7 @@ import {
   ElectricTerrainIcon,
   FriendGuardIcon,
   GrassyTerrainIcon,
+  HelpingHandIcon,
   ImportIcon,
   ItemIcon,
   LightScreenIcon,
@@ -562,6 +563,9 @@ const DesignPage = () => {
           </IconCell>
           <IconCell name="CritIcon">
             <CritIcon className="h-5 w-5" />
+          </IconCell>
+          <IconCell name="HelpingHandIcon">
+            <HelpingHandIcon className="h-5 w-5" />
           </IconCell>
         </div>
       </Section>
