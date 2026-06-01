@@ -36,7 +36,7 @@ const TerrainIcon = ({ terrain }: { terrain: string }) => {
       </svg>
       <img
         alt={data.label}
-        className="relative -mt-[0.1em] h-[0.7em] w-[0.7em] object-contain"
+        className="relative mb-[0.2em] h-[1em] w-[1em] object-contain"
         src={data.icon}
       />
     </span>
