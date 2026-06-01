@@ -120,7 +120,6 @@ export const CalcModal = () => {
             pokemon: calc.opponent,
             speciesAbilities: opponentAbilities ?? [],
             compact: true,
-            label: 'Text-to-Pokémon',
             name: calc.name,
             notes: calc.notes,
             onSpeciesChange: (species) =>
