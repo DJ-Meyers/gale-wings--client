@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { CalculatorIcon } from '~/components/icons'
 import { useParseVs } from '~/hooks/api/data'
 import { useDebouncedValue } from '~/hooks/useDebouncedValue'
 import { useSandboxStore } from '~/sandbox/store'
@@ -7,7 +8,7 @@ import { useSandboxStore } from '~/sandbox/store'
 const PARSE_DEBOUNCE_MS = 300
 
 export const VS_PARSE_INPUT_CLASS =
-  'bg-slate border-l-primary border-l-4 focus:ring-primary/30 focus:ring-2 focus:outline-none w-full rounded-sm px-2 py-1.5 font-mono text-sm'
+  'bg-slate border-l-primary border-l-4 focus:ring-primary/30 focus:ring-2 focus:outline-none w-full rounded-sm py-1.5 pr-8 pl-2 font-mono text-sm'
 
 export const VsParseInput = () => {
   const input = useSandboxStore((s) => s.input)
@@ -29,15 +30,18 @@ export const VsParseInput = () => {
       >
         Quick Calc
       </label>
-      <input
-        autoFocus
-        id="vs-input"
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="32+ ZardY Heat wave vs 32/0 Ttar in sand"
-        className={VS_PARSE_INPUT_CLASS}
-      />
+      <div className="relative">
+        <input
+          autoFocus
+          id="vs-input"
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="32+ ZardY Heat wave vs 32/0 Ttar in sand"
+          className={VS_PARSE_INPUT_CLASS}
+        />
+        <CalculatorIcon className="text-text-muted pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2" />
+      </div>
       {parseVsError && (
         <div className="text-xs text-red-600">
           Parse failed: {parseVsError.message}
