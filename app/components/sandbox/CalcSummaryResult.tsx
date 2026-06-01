@@ -300,12 +300,14 @@ export const CalcSummaryResult = () => {
   const attackerParams = useSandboxStore((s) => s.attackerCalcParameters)
   const defenderParams = useSandboxStore((s) => s.defenderCalcParameters)
   const fieldConditions = useSandboxStore((s) => s.fieldConditions)
+  const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
 
   const attackerDeferred = useDeferredValue(attacker)
   const defenderDeferred = useDeferredValue(defender)
   const attackerParamsDeferred = useDeferredValue(attackerParams)
   const defenderParamsDeferred = useDeferredValue(defenderParams)
   const fieldConditionsDeferred = useDeferredValue(fieldConditions)
+  const isSingleTargetDeferred = useDeferredValue(isSingleTarget)
 
   const result = useMemo(() => {
     const atkSide: CalcSide = {
@@ -321,6 +323,7 @@ export const CalcSummaryResult = () => {
       defSide,
       attackerParamsDeferred.move,
       fieldConditionsDeferred,
+      { isSingleTarget: isSingleTargetDeferred },
     )
   }, [
     attackerDeferred,
@@ -328,6 +331,7 @@ export const CalcSummaryResult = () => {
     attackerParamsDeferred,
     defenderParamsDeferred,
     fieldConditionsDeferred,
+    isSingleTargetDeferred,
   ])
 
   return (

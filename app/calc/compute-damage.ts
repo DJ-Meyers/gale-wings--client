@@ -2,6 +2,7 @@ import { Field, Move, calculate, toID } from '@smogon/calc'
 
 import type { FieldConditions } from '@dj-meyers/galewings/types'
 
+import { isSpreadMove } from '~/calc/is-spread-move'
 import { gen, toSmogonName } from '~/data/gen'
 import type { CalcParameters, ChampionsPokemon } from '~/types'
 import { toCalcPokemon } from '~/utils/championsPokemon'
@@ -57,11 +58,20 @@ export const shouldActivateAbility = (
 //   explicit pick was made (matches TailRoom's behaviour).
 // - Hardcodes gameType: 'Doubles' (§2.8 — no field flag for it).
 // - Returns null on any unknown species / move / calc error.
+export type ComputeDamageOptions = {
+  // When true and the move is a spread move (allAdjacent / allAdjacentFoes),
+  // override the move target to 'normal' so @smogon/calc skips the 0.75×
+  // spread modifier — i.e. the result for "what if this Heat Wave only hit
+  // one Pokémon".
+  isSingleTarget?: boolean
+}
+
 export const computeDamage = (
   attacker: CalcSide,
   defender: CalcSide,
   moveName: string,
   field: FieldConditions,
+  options: ComputeDamageOptions = {},
 ): DamageCalcResult | null => {
   try {
     if (!gen.species.get(toID(toSmogonName(attacker.pokemon.species))))
@@ -101,6 +111,10 @@ export const computeDamage = (
 
     const move = new Move(gen, moveName, {
       isCrit: attacker.params.isCrit || undefined,
+      overrides:
+        options.isSingleTarget && isSpreadMove(moveName)
+          ? { target: 'normal' }
+          : undefined,
     })
 
     const calcField = new Field({
