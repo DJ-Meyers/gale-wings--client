@@ -7,7 +7,7 @@ import { useSandboxStore } from '~/sandbox/store'
 const PARSE_DEBOUNCE_MS = 300
 
 export const VS_PARSE_INPUT_CLASS =
-  'bg-slate border-l-primary border-l-4 focus:ring-primary/30 focus:ring-2 focus:outline-none w-full rounded-sm px-3 py-3 font-mono text-base'
+  'bg-slate border-l-primary border-l-4 focus:ring-primary/30 focus:ring-2 focus:outline-none w-full rounded-sm px-2 py-1.5 font-mono text-sm'
 
 export const VsParseInput = () => {
   const input = useSandboxStore((s) => s.input)
