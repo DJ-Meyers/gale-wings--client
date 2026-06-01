@@ -17,6 +17,12 @@ export interface CalcPokemonStatsContextValue {
   onNameChange?: (name: string) => void
   onNotesChange?: (notes: string) => void
   onMoveChange?: (slot: number, move: string) => void
+  moveOverride?: {
+    value: string
+    onChange: (move: string) => void
+    disabled?: boolean
+    options?: string[]
+  }
 }
 
 export const CalcPokemonStatsContext =
