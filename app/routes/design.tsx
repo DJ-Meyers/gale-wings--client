@@ -122,6 +122,145 @@ const Section = ({
   </section>
 )
 
+type InputVariant = { label: string; className: string }
+
+const WideInputVariant = ({ label, className }: InputVariant) => (
+  <div>
+    <div className="text-text-muted mb-1 text-xs">{label}</div>
+    <input
+      type="text"
+      placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+      className={`${className} w-full`}
+    />
+  </div>
+)
+
+const PanelInputVariant = ({ label, className }: InputVariant) => (
+  <div className="w-[280px]">
+    <div className="text-text-muted mb-1 text-xs">{label}</div>
+    <div className="flex gap-2">
+      <input
+        type="text"
+        placeholder="Charizard-Mega-Y"
+        className={`${className} w-full`}
+      />
+      <input
+        type="number"
+        placeholder="252"
+        className={`${className} w-16`}
+      />
+    </div>
+  </div>
+)
+
+const QUICK_CALC_VARIANTS: InputVariant[] = [
+  {
+    label: 'Current (broken — bg-background is undefined)',
+    className:
+      'border-border bg-background rounded-sm border px-3 py-3 font-mono text-base',
+  },
+  {
+    label: 'Surface-hover (plain)',
+    className:
+      'border-border bg-surface-hover rounded-sm border px-3 py-3 font-mono text-base',
+  },
+  {
+    label: 'Surface-hover + focus ring',
+    className:
+      'border-border bg-surface-hover focus:border-primary focus:ring-primary/30 rounded-sm border px-3 py-3 font-mono text-base focus:ring-2 focus:outline-none',
+  },
+  {
+    label: 'Surface-hover + left accent border',
+    className:
+      'border-border bg-surface-hover border-l-primary rounded-sm border border-l-4 px-3 py-3 font-mono text-base',
+  },
+  {
+    label: 'Surface-hover + inner shadow',
+    className:
+      'border-border bg-surface-hover rounded-sm border px-3 py-3 font-mono text-base shadow-inner',
+  },
+  {
+    label: 'Combo — surface-hover + focus ring + left accent + inner shadow',
+    className:
+      'border-border bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label:
+      'Combo + light-gray — bg-light-gray + left accent + focus ring + inner shadow',
+    className:
+      'bg-light-gray border-l-primary focus:border-primary focus:ring-primary/30 rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label:
+      'Combo + slate — bg-slate + left accent + focus ring + inner shadow',
+    className:
+      'bg-slate border-l-primary focus:border-primary focus:ring-primary/30 rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label:
+      'Combo + charcoal — bg-charcoal + left accent + focus ring + inner shadow',
+    className:
+      'bg-charcoal border-l-primary focus:border-primary focus:ring-primary/30 rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label:
+      'Slate + accent only (no border) — bg-slate + left accent + focus ring',
+    className:
+      'bg-slate border-l-primary border-l-4 focus:ring-primary/30 rounded-sm px-3 py-3 font-mono text-base focus:ring-2 focus:outline-none',
+  },
+]
+
+const PANEL_INPUT_VARIANTS: InputVariant[] = [
+  {
+    label: 'Default canvas — border-border bg-bg border px-2 py-1 text-sm',
+    className:
+      'border-border bg-bg rounded-sm border px-2 py-1 font-mono text-sm',
+  },
+  {
+    label:
+      'Combo full — bg-surface-hover + border-l-4 accent + shadow-inner + focus ring',
+    className:
+      'bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 rounded-sm border border-l-4 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label: 'Combo thinner accent — same but border-l-2',
+    className:
+      'bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 rounded-sm border border-l-2 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label: 'No accent — bg-surface-hover + shadow-inner + focus ring',
+    className:
+      'bg-surface-hover focus:border-primary focus:ring-primary/30 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label: 'Minimal — bg-surface-hover + focus ring only',
+    className:
+      'bg-surface-hover focus:border-primary focus:ring-primary/30 rounded-sm border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none',
+  },
+  {
+    label:
+      'No accent + light-gray — bg-light-gray + shadow-inner + focus ring',
+    className:
+      'bg-light-gray focus:border-primary focus:ring-primary/30 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label: 'No accent + slate — bg-slate + shadow-inner + focus ring',
+    className:
+      'bg-slate focus:border-primary focus:ring-primary/30 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label: 'No accent + charcoal — bg-charcoal + shadow-inner + focus ring',
+    className:
+      'bg-charcoal focus:border-primary focus:ring-primary/30 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none',
+  },
+  {
+    label:
+      'Slate + accent only (no border) — bg-slate + left accent + focus ring',
+    className:
+      'bg-slate border-l-primary border-l-4 focus:ring-primary/30 rounded-sm px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none',
+  },
+]
+
 const Subsection = ({
   title,
   children,
@@ -320,104 +459,9 @@ const DesignPage = () => {
           <code className="font-mono text-xs">routes/index.tsx</code>.
         </p>
         <div className="flex flex-col gap-5">
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Current (broken — bg-background is undefined)
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="border-border bg-background w-full rounded-sm border px-3 py-3 font-mono text-base"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Surface-hover (plain)
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="border-border bg-surface-hover w-full rounded-sm border px-3 py-3 font-mono text-base"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Surface-hover + focus ring
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="border-border bg-surface-hover focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-3 py-3 font-mono text-base focus:ring-2 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Surface-hover + left accent border
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="border-border bg-surface-hover border-l-primary w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Surface-hover + inner shadow
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="border-border bg-surface-hover w-full rounded-sm border px-3 py-3 font-mono text-base shadow-inner"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Combo — surface-hover + focus ring + left accent + inner shadow
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="border-border bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Combo + light-gray — bg-light-gray + left accent + focus ring + inner shadow
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="bg-light-gray border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Combo + slate — bg-slate + left accent + focus ring + inner shadow
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="bg-slate border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <div className="text-text-muted mb-1 text-xs">
-              Combo + charcoal — bg-charcoal + left accent + focus ring + inner shadow
-            </div>
-            <input
-              type="text"
-              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
-              className="bg-charcoal border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
-            />
-          </div>
+          {QUICK_CALC_VARIANTS.map(({ label, className }) => (
+            <WideInputVariant key={label} label={label} className={className} />
+          ))}
         </div>
       </Section>
 
@@ -425,153 +469,14 @@ const DesignPage = () => {
         <p className="text-text-muted mb-4 text-sm">
           Compare visual treatments for the panel inputs (Typeahead and
           NumberField) on the home page. Each variant is an inert mock at the
-          compact size used inside <code className="font-mono text-xs">SandboxPokemonPanel</code>.
-          Pick one and we&apos;ll apply it to the panel fields.
+          compact size used inside{' '}
+          <code className="font-mono text-xs">SandboxPokemonPanel</code>. Pick
+          one and we&apos;ll apply it to the panel fields.
         </p>
         <div className="flex flex-col gap-5">
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              Current (baseline) — border-border bg-background border px-2 py-1 text-sm
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="border-border bg-background w-full rounded-sm border px-2 py-1 font-mono text-sm"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="border-border bg-background w-16 rounded-sm border px-2 py-1 font-mono text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              Combo full — bg-surface-hover + border-l-4 accent + shadow-inner + focus ring
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-16 rounded-sm border border-l-4 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              Combo thinner accent — same but border-l-2
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-2 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-16 rounded-sm border border-l-2 px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              No accent — bg-surface-hover + shadow-inner + focus ring
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              Minimal — bg-surface-hover + focus ring only
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              No accent + light-gray — bg-light-gray + shadow-inner + focus ring
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="bg-light-gray focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="bg-light-gray focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              No accent + slate — bg-slate + shadow-inner + focus ring
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="bg-slate focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="bg-slate focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="w-[280px]">
-            <div className="text-text-muted mb-1 text-xs">
-              No accent + charcoal — bg-charcoal + shadow-inner + focus ring
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Charizard-Mega-Y"
-                className="bg-charcoal focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-              <input
-                type="number"
-                placeholder="252"
-                className="bg-charcoal focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
-              />
-            </div>
-          </div>
+          {PANEL_INPUT_VARIANTS.map(({ label, className }) => (
+            <PanelInputVariant key={label} label={label} className={className} />
+          ))}
         </div>
       </Section>
 
