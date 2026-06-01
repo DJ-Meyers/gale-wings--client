@@ -1,47 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
 
 import { CalcSummaryResult } from '~/components/sandbox/CalcSummaryResult'
 import { SandboxPokemonPanel } from '~/components/sandbox/SandboxPokemonPanel'
-import { useParseVs } from '~/hooks/api/data'
-import { useDebouncedValue } from '~/hooks/useDebouncedValue'
-import { useSandboxStore } from '~/sandbox/store'
-
-const PARSE_DEBOUNCE_MS = 300
-
-const VsParseInput = () => {
-  const input = useSandboxStore((s) => s.input)
-  const setInput = useSandboxStore((s) => s.setInput)
-  const applyParseResult = useSandboxStore((s) => s.applyParseResult)
-
-  const debouncedInput = useDebouncedValue(input, PARSE_DEBOUNCE_MS)
-  const { parseVs, parseVsError } = useParseVs(debouncedInput)
-
-  useEffect(() => {
-    if (parseVs) applyParseResult(parseVs)
-  }, [parseVs, applyParseResult])
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor="vs-input" className="text-text-heading text-sm font-medium">
-        Quick Calc
-      </label>
-      <input
-        id="vs-input"
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="32+ ZardY Heat wave vs 32/0 Ttar in sand"
-        className="border-border bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
-      />
-      {parseVsError && (
-        <div className="text-xs text-red-600">
-          Parse failed: {parseVsError.message}
-        </div>
-      )}
-    </div>
-  )
-}
+import { VsParseInput } from '~/components/sandbox/VsParseInput'
 
 const IndexPage = () => (
   <div className="mx-auto flex max-w-[1400px] flex-col gap-4 py-6">
