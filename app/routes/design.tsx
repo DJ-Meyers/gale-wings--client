@@ -385,6 +385,39 @@ const DesignPage = () => {
               className="border-border bg-surface-hover border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
             />
           </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Combo + light-gray — bg-light-gray + left accent + focus ring + inner shadow
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="bg-light-gray border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Combo + slate — bg-slate + left accent + focus ring + inner shadow
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="bg-slate border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <div className="text-text-muted mb-1 text-xs">
+              Combo + charcoal — bg-charcoal + left accent + focus ring + inner shadow
+            </div>
+            <input
+              type="text"
+              placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+              className="bg-charcoal border-l-primary focus:border-primary focus:ring-primary/30 w-full rounded-sm border border-l-4 px-3 py-3 font-mono text-base shadow-inner focus:ring-2 focus:outline-none"
+            />
+          </div>
         </div>
       </Section>
 
@@ -482,6 +515,60 @@ const DesignPage = () => {
                 type="number"
                 placeholder="252"
                 className="bg-surface-hover focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              No accent + light-gray — bg-light-gray + shadow-inner + focus ring
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="bg-light-gray focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="bg-light-gray focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              No accent + slate — bg-slate + shadow-inner + focus ring
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="bg-slate focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="bg-slate focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="w-[280px]">
+            <div className="text-text-muted mb-1 text-xs">
+              No accent + charcoal — bg-charcoal + shadow-inner + focus ring
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Charizard-Mega-Y"
+                className="bg-charcoal focus:border-primary focus:ring-primary/30 w-full rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="252"
+                className="bg-charcoal focus:border-primary focus:ring-primary/30 w-16 rounded-sm border px-2 py-1 font-mono text-sm shadow-inner focus:ring-2 focus:outline-none"
               />
             </div>
           </div>
