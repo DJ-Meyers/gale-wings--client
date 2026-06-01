@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { FieldLabel } from '~/components/fields/FieldLabel'
 
+const INPUT_CLASS =
+  'block w-full rounded px-2 py-1.5 text-sm font-normal focus:ring-2 focus:outline-none bg-slate border-l-(--field-accent) border-l-4 focus:ring-(--field-accent)/30'
+
 interface Properties {
   label: string
   value: string
@@ -139,7 +142,7 @@ export const Typeahead = ({
       <FieldLabel>{label}</FieldLabel>
       <input
         autoComplete="off"
-        className={`border-border bg-surface focus:border-primary focus:ring-primary/20 block w-full rounded border px-2 py-1.5 text-sm font-normal focus:ring-2 focus:outline-none ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
+        className={`${INPUT_CLASS} ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
         disabled={disabled}
         placeholder={placeholder}
         type="text"
