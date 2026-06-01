@@ -89,7 +89,7 @@ const FieldToggles = () => {
 
   return (
     <div className="border-border mt-3 border-t pt-3">
-      <div className="mx-auto grid w-fit grid-cols-[repeat(2,auto)] items-start gap-x-6 gap-y-3 md:grid-cols-[repeat(4,auto)]">
+      <div className="mx-auto grid w-fit grid-cols-1 items-start gap-x-6 gap-y-3 sm:grid-cols-[repeat(2,auto)] md:grid-cols-[repeat(4,auto)]">
         <div className="flex flex-col gap-0.5">
           <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
             Boosts
