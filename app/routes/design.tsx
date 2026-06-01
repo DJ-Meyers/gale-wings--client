@@ -11,6 +11,7 @@ import {
   AuroraVeilIcon,
   CalculatorIcon,
   ClockIcon,
+  CritIcon,
   EditIcon,
   ElectricTerrainIcon,
   FriendGuardIcon,
@@ -558,6 +559,9 @@ const DesignPage = () => {
           </IconCell>
           <IconCell name="FriendGuardIcon">
             <FriendGuardIcon className="h-5 w-5" />
+          </IconCell>
+          <IconCell name="CritIcon">
+            <CritIcon className="h-5 w-5" />
           </IconCell>
         </div>
       </Section>
