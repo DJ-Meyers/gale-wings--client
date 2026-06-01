@@ -22,8 +22,9 @@ export const StatFieldRow = ({
   natureMod,
   onStatPointChange,
 }: Properties) => (
-  <div className="flex min-w-[104px] flex-1 basis-[calc(33.333%-0.5rem)] items-center gap-1.5">
+  <div className="flex min-w-[98px] flex-1 basis-[calc(33.333%-0.5rem)] items-center">
     <StatDisplay
+      flushRight
       natureMod={natureMod}
       stat={stat}
       total={rawStat}
