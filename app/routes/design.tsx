@@ -13,6 +13,7 @@ import {
   ClockIcon,
   EditIcon,
   ElectricTerrainIcon,
+  FriendGuardIcon,
   GrassyTerrainIcon,
   ImportIcon,
   ItemIcon,
@@ -554,6 +555,9 @@ const DesignPage = () => {
           </IconCell>
           <IconCell name="SwapIcon">
             <SwapIcon className="h-5 w-5" />
+          </IconCell>
+          <IconCell name="FriendGuardIcon">
+            <FriendGuardIcon className="h-5 w-5" />
           </IconCell>
         </div>
       </Section>
