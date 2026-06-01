@@ -110,6 +110,35 @@ const POWER_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
 const powerItem = (item: string | undefined): string =>
   item && POWER_BOOSTING_ITEMS.has(item) ? `${item} ` : ''
 
+// Items that boost a Pokémon's defensive outcome in the calc — flat damage
+// reducers (Assault Vest), single-hit survivability (Focus Sash), and the
+// type-resist berries (one-time half-damage on a super-effective hit).
+const DEFENSE_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
+  'Assault Vest',
+  'Focus Sash',
+  'Babiri Berry',
+  'Charti Berry',
+  'Chilan Berry',
+  'Chople Berry',
+  'Coba Berry',
+  'Colbur Berry',
+  'Haban Berry',
+  'Kasib Berry',
+  'Kebia Berry',
+  'Occa Berry',
+  'Passho Berry',
+  'Payapa Berry',
+  'Rindo Berry',
+  'Roseli Berry',
+  'Shuca Berry',
+  'Tanga Berry',
+  'Wacan Berry',
+  'Yache Berry',
+])
+
+const defenseItem = (item: string | undefined): string =>
+  item && DEFENSE_BOOSTING_ITEMS.has(item) ? `${item} ` : ''
+
 const formatRange = (range: [number, number], maxHp: number): string => {
   const lo = ((range[0] / maxHp) * 100).toFixed(1)
   const hi = ((range[1] / maxHp) * 100).toFixed(1)
@@ -281,7 +310,7 @@ export const CalcSummaryResult = () => {
           <div className="text-text-heading mb-2 text-sm font-medium">
             {powerItem(attacker.item)}
             {attacker.species} {attackerParams.move} vs{' '}
-            {powerItem(defender.item)}
+            {defenseItem(defender.item)}
             {defender.species}
           </div>
           <div
