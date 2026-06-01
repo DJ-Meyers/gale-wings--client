@@ -276,7 +276,7 @@ const DesignPage = () => {
               value={text}
               onChange={setText}
               placeholder="Type here…"
-              className="border-border bg-background w-full rounded-sm border px-2 py-1 text-sm"
+              className="border-border bg-bg w-full rounded-sm border px-2 py-1 text-sm"
             />
           </div>
           <div className="border-border bg-surface rounded border p-4">
@@ -289,7 +289,7 @@ const DesignPage = () => {
               min={0}
               max={252}
               step={4}
-              className="border-border bg-background w-full rounded-sm border px-2 py-1 text-sm"
+              className="border-border bg-bg w-full rounded-sm border px-2 py-1 text-sm"
             />
           </div>
           <div className="border-border bg-surface rounded border p-4">
@@ -306,7 +306,7 @@ const DesignPage = () => {
               onChange={setNotes}
               placeholder="Notes…"
               rows={3}
-              className="border-border bg-background w-full rounded-sm border px-2 py-1 text-sm"
+              className="border-border bg-bg w-full rounded-sm border px-2 py-1 text-sm"
             />
           </div>
         </div>

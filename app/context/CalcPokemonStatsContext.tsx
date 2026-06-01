@@ -5,7 +5,6 @@ import type { ChampionsPokemon, StatKey } from '~/types'
 export interface CalcPokemonStatsContextValue {
   pokemon: ChampionsPokemon
   speciesAbilities: string[]
-  label: string
   name: string
   notes: string
   compact?: boolean

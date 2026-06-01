@@ -154,7 +154,7 @@ export const CalcSummaryResult = () => {
   }, [attacker, defender, attackerParams, defenderParams, fieldConditions])
 
   return (
-    <div className="border-border bg-background rounded-sm border p-3">
+    <div className="border-border bg-bg rounded-sm border p-3">
       {result ? (
         <>
           <div className="text-text-heading mb-2 text-sm font-medium">
