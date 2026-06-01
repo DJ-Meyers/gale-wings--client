@@ -1,6 +1,7 @@
 export { CalculatorIcon } from './CalculatorIcon'
 export { ClockIcon } from './ClockIcon'
 export { EditIcon } from './EditIcon'
+export { FriendGuardIcon } from './FriendGuardIcon'
 export { ImportIcon } from './ImportIcon'
 export { ItemIcon } from './ItemIcon'
 export { PokemonIcon } from './PokemonIcon'
