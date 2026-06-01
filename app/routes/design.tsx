@@ -25,6 +25,7 @@ import {
   PsychicTerrainIcon,
   ReflectIcon,
   RuinIcon,
+  SingleTargetIcon,
   StarIcon,
   SwapIcon,
   TrashIcon,
@@ -566,6 +567,9 @@ const DesignPage = () => {
           </IconCell>
           <IconCell name="HelpingHandIcon">
             <HelpingHandIcon />
+          </IconCell>
+          <IconCell name="SingleTargetIcon">
+            <SingleTargetIcon />
           </IconCell>
         </div>
       </Section>
