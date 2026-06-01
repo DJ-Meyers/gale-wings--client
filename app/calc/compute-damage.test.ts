@@ -107,6 +107,45 @@ describe('computeDamage', () => {
     expect(r).not.toBeNull()
     expect(r!.range[0]).toBeGreaterThan(0)
   })
+
+  it('isSingleTarget removes the spread modifier on a spread move', () => {
+    const spread = computeDamage(
+      { pokemon: floette, params: baseParams },
+      { pokemon: incineroar, params: baseParams },
+      'Dazzling Gleam',
+      emptyField,
+    )
+    const single = computeDamage(
+      { pokemon: floette, params: baseParams },
+      { pokemon: incineroar, params: baseParams },
+      'Dazzling Gleam',
+      emptyField,
+      { isSingleTarget: true },
+    )
+    expect(spread).not.toBeNull()
+    expect(single).not.toBeNull()
+    // Spread modifier is 0.75× in doubles, so removing it should bump damage.
+    expect(single!.range[1]).toBeGreaterThan(spread!.range[1])
+  })
+
+  it('isSingleTarget is a no-op for non-spread moves', () => {
+    const normal = computeDamage(
+      { pokemon: floette, params: baseParams },
+      { pokemon: incineroar, params: baseParams },
+      'Moonblast',
+      emptyField,
+    )
+    const flagged = computeDamage(
+      { pokemon: floette, params: baseParams },
+      { pokemon: incineroar, params: baseParams },
+      'Moonblast',
+      emptyField,
+      { isSingleTarget: true },
+    )
+    expect(normal).not.toBeNull()
+    expect(flagged).not.toBeNull()
+    expect(flagged!.range).toEqual(normal!.range)
+  })
 })
 
 describe('shouldActivateAbility', () => {
