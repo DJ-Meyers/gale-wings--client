@@ -556,16 +556,16 @@ const DesignPage = () => {
             <CalculatorIcon className="h-5 w-5" />
           </IconCell>
           <IconCell name="SwapIcon">
-            <SwapIcon className="h-5 w-5" />
+            <SwapIcon />
           </IconCell>
           <IconCell name="FriendGuardIcon">
-            <FriendGuardIcon className="h-5 w-5" />
+            <FriendGuardIcon />
           </IconCell>
           <IconCell name="CritIcon">
-            <CritIcon className="h-5 w-5" />
+            <CritIcon />
           </IconCell>
           <IconCell name="HelpingHandIcon">
-            <HelpingHandIcon className="h-5 w-5" />
+            <HelpingHandIcon />
           </IconCell>
         </div>
       </Section>
