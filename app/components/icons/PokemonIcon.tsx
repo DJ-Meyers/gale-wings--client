@@ -1,8 +1,6 @@
-import { useState } from 'react'
-import { toSpriteId } from '~/data/spriteNames'
+import { getSpriteUrl } from '@dj-meyers/gale-wings/sprites'
 
-const SPRITE_BASE = 'https://img.pokemondb.net/sprites/scarlet-violet/icon'
-const FALLBACK_SRC = `${SPRITE_BASE}/ditto.png`
+const FALLBACK_SRC = getSpriteUrl('Ditto')
 
 export const PokemonIcon = ({
   species,
@@ -11,10 +9,7 @@ export const PokemonIcon = ({
   species: string
   className?: string
 }) => {
-  const [failed, setFailed] = useState(false)
-  const source = failed
-    ? FALLBACK_SRC
-    : `${SPRITE_BASE}/${toSpriteId(species)}.png`
+  const source = getSpriteUrl(species) ?? FALLBACK_SRC
   return (
     <div
       className={
@@ -22,13 +17,17 @@ export const PokemonIcon = ({
         'relative inline-block h-[1.4em] w-[1.8em] overflow-hidden align-middle'
       }
     >
-      <img
-        alt={species}
-        className="h-full w-full object-cover object-bottom"
-        src={source}
-        title={species}
-        onError={() => setFailed(true)}
-      />
+      {source && (
+        <img
+          alt={species}
+          className="h-full w-full object-contain"
+          height={128}
+          loading="lazy"
+          src={source}
+          title={species}
+          width={128}
+        />
+      )}
     </div>
   )
 }
