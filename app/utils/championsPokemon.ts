@@ -1,6 +1,6 @@
 import { Pokemon } from '@smogon/calc'
 
-import { gen, toSmogonName } from '~/data/gen'
+import { gen, speciesOverride, toSmogonName } from '~/data/gen'
 import type { CalcParameters, ChampionsPokemon } from '~/types'
 import { statPointsToEvs } from '~/utils/statPointConversion'
 
@@ -29,8 +29,9 @@ const PERFECT_IVS = {
 export const toCalcPokemon = (
   pokemon: ChampionsPokemon,
   params: CalcParameters,
-): Pokemon =>
-  new Pokemon(gen, toSmogonName(pokemon.species), {
+): Pokemon => {
+  const smogonName = toSmogonName(pokemon.species)
+  return new Pokemon(gen, smogonName, {
     level: CHAMPIONS_LEVEL,
     nature: pokemon.nature,
     ability: params.abilityOverride ?? pokemon.ability,
@@ -42,4 +43,6 @@ export const toCalcPokemon = (
     status: params.status || undefined,
     abilityOn: params.abilityOn,
     boostedStat: params.boostedStat || undefined,
+    overrides: speciesOverride(smogonName),
   })
+}

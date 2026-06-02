@@ -1,4 +1,6 @@
-import { Generations } from '@smogon/calc'
+import { getSpecies } from '@dj-meyers/gale-wings/dex'
+import { Generations, toID } from '@smogon/calc'
+import type { Specie } from '@smogon/calc/dist/data/interface'
 
 export const gen = Generations.get(9)
 
@@ -22,3 +24,27 @@ export const toSmogonName = (displayName: string): string =>
 
 export const toDisplayName = (smogonName: string): string =>
   SMOGON_TO_DISPLAY[smogonName] ?? smogonName
+
+// @smogon/calc's bundled gen9 data is missing Champions-mod megas
+// (Floette-Mega, Drampa-Mega, ...). When the calc lookup misses, fall
+// back to the gale-wings champions dex and return the seven fields the
+// Pokemon constructor actually reads as `overrides`.
+export const speciesOverride = (name: string): Partial<Specie> | undefined => {
+  if (gen.species.get(toID(name))) return undefined
+  const s = getSpecies(name)
+  if (!s.exists) return undefined
+  return {
+    name: s.name,
+    types: s.types,
+    baseStats: s.baseStats,
+    weightkg: s.weightkg,
+    abilities: s.abilities,
+    baseSpecies: s.baseSpecies,
+    otherFormes: s.otherFormes,
+  } as Partial<Specie>
+}
+
+// True when the species resolves in either data layer — used as the
+// "do we know this Pokemon?" guard before calc construction.
+export const hasSpecies = (name: string): boolean =>
+  !!gen.species.get(toID(name)) || getSpecies(name).exists

@@ -3,7 +3,7 @@ import { Field, Move, calculate, toID } from '@smogon/calc'
 import type { FieldConditions } from '@dj-meyers/gale-wings/types'
 
 import { isSpreadMove } from '~/calc/is-spread-move'
-import { gen, toSmogonName } from '~/data/gen'
+import { gen, hasSpecies, toSmogonName } from '~/data/gen'
 import type { CalcParameters, ChampionsPokemon } from '~/types'
 import { toCalcPokemon } from '~/utils/championsPokemon'
 
@@ -74,10 +74,8 @@ export const computeDamage = (
   options: ComputeDamageOptions = {},
 ): DamageCalcResult | null => {
   try {
-    if (!gen.species.get(toID(toSmogonName(attacker.pokemon.species))))
-      return null
-    if (!gen.species.get(toID(toSmogonName(defender.pokemon.species))))
-      return null
+    if (!hasSpecies(toSmogonName(attacker.pokemon.species))) return null
+    if (!hasSpecies(toSmogonName(defender.pokemon.species))) return null
     if (!gen.moves.get(toID(moveName))) return null
 
     const atkAbilityOn = shouldActivateAbility(
