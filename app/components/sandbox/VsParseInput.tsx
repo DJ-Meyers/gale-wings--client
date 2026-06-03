@@ -37,7 +37,7 @@ export const VsParseInput = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="32+ ZardY Heat wave vs 32/0 Ttar in sand"
+          placeholder="32+ Basc WC vs 17 SpA+ 24/14 Zard Y"
           className={VS_PARSE_INPUT_CLASS}
         />
         <CalculatorIcon className="text-text-muted pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2" />
