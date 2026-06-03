@@ -77,17 +77,45 @@ describe('useSandboxStore', () => {
     expect(s.fieldConditions.defenderSide?.isReflect).toBe(true)
   })
 
-  it('applyParseResult falls back to existing pokemon fields when parse omits them', () => {
+  it('applyParseResult falls back to existing pokemon fields when species is unchanged', () => {
     const before = get().attacker
     get().applyParseResult(
       makeParseResult({
-        attacker: { pokemon: { species: 'Basculegion' }, errors: [] },
+        attacker: { pokemon: { species: before.species }, errors: [] },
       }),
     )
     const after = get().attacker
-    expect(after.species).toBe('Basculegion')
+    expect(after.species).toBe(before.species)
     expect(after.nature).toBe(before.nature)
     expect(after.ability).toBe(before.ability)
+    expect(after.item).toBe(before.item)
+  })
+
+  it('applyParseResult clears species-tied fields when the species changes', () => {
+    // Default attacker is Mega Charizard Y / Charizardite Y. Parsing a new
+    // species without an item must not carry the Charizardite Y over.
+    const before = get().attacker
+    expect(before.item).toBe('Charizardite Y')
+    get().applyParseResult(
+      makeParseResult({
+        attacker: { pokemon: { species: 'Sneasler' }, errors: [] },
+      }),
+    )
+    const after = get().attacker
+    expect(after.species).toBe('Sneasler')
+    expect(after.item).toBeUndefined()
+    expect(after.ability).toBe('')
+    expect(after.moves).toEqual([])
+    expect(after.statPoints).toEqual({
+      hp: 0,
+      atk: 0,
+      def: 0,
+      spa: 0,
+      spd: 0,
+      spe: 0,
+    })
+    // Nature is not species-tied and carries over.
+    expect(after.nature).toBe(before.nature)
   })
 
   it('setAttacker and setDefender patch the right side', () => {

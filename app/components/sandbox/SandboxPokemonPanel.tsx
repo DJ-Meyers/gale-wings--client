@@ -33,8 +33,16 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
 
   const { species, nature, ability, item } = pokemon
 
-  const onSpeciesChange = (s: string) =>
-    setPokemon({ species: s as ChampionsPokemon['species'] })
+  const onSpeciesChange = (s: string) => {
+    setPokemon({
+      species: s as ChampionsPokemon['species'],
+      ability: '' as ChampionsPokemon['ability'],
+      item: undefined,
+      moves: [] as unknown as ChampionsPokemon['moves'],
+      statPoints: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+    })
+    if (isAttacker) setAttackerParams({ move: '' as never })
+  }
   const onNatureChange = (n: string) =>
     setPokemon({ nature: n as ChampionsPokemon['nature'] })
   const onAbilityChange = (a: string) =>

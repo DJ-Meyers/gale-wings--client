@@ -24,7 +24,12 @@ const cloneCalcParameters = (): CalcParameters => ({
   boosts: { ...defaultCalcParameters.boosts },
 })
 
-// ParsedPokemon → ChampionsPokemon. Missing fields fall back to `fallback`.
+// ParsedPokemon → ChampionsPokemon. Missing fields fall back to `fallback`,
+// except species-tied fields (ability, item, moves, statPoints) are cleared
+// when the parsed species differs from the fallback — mirroring the manual
+// species-change reset in SandboxPokemonPanel so a Charizardite Y from the
+// previous attacker doesn't follow Sneasler into the slot. Nature is not
+// species-tied and is allowed to carry over.
 // Parser may return wider types (ParseableAbility ⊃ ChampionsAbility, alias
 // species not in the regulation pool); per Q10 loose-validation philosophy we
 // cast and let downstream tolerate. The calc engine and editors already handle
@@ -32,18 +37,29 @@ const cloneCalcParameters = (): CalcParameters => ({
 export const parsedToPokemon = (
   parsed: ParsedPokemon,
   fallback: ChampionsPokemon,
-): ChampionsPokemon => ({
-  species: (parsed.species ?? fallback.species) as ChampionsPokemon['species'],
-  nature: (parsed.nature ?? fallback.nature) as ChampionsPokemon['nature'],
-  ability: (parsed.ability ?? fallback.ability) as ChampionsPokemon['ability'],
-  item: (parsed.item ?? fallback.item) as ChampionsPokemon['item'],
-  statPoints: parsed.statPoints
-    ? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...parsed.statPoints }
-    : { ...fallback.statPoints },
-  moves: (parsed.move
-    ? [parsed.move]
-    : [...fallback.moves]) as ChampionsPokemon['moves'],
-})
+): ChampionsPokemon => {
+  const species = (parsed.species ??
+    fallback.species) as ChampionsPokemon['species']
+  const speciesChanged = parsed.species != null && species !== fallback.species
+  return {
+    species,
+    nature: (parsed.nature ?? fallback.nature) as ChampionsPokemon['nature'],
+    ability: (parsed.ability ??
+      (speciesChanged ? '' : fallback.ability)) as ChampionsPokemon['ability'],
+    item: (parsed.item ??
+      (speciesChanged ? undefined : fallback.item)) as ChampionsPokemon['item'],
+    statPoints: parsed.statPoints
+      ? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...parsed.statPoints }
+      : speciesChanged
+        ? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
+        : { ...fallback.statPoints },
+    moves: (parsed.move
+      ? [parsed.move]
+      : speciesChanged
+        ? []
+        : [...fallback.moves]) as ChampionsPokemon['moves'],
+  }
+}
 
 // ParsedPokemon → CalcParameters. Calc-shaped fields (move, teraType, boosts,
 // status, isCrit) come from the parse; missing fields fall back to the
