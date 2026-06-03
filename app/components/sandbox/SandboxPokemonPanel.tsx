@@ -26,8 +26,12 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
   const setPokemon = useSandboxStore((s) =>
     isAttacker ? s.setAttacker : s.setDefender,
   )
-  const attackerMove = useSandboxStore((s) => s.attackerCalcParameters.move)
-  const setAttackerParams = useSandboxStore((s) => s.setAttackerParams)
+  const move = useSandboxStore((s) =>
+    isAttacker ? s.attackerCalcParameters.move : s.defenderCalcParameters.move,
+  )
+  const setParams = useSandboxStore((s) =>
+    isAttacker ? s.setAttackerParams : s.setDefenderParams,
+  )
   const { speciesAbilities } = useSpeciesAbilities(pokemon.species)
   const { learnableMoves } = useLearnableMoves(pokemon.species)
 
@@ -41,7 +45,7 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
       moves: [] as unknown as ChampionsPokemon['moves'],
       statPoints: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
     })
-    if (isAttacker) setAttackerParams({ move: '' as never })
+    setParams({ move: '' as never })
   }
   const onNatureChange = (n: string) =>
     setPokemon({ nature: n as ChampionsPokemon['nature'] })
@@ -50,13 +54,11 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
   const onItemChange = (i: string) =>
     setPokemon({ item: (i || undefined) as ChampionsPokemon['item'] })
 
-  const moveOverride = isAttacker
-    ? {
-        value: attackerMove ?? '',
-        onChange: (move: string) => setAttackerParams({ move }),
-        options: learnableMoves ?? [],
-      }
-    : undefined
+  const moveOverride = {
+    value: move ?? '',
+    onChange: (m: string) => setParams({ move: m }),
+    options: learnableMoves ?? [],
+  }
 
   return (
     <section
@@ -93,9 +95,9 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
             setPokemon({
               statPoints: { ...pokemon.statPoints, [stat]: value },
             }),
-          onMoveChange: (slot, move) => {
+          onMoveChange: (slot, nextMove) => {
             const moves = [...pokemon.moves] as string[]
-            moves[slot] = move
+            moves[slot] = nextMove
             setPokemon({
               moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
             })
@@ -129,14 +131,12 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
             value={item ?? ''}
             onChange={onItemChange}
           />
-          {moveOverride && (
-            <MoveSelectField
-              compact
-              options={moveOverride.options}
-              value={moveOverride.value}
-              onChange={moveOverride.onChange}
-            />
-          )}
+          <MoveSelectField
+            compact
+            options={moveOverride.options}
+            value={moveOverride.value}
+            onChange={moveOverride.onChange}
+          />
         </div>
         <PokemonInfoStatPointInputs />
       </CalcPokemonStatsProvider>
