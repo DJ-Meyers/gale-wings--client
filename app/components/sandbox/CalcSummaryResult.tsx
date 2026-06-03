@@ -349,6 +349,13 @@ export const CalcSummaryResult = () => {
           >
             {formatRange(result.range, result.defenderMaxHp)}
           </div>
+          {result.koChance && (
+            <div
+              className={`mt-1 text-sm font-medium tabular-nums ${KO_TIER_COLORS_OFFENSIVE[classifyKoTier(result)]}`}
+            >
+              {result.koChance}
+            </div>
+          )}
           <div className="text-text-muted mt-1 text-sm tabular-nums">
             {result.range[0]} to {result.range[1]} damage out of{' '}
             {result.defenderMaxHp} HP
