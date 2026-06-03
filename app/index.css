@@ -6,6 +6,7 @@
   --color-blue: #4a90e2;
   --color-bright-orange: #e76d3f;
   --color-pale-orange: #f09e70;
+  --color-pale-blue: #7ab8e8;
   --color-yellow: #f6e34f;
   --color-white: #f7f9fb;
   --color-light-gray: #aeb0b2;
@@ -55,6 +56,12 @@
   --color-ko-no-2hko: #e05555;
 
   --field-accent: var(--color-primary);
+
+  /* Attacker/Defender identity accents — warm vs cool for clear distinction.
+     Pale orange stays in the Talonflame family and reads as plumage, not the
+     saturated alert red (--color-error #d43030), so a panel never looks errored. */
+  --color-attacker: var(--color-pale-orange);
+  --color-defender: var(--color-pale-blue);
 }
 
 body {
@@ -68,6 +75,29 @@ body {
   color-scheme: dark;
   min-height: 100vh;
   padding: 1rem;
+}
+
+/* Quick Calc result number: a quick warm pulse whenever the value changes,
+   so a recalculation reads as instant. Keyed remount in JSX retriggers it. */
+@keyframes calc-pop {
+  0% {
+    opacity: 0.45;
+    transform: translateY(1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.calc-pop {
+  animation: calc-pop 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calc-pop {
+    animation: none;
+  }
 }
 
 [data-mode='light'] {

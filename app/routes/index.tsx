@@ -5,12 +5,12 @@ import { SandboxPokemonPanel } from '~/components/sandbox/SandboxPokemonPanel'
 import { VsParseInput } from '~/components/sandbox/VsParseInput'
 
 const IndexPage = () => (
-  <div className="mx-auto flex max-w-[1400px] flex-col gap-4 py-6">
-    <header>
-      <h1 className="from-red via-primary via-65% to-accent inline-block bg-linear-to-r bg-clip-text pb-2 text-5xl leading-tight font-bold text-transparent sm:text-6xl md:text-7xl">
+  <div className="mx-auto flex max-w-[1400px] flex-col gap-3 py-4">
+    <header className="flex flex-wrap items-baseline gap-x-3">
+      <h1 className="from-accent via-primary via-70% to-red inline-block bg-linear-to-br bg-clip-text text-3xl leading-tight font-bold text-transparent sm:text-4xl">
         Gale Wings
       </h1>
-      <p className="text-white text-base font-semibold md:text-xl">
+      <p className="text-text-muted text-sm font-medium">
         The fastest (probably) VGC calculator
       </p>
     </header>

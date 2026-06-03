@@ -1,4 +1,10 @@
-import { useDeferredValue, useMemo, type ReactNode } from 'react'
+import {
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
 
 import {
   KO_TIER_COLORS_OFFENSIVE,
@@ -18,7 +24,6 @@ import {
   PsychicTerrainIcon,
   ReflectIcon,
   SingleTargetIcon,
-  SwapIcon,
   WeatherIcon,
 } from '~/components/icons'
 import { useSandboxStore } from '~/sandbox/store'
@@ -145,6 +150,17 @@ const DEFENSE_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
 const defenseItem = (item: string | undefined): string =>
   item && DEFENSE_BOOSTING_ITEMS.has(item) ? `${item} ` : ''
 
+// Left-edge accent color of the result card, matched to the KO tier so the
+// outcome is legible at a glance before reading any text.
+const KO_TIER_ACCENT_OFFENSIVE: Record<number, string> = {
+  0: 'border-l-ko-guaranteed-ohko',
+  1: 'border-l-ko-chance-ohko',
+  2: 'border-l-ko-guaranteed-2hko',
+  3: 'border-l-ko-chance-2hko',
+  4: 'border-l-ko-no-2hko',
+  5: 'border-l-border',
+}
+
 const formatRange = (range: [number, number], maxHp: number): string => {
   const lo = ((range[0] / maxHp) * 100).toFixed(1)
   const hi = ((range[1] / maxHp) * 100).toFixed(1)
@@ -175,7 +191,7 @@ const ToggleIconButton = ({
       disabled
         ? 'cursor-not-allowed opacity-20 grayscale [&>span]:!bg-neutral-500'
         : active
-          ? 'cursor-pointer [&>span]:ring-1 [&>span]:ring-white [&>span]:ring-inset'
+          ? 'cursor-pointer [&>span]:shadow-[0_0_9px_1px_rgba(247,249,251,0.55)] [&>span]:ring-1 [&>span]:ring-white [&>span]:ring-inset'
           : 'cursor-pointer opacity-40 hover:opacity-100'
     }`}
   >
@@ -302,7 +318,6 @@ export const CalcSummaryResult = () => {
   const defenderParams = useSandboxStore((s) => s.defenderCalcParameters)
   const fieldConditions = useSandboxStore((s) => s.fieldConditions)
   const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
-  const swapAttackerDefender = useSandboxStore((s) => s.swapAttackerDefender)
 
   const attackerDeferred = useDeferredValue(attacker)
   const defenderDeferred = useDeferredValue(defender)
@@ -336,18 +351,32 @@ export const CalcSummaryResult = () => {
     isSingleTargetDeferred,
   ])
 
+  const koTier = classifyKoTier(result)
+
+  // Hold the result back briefly on first load so it doesn't slam in before
+  // the user has oriented; later recalcs render immediately.
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 500)
+    return () => clearTimeout(t)
+  }, [])
+
   return (
-    <div className="border-border bg-bg relative rounded-sm border p-3">
-      <button
-        type="button"
-        title="Swap attacker and defender"
-        aria-label="Swap attacker and defender"
-        onClick={swapAttackerDefender}
-        className="absolute top-3 right-3 cursor-pointer border-none bg-transparent p-0 leading-none"
-      >
-        <SwapIcon />
-      </button>
-      {result ? (
+    <div
+      className={`bg-surface mt-2 rounded-md border border-l-4 p-3.5 shadow-md ${
+        ready && result ? KO_TIER_ACCENT_OFFENSIVE[koTier] : 'border-l-border'
+      } border-y-border border-r-border`}
+    >
+      {!ready ? (
+        <div aria-hidden className="animate-pulse">
+          {/* Mirrors the real result rows so the card height stays fixed:
+              title · damage range · KO-chance · damage-out-of-HP. */}
+          <div className="bg-text-muted/20 mb-2 h-5 w-44 rounded" />
+          <div className="bg-text-muted/20 h-9 w-40 rounded md:h-10" />
+          <div className="bg-text-muted/15 mt-1 h-5 w-28 rounded" />
+          <div className="bg-text-muted/15 mt-1 h-5 w-52 rounded" />
+        </div>
+      ) : result ? (
         <>
           <div className="text-text-heading mb-2 text-sm font-medium">
             {powerItem(attacker.item)}
@@ -356,13 +385,14 @@ export const CalcSummaryResult = () => {
             {defender.species}
           </div>
           <div
-            className={`text-2xl font-bold tabular-nums ${KO_TIER_COLORS_OFFENSIVE[classifyKoTier(result)]}`}
+            key={`${result.range[0]}-${result.range[1]}`}
+            className={`calc-pop text-3xl font-bold tabular-nums md:text-4xl ${KO_TIER_COLORS_OFFENSIVE[koTier]}`}
           >
             {formatRange(result.range, result.defenderMaxHp)}
           </div>
           {result.koChance && (
             <div
-              className={`mt-1 text-sm font-medium tabular-nums ${KO_TIER_COLORS_OFFENSIVE[classifyKoTier(result)]}`}
+              className={`mt-1 text-sm font-medium tabular-nums ${KO_TIER_COLORS_OFFENSIVE[koTier]}`}
             >
               {result.koChance}
             </div>
