@@ -92,8 +92,9 @@ describe('useSandboxStore', () => {
   })
 
   it('applyParseResult clears species-tied fields when the species changes', () => {
-    // Default attacker is Mega Charizard Y / Charizardite Y. Parsing a new
-    // species without an item must not carry the Charizardite Y over.
+    // Give the attacker a species-tied item, then parse a different species
+    // without one — the item must not carry over.
+    get().setAttacker({ item: 'Charizardite Y' })
     const before = get().attacker
     expect(before.item).toBe('Charizardite Y')
     get().applyParseResult(
