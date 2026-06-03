@@ -33,6 +33,7 @@ export interface SandboxActions {
   toggleAttackerSide: (key: AttackerSideKey) => void
   toggleDefenderSide: (key: DefenderSideKey) => void
   toggleSingleTarget: () => void
+  swapAttackerDefender: () => void
 }
 
 export type SandboxStore = SandboxState & SandboxActions

@@ -18,6 +18,7 @@ import {
   PsychicTerrainIcon,
   ReflectIcon,
   SingleTargetIcon,
+  SwapIcon,
   WeatherIcon,
 } from '~/components/icons'
 import { useSandboxStore } from '~/sandbox/store'
@@ -301,6 +302,7 @@ export const CalcSummaryResult = () => {
   const defenderParams = useSandboxStore((s) => s.defenderCalcParameters)
   const fieldConditions = useSandboxStore((s) => s.fieldConditions)
   const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
+  const swapAttackerDefender = useSandboxStore((s) => s.swapAttackerDefender)
 
   const attackerDeferred = useDeferredValue(attacker)
   const defenderDeferred = useDeferredValue(defender)
@@ -335,7 +337,16 @@ export const CalcSummaryResult = () => {
   ])
 
   return (
-    <div className="border-border bg-bg rounded-sm border p-3">
+    <div className="border-border bg-bg relative rounded-sm border p-3">
+      <button
+        type="button"
+        title="Swap attacker and defender"
+        aria-label="Swap attacker and defender"
+        onClick={swapAttackerDefender}
+        className="absolute top-3 right-3 cursor-pointer border-none bg-transparent p-0 leading-none"
+      >
+        <SwapIcon />
+      </button>
       {result ? (
         <>
           <div className="text-text-heading mb-2 text-sm font-medium">
