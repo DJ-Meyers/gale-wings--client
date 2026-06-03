@@ -177,4 +177,20 @@ describe('useSandboxStore', () => {
     expect(get().fieldConditions.attackerSide?.isTailwind).toBe(false)
     expect(get().fieldConditions.defenderSide?.isReflect).toBe(true)
   })
+
+  it('swapAttackerDefender exchanges attacker/defender and their params', () => {
+    get().setAttacker({ species: 'Basculegion', item: 'Choice Scarf' })
+    get().setDefender({ species: 'Charizard-Mega-Y', item: 'Charizardite Y' })
+    get().setAttackerParams({ move: 'Wave Crash' })
+    get().setDefenderParams({ teraType: 'Fire' })
+
+    get().swapAttackerDefender()
+
+    expect(get().attacker.species).toBe('Charizard-Mega-Y')
+    expect(get().attacker.item).toBe('Charizardite Y')
+    expect(get().defender.species).toBe('Basculegion')
+    expect(get().defender.item).toBe('Choice Scarf')
+    expect(get().attackerCalcParameters.teraType).toBe('Fire')
+    expect(get().defenderCalcParameters.move).toBe('Wave Crash')
+  })
 })
