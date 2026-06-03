@@ -3,19 +3,19 @@ import type { ParsedPokemon } from '@dj-meyers/gale-wings/types'
 import type { CalcParameters, ChampionsPokemon, FieldConditions } from '~/types'
 
 export const defaultSandboxAttacker: ChampionsPokemon = {
+  species: 'Basculegion',
+  nature: 'Adamant',
+  ability: 'Adaptability',
+  statPoints: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
+  moves: ['Wave Crash'],
+}
+
+export const defaultSandboxDefender: ChampionsPokemon = {
   species: 'Charizard-Mega-Y',
   nature: 'Modest',
   ability: 'Drought',
   item: 'Charizardite Y',
-  statPoints: { hp: 0, atk: 0, def: 0, spa: 32, spd: 0, spe: 0 },
-  moves: ['Heat Wave'],
-}
-
-export const defaultSandboxDefender: ChampionsPokemon = {
-  species: 'Tyranitar',
-  nature: 'Adamant',
-  ability: 'Sand Stream',
-  statPoints: { hp: 32, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+  statPoints: { hp: 24, atk: 0, def: 14, spa: 17, spd: 0, spe: 0 },
   moves: [],
 }
 
@@ -85,7 +85,7 @@ export const parsedToCalcParameters = (
 })
 
 export const makeDefaultSandboxState = () => ({
-  input: '',
+  input: '32+ Basc WC vs 17 SpA+ 24/14 Zard Y',
   attacker: { ...defaultSandboxAttacker },
   defender: { ...defaultSandboxDefender },
   attackerCalcParameters: {
@@ -93,9 +93,6 @@ export const makeDefaultSandboxState = () => ({
     move: defaultSandboxAttacker.moves[0] as CalcParameters['move'],
   },
   defenderCalcParameters: cloneCalcParameters(),
-  fieldConditions: {
-    ...defaultFieldConditions,
-    weather: 'Sand',
-  } satisfies FieldConditions,
+  fieldConditions: { ...defaultFieldConditions } satisfies FieldConditions,
   isSingleTarget: false,
 })
