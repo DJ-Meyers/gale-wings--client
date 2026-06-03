@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* Light-mode variant keyed to the data-mode attribute set on <html>.
+   Usage: `light:<utility>` applies only when light mode is active. */
+@custom-variant light (&:where([data-mode='light'] *));
+
 @theme {
   /* Galewings redesign palette */
   --color-red: #ec5f44;
@@ -72,9 +76,15 @@ body {
   line-height: 1.5;
   color: var(--color-text);
   background-color: var(--color-bg);
-  color-scheme: dark;
   min-height: 100vh;
   padding: 1rem;
+}
+
+/* color-scheme follows the active mode (set on <html> via data-mode). Dark is
+   the default for any unset/unknown value. */
+:root,
+[data-mode='dark'] {
+  color-scheme: dark;
 }
 
 /* Quick Calc result number: a quick warm pulse whenever the value changes,
@@ -102,9 +112,10 @@ body {
 
 [data-mode='light'] {
   --color-bg: var(--color-white);
+  /* Panels need a clear step down from the near-white page bg. */
   --color-surface: color-mix(
     in srgb,
-    var(--color-white) 92%,
+    var(--color-white) 80%,
     var(--color-ash)
   );
   --color-surface-hover: var(--color-light-gray);
@@ -114,5 +125,18 @@ body {
   --color-primary-hover: var(--color-pale-orange);
   --color-accent: var(--color-yellow);
   --color-error: #c83030;
+  /* Slate is the input-field fill (bg-slate). In dark mode it's a mid-gray; in
+     light mode it reads as a bright field that pops against the grayer panels
+     it usually sits on — lighter than --color-surface, not darker. */
+  --color-slate: color-mix(in srgb, var(--color-white) 90%, var(--color-ash));
+  /* KO tier colors double as small text (text-ko-*) and panel accents
+     (border-l-ko-*). The dark-mode hues — especially the yellow/yellow-green —
+     wash out on a light panel, so light mode uses darker, legible variants that
+     keep the same green → red severity gradient. */
+  --color-ko-guaranteed-ohko: #1f7a32;
+  --color-ko-chance-ohko: #4e6d0a;
+  --color-ko-guaranteed-2hko: #b8860b;
+  --color-ko-chance-2hko: #b34700;
+  --color-ko-no-2hko: #c62828;
   color-scheme: light;
 }

@@ -48,16 +48,11 @@ export const VsParseInput = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <label
-        htmlFor="vs-input"
-        className="text-text-heading text-base font-medium"
-      >
-        Quick Calc
-      </label>
       <div className="relative">
         <textarea
           ref={textareaRef}
           autoFocus
+          aria-label="Quick Calc"
           id="vs-input"
           rows={1}
           value={input}
@@ -70,7 +65,7 @@ export const VsParseInput = () => {
           placeholder="32+ Basc WC vs 17 SpA+ 24/14 Zard Y"
           className={VS_PARSE_INPUT_CLASS}
         />
-        <CalculatorIcon className="text-text-muted pointer-events-none absolute top-3.5 right-3 h-5 w-5" />
+        <CalculatorIcon className="text-text-muted pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2" />
       </div>
       <div className="mt-2 hidden max-h-[1.625rem] flex-wrap content-start items-center gap-1.5 overflow-hidden sm:flex">
         <span className="text-text-faint shrink-0 text-xs">Try:</span>
