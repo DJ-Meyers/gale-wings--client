@@ -8,7 +8,7 @@ import { useSandboxStore } from '~/sandbox/store'
 const PARSE_DEBOUNCE_MS = 300
 
 export const VS_PARSE_INPUT_CLASS =
-  'bg-slate border-l-primary border-l-4 focus:ring-primary/30 focus:ring-2 focus:outline-none w-full rounded-sm py-1.5 pr-8 pl-2 font-mono text-sm'
+  'bg-slate border-l-primary focus:ring-primary focus:shadow-[0_0_22px_-4px_var(--color-primary)] w-full rounded-md border-l-4 py-3 pr-10 pl-3.5 font-mono text-base transition-shadow duration-150 focus:ring-2 focus:outline-none md:text-lg'
 
 export const VsParseInput = () => {
   const input = useSandboxStore((s) => s.input)
@@ -26,7 +26,7 @@ export const VsParseInput = () => {
     <div className="flex flex-col gap-2">
       <label
         htmlFor="vs-input"
-        className="text-text-heading text-xl font-medium"
+        className="text-text-heading text-base font-medium"
       >
         Quick Calc
       </label>
@@ -40,7 +40,7 @@ export const VsParseInput = () => {
           placeholder="32+ Basc WC vs 17 SpA+ 24/14 Zard Y"
           className={VS_PARSE_INPUT_CLASS}
         />
-        <CalculatorIcon className="text-text-muted pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2" />
+        <CalculatorIcon className="text-text-muted pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2" />
       </div>
       {parseVsError && (
         <div className="text-xs text-red-600">
