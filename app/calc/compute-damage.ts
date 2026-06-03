@@ -131,14 +131,20 @@ export const computeDamage = (
     })
 
     const result = calculate(gen, atkPoke, defPoke, move, calcField)
-    const range = result.range()
-    const koChance = result.kochance()
+    const range = result.range() as [number, number]
+    const defenderMaxHp = defPoke.maxHP()
+
+    // Immunities (no-damage hits) make @smogon/calc's desc() and kochance()
+    // throw, so short-circuit before calling them.
+    if (range[1] === 0) {
+      return { desc: '', range, koChance: '', defenderMaxHp }
+    }
 
     return {
       desc: result.desc(),
-      range: range as [number, number],
-      koChance: koChance?.text ?? '',
-      defenderMaxHp: defPoke.maxHP(),
+      range,
+      koChance: result.kochance()?.text ?? '',
+      defenderMaxHp,
     }
   } catch {
     return null
