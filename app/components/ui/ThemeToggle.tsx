@@ -8,16 +8,17 @@ export const ThemeToggle = () => {
   const label = isDark ? 'Switch to light mode' : 'Switch to dark mode'
 
   // A filled rounded-square chip matching the calc-result toggles, colored by
-  // the icon it shows: pale orange behind the sun (dark mode), the result-panel
-  // surface tone behind the moon (light mode).
+  // the icon it shows: the weather-sun orange behind the sun (dark mode), the
+  // result-panel surface tone behind the moon (light mode).
   const chipClass = isDark
-    ? 'bg-pale-orange hover:bg-pale-orange/80 text-white'
+    ? 'hover:brightness-95 text-white'
     : 'bg-surface hover:bg-surface-hover text-text'
 
   return (
     <button
       aria-label={label}
       className={`inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-sm transition-colors ${chipClass}`}
+      style={isDark ? { backgroundColor: '#D4891C' } : undefined}
       title={label}
       type="button"
       onClick={toggleMode}
@@ -26,7 +27,7 @@ export const ThemeToggle = () => {
         <img
           alt=""
           aria-hidden="true"
-          className="h-4 w-4 object-contain"
+          className="h-5 w-5 object-contain"
           src={sunIcon}
         />
       ) : (
