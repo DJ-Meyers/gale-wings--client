@@ -12,7 +12,7 @@ interface Properties {
 
 export const Layout = ({ children }: Properties) => (
   <div className="flex min-h-screen flex-col">
-    <header className="border-border border-b">
+    <header>
       <div className={`${CONTAINER} flex items-center justify-between gap-2 py-3`}>
         <Link
           to="/"
