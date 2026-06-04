@@ -3,6 +3,8 @@ import grassyIcon from '~/assets/terrain-grassy.png'
 import mistyIcon from '~/assets/terrain-misty.png'
 import psychicIcon from '~/assets/terrain-psychic.png'
 
+import { IconChip } from './IconChip'
+
 const TERRAIN_DATA: Record<
   string,
   { icon: string; bg: string; label: string }
@@ -17,10 +19,10 @@ const TerrainIcon = ({ terrain }: { terrain: string }) => {
   const data = TERRAIN_DATA[terrain]
   if (!data) return null
   return (
-    <span
-      className="relative mx-[0.1em] inline-flex items-center justify-center overflow-hidden rounded-sm align-[-0.15em]"
-      style={{ backgroundColor: data.bg, width: '1.3em', height: '1.3em' }}
+    <IconChip
+      color={data.bg}
       title={data.label}
+      className="relative overflow-hidden"
     >
       {/* Perspective grid background */}
       <svg
@@ -39,7 +41,7 @@ const TerrainIcon = ({ terrain }: { terrain: string }) => {
         className="relative mb-[0.2em] h-[1em] w-[1em] object-contain"
         src={data.icon}
       />
-    </span>
+    </IconChip>
   )
 }
 
