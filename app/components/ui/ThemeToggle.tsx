@@ -1,10 +1,10 @@
-import { MoonIcon, SunIcon } from '~/components/icons'
+import sunIcon from '~/assets/weather/Harsh_sunlight_icon_SV.png'
+import { MoonIcon } from '~/components/icons'
 import { useTheme } from '~/hooks/useTheme'
 
 export const ThemeToggle = () => {
   const { mode, toggleMode } = useTheme()
   const isDark = mode === 'dark'
-  const Icon = isDark ? SunIcon : MoonIcon
   const label = isDark ? 'Switch to light mode' : 'Switch to dark mode'
 
   // A filled rounded-square chip matching the calc-result toggles, colored by
@@ -22,7 +22,16 @@ export const ThemeToggle = () => {
       type="button"
       onClick={toggleMode}
     >
-      <Icon className="h-4 w-4" />
+      {isDark ? (
+        <img
+          alt=""
+          aria-hidden="true"
+          className="h-4 w-4 object-contain"
+          src={sunIcon}
+        />
+      ) : (
+        <MoonIcon className="h-4 w-4" />
+      )}
     </button>
   )
 }
