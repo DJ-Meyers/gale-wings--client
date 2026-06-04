@@ -1,7 +1,7 @@
 export const MoonIcon = ({ className }: { className?: string }) => (
   <svg
     className={className ?? 'h-4 w-4'}
-    fill="none"
+    fill="currentColor"
     stroke="currentColor"
     strokeLinecap="round"
     strokeLinejoin="round"

@@ -31,7 +31,7 @@ export const ThemeToggle = () => {
           src={sunIcon}
         />
       ) : (
-        <MoonIcon className="h-4 w-4" />
+        <MoonIcon className="text-text-muted h-4 w-4" />
       )}
     </button>
   )
