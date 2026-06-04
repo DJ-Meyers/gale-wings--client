@@ -148,12 +148,14 @@ body {
      it usually sits on — lighter than --color-surface, not darker. */
   --color-slate: color-mix(in srgb, var(--color-white) 90%, var(--color-ash));
   /* KO tier colors double as small text (text-ko-*) and panel accents
-     (border-l-ko-*). The dark-mode hues — especially the yellow/yellow-green —
-     wash out on a light panel, so light mode uses darker, legible variants that
-     keep the same green → red severity gradient. */
+     (border-l-ko-*). The ramp steps green → greenish-yellow → yellow → orange →
+     red. On the gray light panel the dark-mode yellow/yellow-green hues wash out
+     as text (the small KO-chance label especially), so the two middle tiers use
+     deeper, legible chartreuse and gold that hold the same weight as their
+     neighbors while keeping each step's hue distinct. */
   --color-ko-guaranteed-ohko: #1f7a32;
-  --color-ko-chance-ohko: #4e6d0a;
-  --color-ko-guaranteed-2hko: #b8860b;
+  --color-ko-chance-ohko: #6b7a00;
+  --color-ko-guaranteed-2hko: #9c7e00;
   --color-ko-chance-2hko: #b34700;
   --color-ko-no-2hko: #c62828;
   color-scheme: light;
