@@ -1,9 +1,9 @@
 import { type ReactNode } from 'react'
 
 // A square icon-chip toggle: the child is an IconChip (a colored badge). When
-// active it gets a white inset ring plus a soft glow; when off it dims; when
-// disabled it greys out. Used for the field-condition toggles in the calc
-// result.
+// active it gets a white inset ring plus a glow tinted to the icon's own color
+// (via the chip's --icon-glow variable); when off it dims; when disabled it
+// greys out. Used for the field-condition toggles in the calc result.
 export const ToggleIconButton = ({
   active,
   label,
@@ -28,7 +28,7 @@ export const ToggleIconButton = ({
       disabled
         ? 'cursor-not-allowed opacity-20 grayscale [&>span]:!bg-neutral-500'
         : active
-          ? 'cursor-pointer [&>span]:shadow-[0_0_9px_1px_rgba(247,249,251,0.55)] [&>span]:ring-1 [&>span]:ring-white [&>span]:ring-inset'
+          ? 'cursor-pointer [&>span]:shadow-[0_0_7px_2px_var(--icon-glow)] [&>span]:ring-1 [&>span]:ring-white [&>span]:ring-inset'
           : 'cursor-pointer opacity-40 hover:opacity-100'
     }`}
   >
