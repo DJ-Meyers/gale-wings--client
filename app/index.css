@@ -77,6 +77,29 @@ body {
   padding: 1rem;
 }
 
+/* Quick Calc result number: a quick warm pulse whenever the value changes,
+   so a recalculation reads as instant. Keyed remount in JSX retriggers it. */
+@keyframes calc-pop {
+  0% {
+    opacity: 0.45;
+    transform: translateY(1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.calc-pop {
+  animation: calc-pop 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calc-pop {
+    animation: none;
+  }
+}
+
 [data-mode='light'] {
   --color-bg: var(--color-white);
   --color-surface: color-mix(
