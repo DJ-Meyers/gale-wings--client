@@ -3,6 +3,7 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { useLayoutEffect } from 'react'
 
 import '~/index.css'
+import { Layout } from '~/components/layout/Layout'
 import { useTheme } from '~/hooks/useTheme'
 import type { RouterContext } from '~/router'
 import { TRPCProvider, trpcClient } from '~/trpc/client'
@@ -21,9 +22,9 @@ const RootComponent = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider queryClient={queryClient} trpcClient={trpcClient}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Layout>
           <Outlet />
-        </div>
+        </Layout>
       </TRPCProvider>
     </QueryClientProvider>
   )
