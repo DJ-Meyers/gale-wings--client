@@ -117,4 +117,6 @@ export const useSandboxStore = create<SandboxStore>((set) => ({
       attackerCalcParameters: state.defenderCalcParameters,
       defenderCalcParameters: state.attackerCalcParameters,
     })),
+
+  setKoTier: (koTier) => set((state) => ({ ...state, koTier })),
 }))
