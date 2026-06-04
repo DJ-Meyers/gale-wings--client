@@ -6,6 +6,7 @@ import { ItemSelectField } from '~/components/fields/ItemSelectField'
 import { MoveSelectField } from '~/components/fields/MoveSelectField'
 import { NatureSelectField } from '~/components/fields/NatureSelectField'
 import { PokemonSelectField } from '~/components/fields/PokemonSelectField'
+import { SwapIcon } from '~/components/icons'
 import { PokemonWithItemIcon } from '~/components/icons/PokemonWithItemIcon'
 import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
 import { useSpeciesAbilities } from '~/hooks/api/data'
@@ -32,6 +33,7 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
   const setParams = useSandboxStore((s) =>
     isAttacker ? s.setAttackerParams : s.setDefenderParams,
   )
+  const swapAttackerDefender = useSandboxStore((s) => s.swapAttackerDefender)
   const { speciesAbilities } = useSpeciesAbilities(pokemon.species)
   const { learnableMoves } = useLearnableMoves(pokemon.species)
 
@@ -63,21 +65,35 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
   return (
     <section
       aria-labelledby={`panel-heading-${side}`}
-      className="bg-surface rounded-lg p-4 shadow-md"
+      className="border-border overflow-hidden rounded-lg border bg-gradient-to-b from-[color-mix(in_srgb,var(--color-white)_4%,var(--color-surface))] to-surface shadow-md"
       style={
         {
           '--field-accent': isAttacker
-            ? 'var(--color-blue)'
-            : 'var(--color-yellow)',
+            ? 'var(--color-attacker)'
+            : 'var(--color-defender)',
         } as CSSProperties
       }
     >
-      <h2
-        id={`panel-heading-${side}`}
-        className="text-text-heading mb-2 text-sm font-semibold"
-      >
-        {LABELS[side]}
-      </h2>
+      <div className="border-border mb-3 flex items-center gap-2 border-b px-4 py-2">
+        <span className="h-2 w-2 rounded-full bg-[var(--field-accent)]" />
+        <h2
+          id={`panel-heading-${side}`}
+          className="text-text-heading text-xs font-bold tracking-wider uppercase"
+        >
+          {LABELS[side]}
+        </h2>
+        <button
+          type="button"
+          title="Swap attacker and defender"
+          aria-label="Swap attacker and defender"
+          onClick={swapAttackerDefender}
+          className="text-text-muted hover:text-text ml-auto cursor-pointer border-none bg-transparent p-0 leading-none transition-colors"
+        >
+          <SwapIcon />
+        </button>
+      </div>
+      <div className="px-4 pb-4">
+        {/* panel body */}
       <CalcPokemonStatsProvider
         value={{
           pokemon,
@@ -140,6 +156,7 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
         </div>
         <PokemonInfoStatPointInputs />
       </CalcPokemonStatsProvider>
+      </div>
     </section>
   )
 }
