@@ -13,6 +13,7 @@ export { SingleTargetIcon } from './SingleTargetIcon'
 export { AuroraVeilIcon, LightScreenIcon, ReflectIcon } from './ScreenIcon'
 export { StarIcon } from './StarIcon'
 export { SwapIcon } from './SwapIcon'
+export { MoonIcon } from './ThemeIcon'
 export {
   ElectricTerrainIcon,
   GrassyTerrainIcon,
