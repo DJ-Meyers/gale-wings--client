@@ -16,7 +16,7 @@ export const defaultSandboxDefender: ChampionsPokemon = {
   ability: 'Drought',
   item: 'Charizardite Y',
   statPoints: { hp: 24, atk: 0, def: 14, spa: 17, spd: 0, spe: 0 },
-  moves: [],
+  moves: ['Heat Wave'],
 }
 
 const cloneCalcParameters = (): CalcParameters => ({
@@ -92,7 +92,10 @@ export const makeDefaultSandboxState = () => ({
     ...cloneCalcParameters(),
     move: defaultSandboxAttacker.moves[0] as CalcParameters['move'],
   },
-  defenderCalcParameters: cloneCalcParameters(),
+  defenderCalcParameters: {
+    ...cloneCalcParameters(),
+    move: defaultSandboxDefender.moves[0] as CalcParameters['move'],
+  },
   fieldConditions: { ...defaultFieldConditions } satisfies FieldConditions,
   isSingleTarget: false,
 })

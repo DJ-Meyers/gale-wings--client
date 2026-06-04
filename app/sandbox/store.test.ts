@@ -131,7 +131,7 @@ describe('useSandboxStore', () => {
     get().setAttackerParams({ move: 'Wave Crash', isCrit: true })
     expect(get().attackerCalcParameters.move).toBe('Wave Crash')
     expect(get().attackerCalcParameters.isCrit).toBe(true)
-    expect(get().defenderCalcParameters.move).toBe('')
+    expect(get().defenderCalcParameters.move).toBe('Heat Wave')
 
     get().setDefenderParams({ teraType: 'Fairy' })
     expect(get().defenderCalcParameters.teraType).toBe('Fairy')
