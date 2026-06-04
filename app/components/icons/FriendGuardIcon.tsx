@@ -1,9 +1,7 @@
+import { IconChip } from './IconChip'
+
 export const FriendGuardIcon = () => (
-  <span
-    className="mx-[0.1em] inline-flex items-center justify-center rounded-sm align-[-0.15em] text-white"
-    style={{ backgroundColor: '#EC4899', width: '1.3em', height: '1.3em' }}
-    title="Friend Guard"
-  >
+  <IconChip color="#EC4899" title="Friend Guard" className="text-white">
     <svg
       className="h-[1em] w-[1em]"
       fill="none"
@@ -19,5 +17,5 @@ export const FriendGuardIcon = () => (
         fill="currentColor"
       />
     </svg>
-  </span>
+  </IconChip>
 )

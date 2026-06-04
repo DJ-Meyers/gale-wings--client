@@ -1,3 +1,5 @@
+import { IconChip } from './IconChip'
+
 const darken = (hex: string, amount: number): string => {
   const r = Math.max(0, Number.parseInt(hex.slice(1, 3), 16) - amount)
   const g = Math.max(0, Number.parseInt(hex.slice(3, 5), 16) - amount)
@@ -10,11 +12,7 @@ const WHITE_MID = darken(WHITE, 45)
 const WHITE_DARK = darken(WHITE, 90)
 
 const ScreenIcon = ({ bg, title }: { bg: string; title: string }) => (
-  <span
-    className="mx-[0.1em] inline-flex items-center justify-center rounded-sm align-[-0.15em]"
-    style={{ backgroundColor: bg, width: '1.3em', height: '1.3em' }}
-    title={title}
-  >
+  <IconChip color={bg} title={title}>
     <svg
       className="h-[1em] w-[1em]"
       fill="none"
@@ -44,7 +42,7 @@ const ScreenIcon = ({ bg, title }: { bg: string; title: string }) => (
         strokeWidth="1"
       />
     </svg>
-  </span>
+  </IconChip>
 )
 
 export const ReflectIcon = () => <ScreenIcon bg="#F0D060" title="Reflect" />

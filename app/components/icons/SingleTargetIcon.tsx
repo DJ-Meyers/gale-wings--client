@@ -1,9 +1,7 @@
+import { IconChip } from './IconChip'
+
 export const SingleTargetIcon = () => (
-  <span
-    className="mx-[0.1em] inline-flex items-center justify-center rounded-sm align-[-0.15em] text-white"
-    style={{ backgroundColor: '#8B5CF6', width: '1.3em', height: '1.3em' }}
-    title="Single Target"
-  >
+  <IconChip color="#8B5CF6" title="Single Target" className="text-white">
     <svg
       className="h-[1em] w-[1em]"
       fill="none"
@@ -23,5 +21,5 @@ export const SingleTargetIcon = () => (
       <path d="M13.9 15.5 L17.1 9.5" />
       <path d="M15.3 10.4 L17.1 9.5 L17.3 11.5" />
     </svg>
-  </span>
+  </IconChip>
 )

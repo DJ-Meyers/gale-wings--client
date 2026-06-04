@@ -1,9 +1,7 @@
+import { IconChip } from './IconChip'
+
 export const HelpingHandIcon = () => (
-  <span
-    className="mx-[0.1em] inline-flex items-center justify-center rounded-sm align-[-0.15em] text-white"
-    style={{ backgroundColor: '#10B981', width: '1.3em', height: '1.3em' }}
-    title="Helping Hand"
-  >
+  <IconChip color="#10B981" title="Helping Hand" className="text-white">
     <svg
       className="h-[1em] w-[1em]"
       fill="none"
@@ -18,5 +16,5 @@ export const HelpingHandIcon = () => (
       <path d="M10 10.5V6a2 2 0 0 0-4 0v8" />
       <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
     </svg>
-  </span>
+  </IconChip>
 )
