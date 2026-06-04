@@ -39,3 +39,15 @@ export const KO_TIER_COLORS_OFFENSIVE: Record<KoTier, string> = {
   4: 'text-ko-no-2hko',
   5: 'text-text-muted',
 }
+
+// Left-edge accent border colors, paired with KO_TIER_COLORS_OFFENSIVE: the
+// card border restates the tier the result text already shows. Tier 5 (no
+// result) falls back to the neutral border rather than a muted color.
+export const KO_TIER_ACCENT_OFFENSIVE: Record<KoTier, string> = {
+  0: 'border-l-ko-guaranteed-ohko',
+  1: 'border-l-ko-chance-ohko',
+  2: 'border-l-ko-guaranteed-2hko',
+  3: 'border-l-ko-chance-2hko',
+  4: 'border-l-ko-no-2hko',
+  5: 'border-l-border',
+}
