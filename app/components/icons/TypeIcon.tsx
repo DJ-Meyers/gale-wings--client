@@ -1,4 +1,4 @@
-import { TYPE_SPRITE_ID } from '~/constants'
+import { TYPE_SPRITE_ID } from '~/data/constants/types'
 
 import type1 from 'pokemon-sprites/sprites/types/generation-ix/scarlet-violet/small/Tera/1.png'
 import type10 from 'pokemon-sprites/sprites/types/generation-ix/scarlet-violet/small/Tera/10.png'

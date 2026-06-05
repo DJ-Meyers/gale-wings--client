@@ -98,4 +98,5 @@ export const makeDefaultSandboxState = () => ({
   },
   fieldConditions: { ...defaultFieldConditions } satisfies FieldConditions,
   isSingleTarget: false,
+  koTier: null,
 })

@@ -1,3 +1,4 @@
+import type { KoTier } from '~/calc/classify-ko-range'
 import type {
   AttackerSideKey,
   DefenderSideKey,
@@ -15,6 +16,10 @@ export interface SandboxState {
   defenderCalcParameters: CalcParameters
   fieldConditions: FieldConditions
   isSingleTarget: boolean
+  // The KO tier currently shown in the result, published by CalcSummarySection
+  // so the parent CalcResultPanel can color its left-edge accent without
+  // knowing how the calc is run. Null while loading or when there's no result.
+  koTier: KoTier | null
 }
 
 export interface SandboxActions {
@@ -34,6 +39,7 @@ export interface SandboxActions {
   toggleDefenderSide: (key: DefenderSideKey) => void
   toggleSingleTarget: () => void
   swapAttackerDefender: () => void
+  setKoTier: (koTier: KoTier | null) => void
 }
 
 export type SandboxStore = SandboxState & SandboxActions

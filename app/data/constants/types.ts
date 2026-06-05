@@ -40,13 +40,3 @@ export const TYPE_SPRITE_ID: Record<string, number> = {
   Dark: 17,
   Fairy: 18,
 }
-
-export const STATUS_VALUES = ['brn', 'par', 'psn', 'tox', 'slp', 'frz']
-export const STATUS_LABELS: Record<string, string> = {
-  brn: 'Burned',
-  par: 'Paralyzed',
-  psn: 'Poisoned',
-  tox: 'Badly Poisoned',
-  slp: 'Asleep',
-  frz: 'Frozen',
-}

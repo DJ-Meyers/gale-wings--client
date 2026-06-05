@@ -1,6 +1,6 @@
 import { ModifierFieldWrapper } from '~/components/calculator/ModifiersSection/StandardModifiersSection/ModifierFieldWrapper'
 import { Typeahead } from '~/components/fields/Typeahead'
-import { STATUS_LABELS, STATUS_VALUES } from '~/constants'
+import { STATUS_LABELS, STATUS_VALUES } from '~/data/constants/status'
 import { useModifiers } from '~/hooks/calc/useModifiers'
 
 interface Properties {
