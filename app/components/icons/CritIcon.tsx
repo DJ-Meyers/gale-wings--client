@@ -1,9 +1,7 @@
+import { IconChip } from './IconChip'
+
 export const CritIcon = () => (
-  <span
-    className="mx-[0.1em] inline-flex items-center justify-center rounded-sm align-[-0.15em] text-white"
-    style={{ backgroundColor: '#F59E0B', width: '1.3em', height: '1.3em' }}
-    title="Critical Hit"
-  >
+  <IconChip color="#F59E0B" title="Critical Hit" className="text-white">
     <svg
       className="h-[1em] w-[1em]"
       fill="none"
@@ -20,5 +18,5 @@ export const CritIcon = () => (
       <path d="M19 12 H22" />
       <circle cx="12" cy="12" r="1" fill="currentColor" />
     </svg>
-  </span>
+  </IconChip>
 )
