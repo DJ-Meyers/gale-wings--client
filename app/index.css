@@ -59,6 +59,24 @@
   --color-ko-chance-2hko: #e8913a;
   --color-ko-no-2hko: #e05555;
 
+  /* Per-stat chip hues (StatDisplay, see .stat-chip). --color-stat-* is the
+     pastel used for the value text in both themes. --color-stat-*-fill is the
+     darker same-hue solid fill the chip uses in light mode, where the pastels
+     are too pale to read as text on white; the pastel number then sits on its
+     own darker fill for a clean monochrome chip. */
+  --color-stat-hp: #9ee865;
+  --color-stat-atk: #f5de69;
+  --color-stat-def: #f09a65;
+  --color-stat-spa: #66d8f6;
+  --color-stat-spd: #899eea;
+  --color-stat-spe: #e46cca;
+  --color-stat-hp-fill: #2f8a34;
+  --color-stat-atk-fill: #c2961e;
+  --color-stat-def-fill: #c2521a;
+  --color-stat-spa-fill: #0e7490;
+  --color-stat-spd-fill: #4854c4;
+  --color-stat-spe-fill: #b02a8f;
+
   --field-accent: var(--color-primary);
 
   /* Attacker/Defender identity accents — warm vs cool for clear distinction.
@@ -139,4 +157,27 @@ body {
   --color-ko-chance-2hko: #b34700;
   --color-ko-no-2hko: #c62828;
   color-scheme: light;
+}
+
+/* Stat chip (StatDisplay). Each chip exposes --stat (pastel hue) and --stat-fill
+   (darker same-hue solid). Dark mode: faint tint fill with the pastel as value
+   text. Light mode keeps the pastel value text but sits it on the darker solid
+   fill (--stat-fill) — distinct chip-to-chip, and a clean monochrome pairing —
+   since the pastels are unreadable on white. The label goes white on that fill. */
+.stat-chip {
+  background-color: color-mix(in srgb, var(--stat) 13%, transparent);
+}
+.stat-chip-value {
+  color: var(--stat);
+}
+[data-mode='light'] .stat-chip {
+  background-color: var(--stat-fill);
+}
+[data-mode='light'] .stat-chip-value {
+  /* Lift the pastel toward white so the number reads clearly on the darker fill
+     while keeping a hint of its stat hue. */
+  color: color-mix(in srgb, var(--stat) 40%, #fff);
+}
+[data-mode='light'] .stat-chip .text-text {
+  color: #fff;
 }
