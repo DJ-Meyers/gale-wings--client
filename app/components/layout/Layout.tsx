@@ -26,7 +26,7 @@ export const Layout = ({ children }: Properties) => (
 
     <main className={`${CONTAINER} flex-1`}>{children}</main>
 
-    <footer className="border-border mt-auto border-t">
+    <footer className="mt-auto">
       <div className={`${CONTAINER} py-6`} />
     </footer>
   </div>
