@@ -5,7 +5,7 @@ import {
   classifyKoTier,
 } from '~/calc/classify-ko-range'
 import { computeDamage, type CalcSide } from '~/calc/compute-damage'
-import { DEFENSE_BOOSTING_ITEMS, POWER_BOOSTING_ITEMS } from '~/constants'
+import { DEFENSE_BOOSTING_ITEMS, POWER_BOOSTING_ITEMS } from '~/data/constants/items'
 import { useSandboxStore } from '~/sandbox/store'
 
 const powerItem = (item: string | undefined): string =>
