@@ -4,6 +4,10 @@ import { type CSSProperties, type ReactNode } from 'react'
 // surrounding text. `color` sets both the fill and the `--icon-glow` variable
 // that the active-toggle glow reads (see ToggleIconButton in components/ui),
 // so the glow always matches the chip's color.
+//
+// `title` is optional: when the chip lives inside a ToggleIconButton (which sets
+// its own, more specific `title`/`aria-label`), omit it so the chip's generic
+// title doesn't shadow the button's tooltip on hover.
 export const IconChip = ({
   color,
   title,
@@ -11,7 +15,7 @@ export const IconChip = ({
   children,
 }: {
   color: string
-  title: string
+  title?: string
   className?: string
   children: ReactNode
 }) => (
