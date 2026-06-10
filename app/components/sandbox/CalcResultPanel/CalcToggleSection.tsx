@@ -1,7 +1,5 @@
 import { type ReactNode } from 'react'
 
-import { isSpreadMove } from '~/calc/is-spread-move'
-import { relevantConditions } from '~/calc/move-conditions'
 import {
   AuroraVeilIcon,
   CritIcon,
@@ -13,7 +11,6 @@ import {
   MistyTerrainIcon,
   PsychicTerrainIcon,
   ReflectIcon,
-  SingleTargetIcon,
   WeatherIcon,
 } from '~/components/icons'
 import { ToggleIconButton } from '~/components/ui/ToggleIconButton'
@@ -53,29 +50,15 @@ export const CalcToggleSection = () => {
   const attackerSide = useSandboxStore((s) => s.fieldConditions.attackerSide)
   const defenderSide = useSandboxStore((s) => s.fieldConditions.defenderSide)
   const isCrit = useSandboxStore((s) => s.attackerCalcParameters.isCrit)
-  const move = useSandboxStore((s) => s.attackerCalcParameters.move)
-  const ability = useSandboxStore((s) => s.attacker.ability)
-  const abilityOverride = useSandboxStore(
-    (s) => s.attackerCalcParameters.abilityOverride,
-  )
-  const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
   const setWeather = useSandboxStore((s) => s.setWeather)
   const setTerrain = useSandboxStore((s) => s.setTerrain)
   const setAttackerParams = useSandboxStore((s) => s.setAttackerParams)
   const toggleAttackerSide = useSandboxStore((s) => s.toggleAttackerSide)
   const toggleDefenderSide = useSandboxStore((s) => s.toggleDefenderSide)
-  const toggleSingleTarget = useSandboxStore((s) => s.toggleSingleTarget)
-
-  const moveIsSpread = isSpreadMove(move)
-  const hasMoveConditions =
-    relevantConditions(move, abilityOverride || ability).length > 0
 
   return (
     <div className="border-border mt-3 border-t pt-3">
-      <div
-        className={`mx-auto grid w-fit grid-cols-1 items-start gap-x-6 gap-y-3 sm:grid-cols-[repeat(2,auto)] ${hasMoveConditions ? 'md:grid-cols-[repeat(5,auto)]' : 'md:grid-cols-[repeat(4,auto)]'}`}
-      >
-        <CalcExtraToggles />
+      <div className="mx-auto grid w-fit grid-cols-1 items-start gap-x-6 gap-y-3 sm:grid-cols-[repeat(2,auto)] md:grid-cols-[repeat(4,auto)]">
         <div className="flex flex-col gap-0.5">
           <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
             Boosts
@@ -95,18 +78,7 @@ export const CalcToggleSection = () => {
             >
               <HelpingHandIcon />
             </ToggleIconButton>
-            <ToggleIconButton
-              active={moveIsSpread && isSingleTarget}
-              disabled={!moveIsSpread}
-              label={
-                moveIsSpread
-                  ? 'Single Target (no spread reduction)'
-                  : 'Single Target (only available for spread moves)'
-              }
-              onClick={toggleSingleTarget}
-            >
-              <SingleTargetIcon />
-            </ToggleIconButton>
+            <CalcExtraToggles />
           </div>
         </div>
         <div className="flex flex-col gap-0.5">
