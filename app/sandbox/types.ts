@@ -1,4 +1,5 @@
 import type { KoTier } from '~/calc/classify-ko-range'
+import type { MoveConditions } from '~/calc/move-conditions'
 import type {
   AttackerSideKey,
   DefenderSideKey,
@@ -14,6 +15,11 @@ export interface SandboxState {
   defender: ChampionsPokemon
   attackerCalcParameters: CalcParameters
   defenderCalcParameters: CalcParameters
+  // History-dependent variable-power state per side (allies fainted, times
+  // hit, …). Stored symmetrically so a swap preserves it, but only the
+  // attacker's is consumed by the calc and surfaced in the UI.
+  attackerConditions: MoveConditions
+  defenderConditions: MoveConditions
   fieldConditions: FieldConditions
   isSingleTarget: boolean
   // The KO tier currently shown in the result, published by CalcSummarySection
@@ -29,6 +35,8 @@ export interface SandboxActions {
   setDefender: (patch: Partial<ChampionsPokemon>) => void
   setAttackerParams: (patch: Partial<CalcParameters>) => void
   setDefenderParams: (patch: Partial<CalcParameters>) => void
+  setAttackerConditions: (patch: Partial<MoveConditions>) => void
+  setDefenderConditions: (patch: Partial<MoveConditions>) => void
   setAttackerBoost: (stat: StatBoostKey, value: number) => void
   setDefenderBoost: (stat: StatBoostKey, value: number) => void
   setFieldConditions: (patch: FieldConditions) => void
