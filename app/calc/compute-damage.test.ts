@@ -128,6 +128,68 @@ describe('computeDamage', () => {
     expect(single!.range[1]).toBeGreaterThan(spread!.range[1])
   })
 
+  it('scales Last Respects damage with conditions.alliesFainted', () => {
+    const none = computeDamage(
+      { pokemon: floette, params: baseParams, conditions: { alliesFainted: 0 } },
+      { pokemon: incineroar, params: baseParams },
+      'Last Respects',
+      emptyField,
+    )
+    const three = computeDamage(
+      { pokemon: floette, params: baseParams, conditions: { alliesFainted: 3 } },
+      { pokemon: incineroar, params: baseParams },
+      'Last Respects',
+      emptyField,
+    )
+    expect(none).not.toBeNull()
+    expect(three).not.toBeNull()
+    // 50 BP → 200 BP is a 4× base-power jump, so damage rises sharply.
+    expect(three!.range[1]).toBeGreaterThan(none!.range[1] * 3)
+  })
+
+  it('doubles Temper Flare damage when the previous move failed', () => {
+    const normal = computeDamage(
+      { pokemon: floette, params: baseParams },
+      { pokemon: incineroar, params: baseParams },
+      'Temper Flare',
+      emptyField,
+    )
+    const doubled = computeDamage(
+      { pokemon: floette, params: baseParams, conditions: { doubled: true } },
+      { pokemon: incineroar, params: baseParams },
+      'Temper Flare',
+      emptyField,
+    )
+    expect(normal).not.toBeNull()
+    expect(doubled).not.toBeNull()
+    expect(doubled!.range[1]).toBeGreaterThan(normal!.range[1])
+  })
+
+  it('routes alliesFainted into Supreme Overlord — more fallen allies hit harder', () => {
+    // Supreme Overlord boosts every move ~10% per fallen ally; the app feeds
+    // it through the native Pokemon.alliesFainted path (not overrides).
+    const overlord = {
+      ...incineroar,
+      species: 'Kingambit',
+      ability: 'Supreme Overlord',
+    } as unknown as ChampionsPokemon
+    const noAllies = computeDamage(
+      { pokemon: overlord, params: baseParams, conditions: { alliesFainted: 0 } },
+      { pokemon: incineroar, params: baseParams },
+      'Iron Head',
+      emptyField,
+    )
+    const threeAllies = computeDamage(
+      { pokemon: overlord, params: baseParams, conditions: { alliesFainted: 3 } },
+      { pokemon: incineroar, params: baseParams },
+      'Iron Head',
+      emptyField,
+    )
+    expect(noAllies).not.toBeNull()
+    expect(threeAllies).not.toBeNull()
+    expect(threeAllies!.range[1]).toBeGreaterThan(noAllies!.range[1])
+  })
+
   it('isSingleTarget is a no-op for non-spread moves', () => {
     const normal = computeDamage(
       { pokemon: floette, params: baseParams },
