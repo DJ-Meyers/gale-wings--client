@@ -96,6 +96,8 @@ export const makeDefaultSandboxState = () => ({
     ...cloneCalcParameters(),
     move: defaultSandboxDefender.moves[0] as CalcParameters['move'],
   },
+  attackerConditions: {},
+  defenderConditions: {},
   fieldConditions: { ...defaultFieldConditions } satisfies FieldConditions,
   isSingleTarget: false,
   koTier: null,

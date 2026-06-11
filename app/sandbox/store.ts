@@ -19,6 +19,9 @@ export const useSandboxStore = create<SandboxStore>((set) => ({
       defender: parsedToPokemon(result.defender.pokemon, state.defender),
       attackerCalcParameters: parsedToCalcParameters(result.attacker.pokemon),
       defenderCalcParameters: parsedToCalcParameters(result.defender.pokemon),
+      // New mons carry no history-dependent conditions.
+      attackerConditions: {},
+      defenderConditions: {},
       fieldConditions: { ...result.fieldConditions },
     })),
 
@@ -38,6 +41,18 @@ export const useSandboxStore = create<SandboxStore>((set) => ({
     set((state) => ({
       ...state,
       defenderCalcParameters: { ...state.defenderCalcParameters, ...patch },
+    })),
+
+  setAttackerConditions: (patch) =>
+    set((state) => ({
+      ...state,
+      attackerConditions: { ...state.attackerConditions, ...patch },
+    })),
+
+  setDefenderConditions: (patch) =>
+    set((state) => ({
+      ...state,
+      defenderConditions: { ...state.defenderConditions, ...patch },
     })),
 
   setAttackerBoost: (stat, value) =>
@@ -116,6 +131,8 @@ export const useSandboxStore = create<SandboxStore>((set) => ({
       defender: state.attacker,
       attackerCalcParameters: state.defenderCalcParameters,
       defenderCalcParameters: state.attackerCalcParameters,
+      attackerConditions: state.defenderConditions,
+      defenderConditions: state.attackerConditions,
     })),
 
   setKoTier: (koTier) => set((state) => ({ ...state, koTier })),
