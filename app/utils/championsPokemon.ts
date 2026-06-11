@@ -26,9 +26,14 @@ const PERFECT_IVS = {
 // assign cleanly to @smogon/calc.
 //
 // Plan §6.6. Sentinel '' values are normalised to undefined at the boundary.
+//
+// `alliesFainted` is optional and feeds @smogon/calc's native Supreme Overlord
+// handling (Last Respects is driven separately via overrides.basePower). Kept
+// optional so the other callers (pokemonStats, calc-speed) stay unchanged.
 export const toCalcPokemon = (
   pokemon: ChampionsPokemon,
   params: CalcParameters,
+  alliesFainted?: number,
 ): Pokemon => {
   const smogonName = toSmogonName(pokemon.species)
   return new Pokemon(gen, smogonName, {
@@ -43,6 +48,7 @@ export const toCalcPokemon = (
     status: params.status || undefined,
     abilityOn: params.abilityOn,
     boostedStat: params.boostedStat || undefined,
+    alliesFainted,
     overrides: speciesOverride(smogonName),
   })
 }

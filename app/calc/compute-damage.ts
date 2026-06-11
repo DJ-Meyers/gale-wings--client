@@ -3,15 +3,21 @@ import { Field, Move, calculate, toID } from '@smogon/calc'
 import type { FieldConditions } from '@dj-meyers/gale-wings/types'
 
 import { isSpreadMove } from '~/calc/is-spread-move'
+import {
+  conditionalBasePower,
+  type MoveConditions,
+} from '~/calc/move-conditions'
 import { gen, hasSpecies, toSmogonName } from '~/data/gen'
 import type { CalcParameters, ChampionsPokemon } from '~/types'
 import { toCalcPokemon } from '~/utils/championsPokemon'
 
 // One side of a damage calc: the Pokémon row plus the per-side scenario
-// parameters (tera, boosts, status, isCrit, etc.).
+// parameters (tera, boosts, status, isCrit, etc.). `conditions` carries the
+// history-dependent variable-power state; only the attacker's is read.
 export type CalcSide = {
   pokemon: ChampionsPokemon
   params: CalcParameters
+  conditions?: MoveConditions
 }
 
 export type DamageCalcResult = {
@@ -104,15 +110,30 @@ export const computeDamage = (
         : '',
     }
 
-    const atkPoke = toCalcPokemon(attacker.pokemon, atkParams)
+    const conditions = attacker.conditions ?? {}
+    const atkPoke = toCalcPokemon(
+      attacker.pokemon,
+      atkParams,
+      conditions.alliesFainted,
+    )
     const defPoke = toCalcPokemon(defender.pokemon, defParams)
+
+    // History-dependent moves (Last Respects, Rage Fist, …) aren't in the
+    // calc's base-power switch, so drive them through overrides.basePower; it's
+    // the pre-modifier base, so STAB/items/BP-mods still chain on top.
+    const basePower = conditionalBasePower(moveName, conditions)
+    const spreadOverride =
+      options.isSingleTarget && isSpreadMove(moveName)
+        ? ({ target: 'normal' } as const)
+        : undefined
+    const overrides =
+      basePower !== undefined
+        ? { ...spreadOverride, basePower }
+        : spreadOverride
 
     const move = new Move(gen, moveName, {
       isCrit: attacker.params.isCrit || undefined,
-      overrides:
-        options.isSingleTarget && isSpreadMove(moveName)
-          ? { target: 'normal' }
-          : undefined,
+      overrides,
     })
 
     const calcField = new Field({
