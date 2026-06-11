@@ -1,8 +1,14 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 
+import { isSpreadMove } from '~/calc/is-spread-move'
 import type { ConditionId } from '~/calc/move-conditions'
 import { relevantConditions } from '~/calc/move-conditions'
-import { DoublerIcon, HeadstoneIcon, RageFistIcon } from '~/components/icons'
+import {
+  DoublerIcon,
+  HeadstoneIcon,
+  RageFistIcon,
+  SingleTargetIcon,
+} from '~/components/icons'
 import { ToggleIconButton } from '~/components/ui/ToggleIconButton'
 import { useSandboxStore } from '~/sandbox/store'
 
@@ -88,10 +94,12 @@ const CountControl = ({
   )
 }
 
-// The contextual "Move conditions" cluster: variable-power state that
-// @smogon/calc can't derive (allies fainted, times hit, …). Renders NOTHING
-// unless the selected move — or a Supreme Overlord ability — needs it, so it
-// has zero footprint for ordinary moves. Attacker-only.
+// The contextual attacker-only toggles that share the Boosts row: the Single
+// Target spread override plus variable-power state @smogon/calc can't derive
+// (allies fainted, times hit, …). Each piece renders only when it applies —
+// Single Target only for spread moves, conditions only for moves/abilities that
+// need them — so this contributes nothing for an ordinary single-target move.
+// Returns a fragment so the toggles sit inline next to Crit / Helping Hand.
 export const CalcExtraToggles = () => {
   const move = useSandboxStore((s) => s.attackerCalcParameters.move)
   const ability = useSandboxStore((s) => s.attacker.ability)
@@ -100,47 +108,53 @@ export const CalcExtraToggles = () => {
   )
   const conditions = useSandboxStore((s) => s.attackerConditions)
   const setConditions = useSandboxStore((s) => s.setAttackerConditions)
+  const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
+  const toggleSingleTarget = useSandboxStore((s) => s.toggleSingleTarget)
 
   const effectiveAbility = abilityOverride || ability
   const controls = relevantConditions(move, effectiveAbility)
-  if (controls.length === 0) return null
+  const moveIsSpread = isSpreadMove(move)
 
   return (
-    <div className="flex flex-col gap-0.5">
-      <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
-        Move conditions
-      </span>
-      <div className="flex items-center gap-0.5">
-        {controls.map((control) => {
-          const Icon = ICONS[control.id]
-          if (control.kind === 'toggle') {
-            return (
-              <ToggleIconButton
-                key={control.id}
-                active={!!conditions[control.id]}
-                label={control.label}
-                onClick={() =>
-                  setConditions({ [control.id]: !conditions[control.id] })
-                }
-              >
-                <Icon />
-              </ToggleIconButton>
-            )
-          }
-          const value = conditions[control.id]
+    <>
+      {moveIsSpread && (
+        <ToggleIconButton
+          active={isSingleTarget}
+          label="Single Target (no spread reduction)"
+          onClick={toggleSingleTarget}
+        >
+          <SingleTargetIcon />
+        </ToggleIconButton>
+      )}
+      {controls.map((control) => {
+        const Icon = ICONS[control.id]
+        if (control.kind === 'toggle') {
           return (
-            <CountControl
+            <ToggleIconButton
               key={control.id}
-              value={typeof value === 'number' ? value : 0}
-              min={control.min}
-              max={control.max}
+              active={!!conditions[control.id]}
               label={control.label}
-              icon={<Icon />}
-              onChange={(n) => setConditions({ [control.id]: n })}
-            />
+              onClick={() =>
+                setConditions({ [control.id]: !conditions[control.id] })
+              }
+            >
+              <Icon />
+            </ToggleIconButton>
           )
-        })}
-      </div>
-    </div>
+        }
+        const value = conditions[control.id]
+        return (
+          <CountControl
+            key={control.id}
+            value={typeof value === 'number' ? value : 0}
+            min={control.min}
+            max={control.max}
+            label={control.label}
+            icon={<Icon />}
+            onChange={(n) => setConditions({ [control.id]: n })}
+          />
+        )
+      })}
+    </>
   )
 }
