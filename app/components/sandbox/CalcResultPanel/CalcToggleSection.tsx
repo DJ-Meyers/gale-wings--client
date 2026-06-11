@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react'
 
 import { isSpreadMove } from '~/calc/is-spread-move'
+import { relevantConditions } from '~/calc/move-conditions'
 import {
   AuroraVeilIcon,
   CritIcon,
@@ -18,6 +19,8 @@ import {
 import { ToggleIconButton } from '~/components/ui/ToggleIconButton'
 import { useSandboxStore } from '~/sandbox/store'
 import type { FieldConditions } from '~/types'
+
+import { CalcExtraToggles } from './CalcExtraToggles'
 
 type Weather = NonNullable<FieldConditions['weather']>
 type Terrain = NonNullable<FieldConditions['terrain']>
@@ -51,6 +54,10 @@ export const CalcToggleSection = () => {
   const defenderSide = useSandboxStore((s) => s.fieldConditions.defenderSide)
   const isCrit = useSandboxStore((s) => s.attackerCalcParameters.isCrit)
   const move = useSandboxStore((s) => s.attackerCalcParameters.move)
+  const ability = useSandboxStore((s) => s.attacker.ability)
+  const abilityOverride = useSandboxStore(
+    (s) => s.attackerCalcParameters.abilityOverride,
+  )
   const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
   const setWeather = useSandboxStore((s) => s.setWeather)
   const setTerrain = useSandboxStore((s) => s.setTerrain)
@@ -60,10 +67,15 @@ export const CalcToggleSection = () => {
   const toggleSingleTarget = useSandboxStore((s) => s.toggleSingleTarget)
 
   const moveIsSpread = isSpreadMove(move)
+  const hasMoveConditions =
+    relevantConditions(move, abilityOverride || ability).length > 0
 
   return (
     <div className="border-border mt-3 border-t pt-3">
-      <div className="mx-auto grid w-fit grid-cols-1 items-start gap-x-6 gap-y-3 sm:grid-cols-[repeat(2,auto)] md:grid-cols-[repeat(4,auto)]">
+      <div
+        className={`mx-auto grid w-fit grid-cols-1 items-start gap-x-6 gap-y-3 sm:grid-cols-[repeat(2,auto)] ${hasMoveConditions ? 'md:grid-cols-[repeat(5,auto)]' : 'md:grid-cols-[repeat(4,auto)]'}`}
+      >
+        <CalcExtraToggles />
         <div className="flex flex-col gap-0.5">
           <span className="text-text-muted text-xs font-medium tracking-wide uppercase">
             Boosts

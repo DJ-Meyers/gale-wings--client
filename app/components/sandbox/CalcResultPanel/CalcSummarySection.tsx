@@ -5,6 +5,7 @@ import {
   classifyKoTier,
 } from '~/calc/classify-ko-range'
 import { computeDamage, type CalcSide } from '~/calc/compute-damage'
+import { conditionalBasePower } from '~/calc/move-conditions'
 import { DEFENSE_BOOSTING_ITEMS, POWER_BOOSTING_ITEMS } from '~/data/constants/items'
 import { useSandboxStore } from '~/sandbox/store'
 
@@ -25,6 +26,7 @@ export const CalcSummarySection = () => {
   const defender = useSandboxStore((s) => s.defender)
   const attackerParams = useSandboxStore((s) => s.attackerCalcParameters)
   const defenderParams = useSandboxStore((s) => s.defenderCalcParameters)
+  const attackerConditions = useSandboxStore((s) => s.attackerConditions)
   const fieldConditions = useSandboxStore((s) => s.fieldConditions)
   const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
   const setKoTier = useSandboxStore((s) => s.setKoTier)
@@ -33,6 +35,7 @@ export const CalcSummarySection = () => {
   const defenderDeferred = useDeferredValue(defender)
   const attackerParamsDeferred = useDeferredValue(attackerParams)
   const defenderParamsDeferred = useDeferredValue(defenderParams)
+  const attackerConditionsDeferred = useDeferredValue(attackerConditions)
   const fieldConditionsDeferred = useDeferredValue(fieldConditions)
   const isSingleTargetDeferred = useDeferredValue(isSingleTarget)
 
@@ -40,6 +43,7 @@ export const CalcSummarySection = () => {
     const atkSide: CalcSide = {
       pokemon: attackerDeferred,
       params: attackerParamsDeferred,
+      conditions: attackerConditionsDeferred,
     }
     const defSide: CalcSide = {
       pokemon: defenderDeferred,
@@ -57,11 +61,16 @@ export const CalcSummarySection = () => {
     defenderDeferred,
     attackerParamsDeferred,
     defenderParamsDeferred,
+    attackerConditionsDeferred,
     fieldConditionsDeferred,
     isSingleTargetDeferred,
   ])
 
   const koTier = classifyKoTier(result)
+
+  // Condition-driven moves get their base power via overrides, which the calc's
+  // desc() never surfaces — echo it in the title so the hidden input is visible.
+  const moveBP = conditionalBasePower(attackerParams.move, attackerConditions)
 
   // Hold the result back briefly on first load so it doesn't slam in before
   // the user has oriented; later recalcs render immediately.
@@ -105,7 +114,9 @@ export const CalcSummarySection = () => {
     <>
       <div className="text-text-heading mb-2 text-sm font-medium">
         {powerItem(attacker.item)}
-        {attacker.species} {attackerParams.move} vs {defenseItem(defender.item)}
+        {attacker.species} {attackerParams.move}
+        {moveBP !== undefined && ` (${moveBP} BP)`} vs{' '}
+        {defenseItem(defender.item)}
         {defender.species}
       </div>
       <div
