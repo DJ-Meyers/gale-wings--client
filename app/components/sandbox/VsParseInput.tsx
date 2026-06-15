@@ -12,7 +12,7 @@ const EXAMPLES = [
   '32+ Basc LR3 vs 24/14 ZardY',
   'Max Atk glasses KG SP vs Veil MFross in sun',
   '-1 32 Atk Maus PopBomb 10 vs 32/14 Incin',
-  'Timid 32 SpA MZam EForce on psychic terrain vs 2/0 +1 Friend Guard Kommo',
+  '32+ spoon Hat EForce psychic terrain vs Hera-M',
 ]
 
 export const VS_PARSE_INPUT_CLASS =
