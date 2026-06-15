@@ -11,7 +11,7 @@ const PARSE_DEBOUNCE_MS = 300
 const EXAMPLES = [
   '32+ Basc LR3 vs 24/14 ZardY',
   'Max Atk glasses KG SP vs Veil MFross in sun',
-  '-1 Adamant silk 32 Atk Maus Pop Bomb 10 vs 32/14 Incin',
+  '-1 32 Atk Silk Maus PopBomb 10 vs 32/14 Incin',
   'Timid 32 SpA MZam EForce on psychic terrain vs 2/0 +1 Friend Guard Kommo',
 ]
 
