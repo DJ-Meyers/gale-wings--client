@@ -10,7 +10,7 @@ const PARSE_DEBOUNCE_MS = 300
 // Example shorthands that double as a grammar cheat-sheet for new users.
 const EXAMPLES = [
   '32+ Basc LR3 vs 24/14 ZardY',
-  'Max Atk glasses KG SP vs Veil MFross in sun',
+  'Max Atk glasses KG SP vs Veil MFross sun',
   '-1 32 Atk Maus PopBomb 10 vs 32/14 Incin',
   '32+ spoon Hat EForce psychic terrain vs Hera-M',
 ]
