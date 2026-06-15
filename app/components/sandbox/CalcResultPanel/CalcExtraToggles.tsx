@@ -3,9 +3,11 @@ import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { isSpreadMove } from '~/calc/is-spread-move'
 import type { ConditionId } from '~/calc/move-conditions'
 import { relevantConditions } from '~/calc/move-conditions'
+import { defaultHits, multiHitRange } from '~/calc/multi-hit'
 import {
   DoublerIcon,
   HeadstoneIcon,
+  MultiHitIcon,
   RageFistIcon,
   SingleTargetIcon,
 } from '~/components/icons'
@@ -13,8 +15,9 @@ import { ToggleIconButton } from '~/components/ui/ToggleIconButton'
 import { useSandboxStore } from '~/sandbox/store'
 
 // One icon per condition. Kept here (not in the registry) so move-conditions
-// stays React-free.
-const ICONS: Record<ConditionId, () => ReactNode> = {
+// stays React-free. `hits` is handled separately (its icon shows the move's
+// range), so it's absent here.
+const ICONS: Partial<Record<ConditionId, () => ReactNode>> = {
   doubled: DoublerIcon,
   alliesFainted: HeadstoneIcon,
   timesHit: RageFistIcon,
@@ -112,7 +115,8 @@ export const CalcExtraToggles = () => {
   const toggleSingleTarget = useSandboxStore((s) => s.toggleSingleTarget)
 
   const effectiveAbility = abilityOverride || ability
-  const controls = relevantConditions(move, effectiveAbility)
+  const hitsRange = multiHitRange(move) ?? undefined
+  const controls = relevantConditions(move, effectiveAbility, { hitsRange })
   const moveIsSpread = isSpreadMove(move)
 
   return (
@@ -127,7 +131,24 @@ export const CalcExtraToggles = () => {
         </ToggleIconButton>
       )}
       {controls.map((control) => {
+        // Hits has its own range-aware icon, and its "unset" value is the move's
+        // natural count (e.g. Icicle Spear → 3), not the 0 the other count
+        // controls treat as neutral.
+        if (control.id === 'hits' && control.kind === 'count') {
+          return (
+            <CountControl
+              key={control.id}
+              value={conditions.hits ?? defaultHits(move)}
+              min={control.min}
+              max={control.max}
+              label={control.label}
+              icon={<MultiHitIcon min={control.min} max={control.max} />}
+              onChange={(n) => setConditions({ hits: n })}
+            />
+          )
+        }
         const Icon = ICONS[control.id]
+        if (!Icon) return null
         if (control.kind === 'toggle') {
           return (
             <ToggleIconButton

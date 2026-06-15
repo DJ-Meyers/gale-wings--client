@@ -118,4 +118,20 @@ describe('relevantConditions', () => {
     const [hits] = relevantConditions('Rage Fist')
     expect(hits).toMatchObject({ kind: 'count', min: 0, max: 6 })
   })
+
+  it('offers a hit-count control bounded to the range the caller passes', () => {
+    // The range is a @smogon/calc lookup the caller resolves, so the registry
+    // only surfaces the control when given one.
+    expect(relevantConditions('Icicle Spear').map((c) => c.id)).toEqual([])
+    const [hits] = relevantConditions('Icicle Spear', undefined, {
+      hitsRange: [2, 5],
+    })
+    expect(hits).toMatchObject({
+      id: 'hits',
+      kind: 'count',
+      label: 'Number of hits',
+      min: 2,
+      max: 5,
+    })
+  })
 })
