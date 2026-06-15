@@ -9,9 +9,10 @@ const PARSE_DEBOUNCE_MS = 300
 
 // Example shorthands that double as a grammar cheat-sheet for new users.
 const EXAMPLES = [
-  '32+ KG SP vs 0/0 Reflect MFloette',
-  '32+ Hat EForce vs 32/20+ Sini on psychic terrain',
-  'HH 32+ Ttar-M Knock off vs Snow scarf 1 Def Vanilluxe',
+  '32+ Basc LR3 vs 24/14 ZardY',
+  'Max Atk glasses KG SP vs AVeil MFross in sun',
+  '-1 Adamant silk 32 Atk Maus Pop Bomb 10 vs 32/14 Incin',
+  'Timid 32 SpA MZam EForce on psychic terrain vs 2/0 +1 Friend Guard Kommo',
 ]
 
 export const VS_PARSE_INPUT_CLASS =
@@ -62,7 +63,7 @@ export const VsParseInput = () => {
             // the field a single logical line instead of inserting newlines.
             if (e.key === 'Enter') e.preventDefault()
           }}
-          placeholder="32+ Basc WC vs 17 SpA+ 24/14 Zard Y"
+          placeholder="32+ Basc LR3 vs 24/14 ZardY"
           className={VS_PARSE_INPUT_CLASS}
         />
         <CalculatorIcon className="text-text-muted pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2" />

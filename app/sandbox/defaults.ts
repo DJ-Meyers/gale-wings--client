@@ -8,7 +8,7 @@ export const defaultSandboxAttacker: ChampionsPokemon = {
   nature: 'Adamant',
   ability: 'Adaptability',
   statPoints: { hp: 0, atk: 32, def: 0, spa: 0, spd: 0, spe: 0 },
-  moves: ['Wave Crash'],
+  moves: ['Last Respects'],
 }
 
 export const defaultSandboxDefender: ChampionsPokemon = {
@@ -101,7 +101,7 @@ export const parsedToConditions = (parsed: ParsedPokemon): MoveConditions => ({
 })
 
 export const makeDefaultSandboxState = () => ({
-  input: '32+ Basc WC vs 17 SpA+ 24/14 Zard Y',
+  input: '32+ Basc LR3 vs 24/14 ZardY',
   attacker: { ...defaultSandboxAttacker },
   defender: { ...defaultSandboxDefender },
   attackerCalcParameters: {
@@ -112,7 +112,7 @@ export const makeDefaultSandboxState = () => ({
     ...cloneCalcParameters(),
     move: defaultSandboxDefender.moves[0] as CalcParameters['move'],
   },
-  attackerConditions: {},
+  attackerConditions: { alliesFainted: 3 },
   defenderConditions: {},
   fieldConditions: { ...defaultFieldConditions } satisfies FieldConditions,
   isSingleTarget: false,
