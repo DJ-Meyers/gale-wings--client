@@ -10,7 +10,7 @@
 // Move names must match @smogon/calc's canonical names exactly (verified
 // against the installed package).
 
-export type ConditionId = 'doubled' | 'alliesFainted' | 'timesHit'
+export type ConditionId = 'doubled' | 'alliesFainted' | 'timesHit' | 'hits'
 
 // Per-side condition state. All optional: an absent key means "not set",
 // which the formulas treat as the neutral/zero/false case.
@@ -82,9 +82,15 @@ const COUNT_CONTROLS: Record<'alliesFainted' | 'timesHit', ConditionControl> = {
 // `alliesFainted` is one control feeding two mechanics: Last Respects' base
 // power AND Supreme Overlord's every-move boost. When only Supreme Overlord is
 // present (any move), the control still shows.
+//
+// `opts.hitsRange` is the caller's answer to "is this a multi-hit move, and
+// what's its hit range?" (a @smogon/calc lookup this pure module can't do
+// itself). When provided, a hit-count control bounded to that range is offered
+// so the user can pick how many hits land.
 export const relevantConditions = (
   move: string,
   ability?: string,
+  opts?: { hitsRange?: [number, number] },
 ): ConditionControl[] => {
   const controls: ConditionControl[] = []
   const doubler = DOUBLING_MOVES[move]
@@ -97,6 +103,14 @@ export const relevantConditions = (
   if (move === 'Last Respects' || ability === 'Supreme Overlord')
     controls.push(COUNT_CONTROLS.alliesFainted)
   if (move === 'Rage Fist') controls.push(COUNT_CONTROLS.timesHit)
+  if (opts?.hitsRange)
+    controls.push({
+      id: 'hits',
+      kind: 'count',
+      label: 'Number of hits',
+      min: opts.hitsRange[0],
+      max: opts.hitsRange[1],
+    })
   return controls
 }
 
