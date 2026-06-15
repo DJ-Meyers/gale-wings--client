@@ -208,6 +208,77 @@ describe('computeDamage', () => {
     expect(flagged).not.toBeNull()
     expect(flagged!.range).toEqual(normal!.range)
   })
+
+  it('applies conditions.basePowerOverride to a named move (the 150BP repro)', () => {
+    // Last Respects sits at a native 50 BP; the override forces 150.
+    const native = computeDamage(
+      { pokemon: floette, params: baseParams },
+      { pokemon: incineroar, params: baseParams },
+      'Last Respects',
+      emptyField,
+    )
+    const overridden = computeDamage(
+      {
+        pokemon: floette,
+        params: baseParams,
+        conditions: { basePowerOverride: 150 },
+      },
+      { pokemon: incineroar, params: baseParams },
+      'Last Respects',
+      emptyField,
+    )
+    expect(native).not.toBeNull()
+    expect(overridden).not.toBeNull()
+    // 50 → 150 BP triples the base power, so damage rises well above the native.
+    expect(overridden!.range[1]).toBeGreaterThan(native!.range[1] * 2)
+  })
+
+  it('conditions.basePowerOverride beats the move-specific formula', () => {
+    // alliesFainted would push Last Respects to 200 BP, but the explicit
+    // override wins, so this matches the plain 150BP result rather than 200.
+    const overrideOnly = computeDamage(
+      {
+        pokemon: floette,
+        params: baseParams,
+        conditions: { basePowerOverride: 150 },
+      },
+      { pokemon: incineroar, params: baseParams },
+      'Last Respects',
+      emptyField,
+    )
+    const overrideWithAllies = computeDamage(
+      {
+        pokemon: floette,
+        params: baseParams,
+        conditions: { basePowerOverride: 150, alliesFainted: 3 },
+      },
+      { pokemon: incineroar, params: baseParams },
+      'Last Respects',
+      emptyField,
+    )
+    expect(overrideOnly).not.toBeNull()
+    expect(overrideWithAllies).not.toBeNull()
+    expect(overrideWithAllies!.range).toEqual(overrideOnly!.range)
+  })
+
+  it('routes conditions.hits into Move — more hits deal more damage', () => {
+    // Icicle Spear hits 2–5 times; pinning more hits raises total damage.
+    const twoHits = computeDamage(
+      { pokemon: floette, params: baseParams, conditions: { hits: 2 } },
+      { pokemon: incineroar, params: baseParams },
+      'Icicle Spear',
+      emptyField,
+    )
+    const fiveHits = computeDamage(
+      { pokemon: floette, params: baseParams, conditions: { hits: 5 } },
+      { pokemon: incineroar, params: baseParams },
+      'Icicle Spear',
+      emptyField,
+    )
+    expect(twoHits).not.toBeNull()
+    expect(fiveHits).not.toBeNull()
+    expect(fiveHits!.range[1]).toBeGreaterThan(twoHits!.range[1])
+  })
 })
 
 describe('shouldActivateAbility', () => {

@@ -44,6 +44,26 @@ describe('conditionalBasePower', () => {
     expect(conditionalBasePower('Moonblast', { doubled: true })).toBeUndefined()
     expect(conditionalBasePower('Heat Wave', { alliesFainted: 3 })).toBeUndefined()
   })
+
+  it('lets an explicit basePowerOverride win over every move-specific formula', () => {
+    // The headline `150BP` repro: forces a flat base power on any move, even one
+    // with its own variable-power formula (Last Respects) or doubler.
+    expect(conditionalBasePower('Last Respects', { basePowerOverride: 150 })).toBe(150)
+    expect(
+      conditionalBasePower('Last Respects', {
+        basePowerOverride: 150,
+        alliesFainted: 3,
+      }),
+    ).toBe(150)
+    expect(
+      conditionalBasePower('Temper Flare', {
+        basePowerOverride: 150,
+        doubled: true,
+      }),
+    ).toBe(150)
+    // Applies to an ordinary move too (Earthquake 150BP).
+    expect(conditionalBasePower('Earthquake', { basePowerOverride: 150 })).toBe(150)
+  })
 })
 
 describe('relevantConditions', () => {

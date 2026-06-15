@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import {
   makeDefaultSandboxState,
   parsedToCalcParameters,
+  parsedToConditions,
   parsedToPokemon,
 } from './defaults'
 import type { SandboxStore } from './types'
@@ -19,9 +20,11 @@ export const useSandboxStore = create<SandboxStore>((set) => ({
       defender: parsedToPokemon(result.defender.pokemon, state.defender),
       attackerCalcParameters: parsedToCalcParameters(result.attacker.pokemon),
       defenderCalcParameters: parsedToCalcParameters(result.defender.pokemon),
-      // New mons carry no history-dependent conditions.
-      attackerConditions: {},
-      defenderConditions: {},
+      // Seed the explicit variable-power tokens (`150BP`, `5 hits`, allies
+      // fainted) from the parse; history-dependent toggles the parser can't see
+      // start cleared and are set by the user.
+      attackerConditions: parsedToConditions(result.attacker.pokemon),
+      defenderConditions: parsedToConditions(result.defender.pokemon),
       fieldConditions: { ...result.fieldConditions },
     })),
 

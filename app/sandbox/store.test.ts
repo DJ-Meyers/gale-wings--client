@@ -77,6 +77,43 @@ describe('useSandboxStore', () => {
     expect(s.fieldConditions.defenderSide?.isReflect).toBe(true)
   })
 
+  it('applyParseResult seeds variable-power conditions from the parse', () => {
+    get().applyParseResult(
+      makeParseResult({
+        attacker: {
+          pokemon: {
+            species: 'Basculegion',
+            move: 'Last Respects',
+            basePowerOverride: 150,
+            alliesFainted: 2,
+          },
+          errors: [],
+        },
+        defender: {
+          pokemon: { species: 'Garchomp', hits: 5 },
+          errors: [],
+        },
+      }),
+    )
+    const s = get()
+    expect(s.attackerConditions).toEqual({
+      basePowerOverride: 150,
+      alliesFainted: 2,
+    })
+    expect(s.defenderConditions).toEqual({ hits: 5 })
+  })
+
+  it('applyParseResult clears stale conditions when the parse carries no tokens', () => {
+    get().setAttackerConditions({ basePowerOverride: 150 })
+    expect(get().attackerConditions.basePowerOverride).toBe(150)
+    get().applyParseResult(
+      makeParseResult({
+        attacker: { pokemon: { species: 'Basculegion' }, errors: [] },
+      }),
+    )
+    expect(get().attackerConditions).toEqual({})
+  })
+
   it('applyParseResult falls back to existing pokemon fields when species is unchanged', () => {
     const before = get().attacker
     get().applyParseResult(

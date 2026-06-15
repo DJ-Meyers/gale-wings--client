@@ -1,5 +1,6 @@
 import { defaultCalcParameters, defaultFieldConditions } from '~/calc/defaults'
 import type { ParsedPokemon } from '@dj-meyers/gale-wings/types'
+import type { MoveConditions } from '~/calc/move-conditions'
 import type { CalcParameters, ChampionsPokemon, FieldConditions } from '~/types'
 
 export const defaultSandboxAttacker: ChampionsPokemon = {
@@ -82,6 +83,21 @@ export const parsedToCalcParameters = (
   isCrit: parsed.isCrit ?? false,
   abilityOn: parsed.abilityOn ?? false,
   boostedStat: (parsed.boostedStat ?? '') as CalcParameters['boostedStat'],
+})
+
+// ParsedPokemon → MoveConditions. The explicit variable-power tokens the parser
+// captures (`150BP`, `5 hits`, an allies-fainted count) seed the same per-side
+// condition state the manual toggles drive, so a typed input and a clicked
+// toggle reach the calc by one path. Each field guards on `!== undefined` so an
+// absent token stays absent (the neutral case) rather than pinning a value.
+export const parsedToConditions = (parsed: ParsedPokemon): MoveConditions => ({
+  ...(parsed.basePowerOverride !== undefined && {
+    basePowerOverride: parsed.basePowerOverride,
+  }),
+  ...(parsed.hits !== undefined && { hits: parsed.hits }),
+  ...(parsed.alliesFainted !== undefined && {
+    alliesFainted: parsed.alliesFainted,
+  }),
 })
 
 export const makeDefaultSandboxState = () => ({

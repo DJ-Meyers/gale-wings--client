@@ -134,6 +134,9 @@ export const computeDamage = (
     const move = new Move(gen, moveName, {
       isCrit: attacker.params.isCrit || undefined,
       overrides,
+      // `hits` from a `5 hits` token overrides the move's native multi-hit
+      // roll; absent leaves @smogon/calc to pick its own (random) count.
+      ...(conditions.hits !== undefined && { hits: conditions.hits }),
     })
 
     const calcField = new Field({

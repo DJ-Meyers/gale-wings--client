@@ -18,6 +18,15 @@ export type MoveConditions = {
   doubled?: boolean
   alliesFainted?: number
   timesHit?: number
+  // Explicit overrides parsed from the input string (a `150BP` or `5 hits`
+  // token), not history-dependent toggles. They share the per-side condition
+  // lifecycle (seeded on parse, swap with the sides, consumed only by the calc)
+  // so a typed input and a clicked control reach the calc by one path.
+  // `basePowerOverride` is a raw pre-modifier base power that beats every
+  // move-specific formula below; `hits` is a multi-hit count handed straight to
+  // @smogon/calc's `Move({ hits })`.
+  basePowerOverride?: number
+  hits?: number
 }
 
 export type ConditionControl =
@@ -99,6 +108,9 @@ export const conditionalBasePower = (
   move: string,
   c: MoveConditions,
 ): number | undefined => {
+  // An explicit `…BP` token from the input wins over every move-specific
+  // formula below — `150BP LR` means base power 150, not 50×(allies+1).
+  if (c.basePowerOverride !== undefined) return c.basePowerOverride
   const doubler = DOUBLING_MOVES[move]
   if (doubler) return c.doubled ? doubler.doubledBp : undefined
   switch (move) {
