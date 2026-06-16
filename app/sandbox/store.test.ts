@@ -51,7 +51,11 @@ describe('useSandboxStore', () => {
           },
           errors: [],
         },
-        fieldConditions: { weather: 'Sun', defenderSide: { isReflect: true } },
+        fieldConditions: {
+          weather: 'Sun',
+          terrain: 'Psychic',
+          defenderSide: { isReflect: true },
+        },
       }),
     )
 
@@ -74,6 +78,7 @@ describe('useSandboxStore', () => {
     expect(s.defenderCalcParameters.boosts.def).toBe(-1)
 
     expect(s.fieldConditions.weather).toBe('Sun')
+    expect(s.fieldConditions.terrain).toBe('Psychic')
     expect(s.fieldConditions.defenderSide?.isReflect).toBe(true)
   })
 
