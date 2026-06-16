@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import { PARSE_CORPUS } from '@dj-meyers/gale-wings/test-fixtures'
+
 import type { VsParseResult } from '~/hooks/api/data'
 
 import { makeDefaultSandboxState } from './defaults'
@@ -108,15 +110,28 @@ describe('useSandboxStore', () => {
     expect(s.defenderConditions).toEqual({ hits: 5 })
   })
 
-  it('applyParseResult clears stale conditions when the parse carries no tokens', () => {
+  it('applyParseResult clears stale conditions on both sides when the parse carries no tokens', () => {
     get().setAttackerConditions({ basePowerOverride: 150 })
+    get().setDefenderConditions({ hits: 5 })
     expect(get().attackerConditions.basePowerOverride).toBe(150)
+    expect(get().defenderConditions.hits).toBe(5)
     get().applyParseResult(
       makeParseResult({
         attacker: { pokemon: { species: 'Basculegion' }, errors: [] },
       }),
     )
     expect(get().attackerConditions).toEqual({})
+    expect(get().defenderConditions).toEqual({})
+  })
+
+  // Pins the parse-driven UX: fieldConditions is REPLACED wholesale on each
+  // parse, not shallow-merged. A future refactor switching to a merge would
+  // silently change the UX (a manually-toggled terrain would survive a
+  // subsequent parse that carries no terrain).
+  it('applyParseResult replaces fieldConditions wholesale, not merging', () => {
+    get().setFieldConditions({ terrain: 'Psychic', weather: 'Sun' })
+    get().applyParseResult(makeParseResult({ fieldConditions: {} }))
+    expect(get().fieldConditions).toEqual({})
   })
 
   it('applyParseResult falls back to existing pokemon fields when species is unchanged', () => {
@@ -159,6 +174,46 @@ describe('useSandboxStore', () => {
     })
     // Nature is not species-tied and carries over.
     expect(after.nature).toBe(before.nature)
+  })
+
+  // Shared cross-repo fixture corpus. Each fixture pairs a `parseVs` input with
+  // the result it should produce; here we drive `applyParseResult` with that
+  // result and assert the store landed in the right shape. A fixture only
+  // asserts a field the fixture itself sets — missing fields fall back to
+  // prior state via `parsedToPokemon` and shouldn't be pinned per-fixture.
+  // Together this covers the cross-fixture surface that Bucket 1 of the
+  // test-coverage handoff calls out (side flags, field-wide flags, quiet
+  // fields like nature/ability landing through the parse → store hop).
+  describe('PARSE_CORPUS fixtures', () => {
+    it.each(PARSE_CORPUS.map((fx) => [fx.id, fx] as const))(
+      '%s applyParseResult lands fixture in the store',
+      (_id, fixture) => {
+        get().applyParseResult(fixture.expected)
+        const s = get()
+        const { attacker: a, defender: d, fieldConditions: fc } = fixture.expected
+
+        // Pokemon-shaped fields land via parsedToPokemon.
+        if (a.pokemon.species) expect(s.attacker.species).toBe(a.pokemon.species)
+        if (a.pokemon.nature) expect(s.attacker.nature).toBe(a.pokemon.nature)
+        if (a.pokemon.ability) expect(s.attacker.ability).toBe(a.pokemon.ability)
+        if (a.pokemon.item) expect(s.attacker.item).toBe(a.pokemon.item)
+        if (d.pokemon.species) expect(s.defender.species).toBe(d.pokemon.species)
+        if (d.pokemon.nature) expect(s.defender.nature).toBe(d.pokemon.nature)
+        if (d.pokemon.ability) expect(s.defender.ability).toBe(d.pokemon.ability)
+        if (d.pokemon.item) expect(s.defender.item).toBe(d.pokemon.item)
+
+        // Calc-shaped fields land via parsedToCalcParameters.
+        if (a.pokemon.move) {
+          expect(s.attackerCalcParameters.move).toBe(a.pokemon.move)
+        }
+        if (d.pokemon.move) {
+          expect(s.defenderCalcParameters.move).toBe(d.pokemon.move)
+        }
+
+        // Field conditions are written wholesale.
+        expect(s.fieldConditions).toMatchObject(fc)
+      },
+    )
   })
 
   it('setAttacker and setDefender patch the right side', () => {
