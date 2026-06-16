@@ -12,8 +12,8 @@ importers:
         specifier: ^6.1.0
         version: 6.7.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@dj-meyers/gale-wings':
-        specifier: ^1.5.2
-        version: 1.5.2
+        specifier: ^1.5.3
+        version: 1.5.3
       '@dj-meyers/gale-wings--api-types':
         specifier: ^0.4.0
         version: 0.4.0
@@ -207,8 +207,8 @@ packages:
   '@dj-meyers/gale-wings--api-types@0.4.0':
     resolution: {integrity: sha512-gheAyGcx2OJX7sE6JphJpq3dW5dXJswBz9a3KdnV2JvNL+SoZqNCHtlshXoUSI6oPQdt4TJu7q7ixA2ayN+nYg==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings--api-types/0.4.0/85b1a364a9f98250cb9eb5a4d9d0b736024e7bf1}
 
-  '@dj-meyers/gale-wings@1.5.2':
-    resolution: {integrity: sha512-o31jJLMc89JA4Z4UOOslgRluEWrCT1QlTyg00Num8RP3ySV4aebvpVsbmAg9Eaaqw2uR6n6Van3ep6ypLMoKmg==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings/1.5.2/f841d3ff552ac79c31707ba7a9fd35b90f5ef29a}
+  '@dj-meyers/gale-wings@1.5.3':
+    resolution: {integrity: sha512-MJVE0XAX+pPxt+sBa0tb1JIHrzzkskHN4cSTvYZYXhXxgVPeodYdrfFXsYVH6C2edHmjFFdCbrEOG/p+agROXA==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings/1.5.3/b8ae675e255909d9ddc689c20e85286744b7f63d}
 
   '@esbuild/aix-ppc64@0.27.7':
     resolution: {integrity: sha512-EKX3Qwmhz1eMdEJokhALr0YiD0lhQNwDqkPYyPhiSwKrh7/4KRjQc04sZ8db+5DVVnZ1LmbNDI1uAMPEUBnQPg==}
@@ -1660,7 +1660,7 @@ snapshots:
 
   '@dj-meyers/gale-wings--api-types@0.4.0': {}
 
-  '@dj-meyers/gale-wings@1.5.2':
+  '@dj-meyers/gale-wings@1.5.3':
     dependencies:
       '@pkmn/data': 0.10.9
       '@pkmn/dex': 0.10.9
