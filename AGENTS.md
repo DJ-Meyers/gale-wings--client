@@ -23,9 +23,9 @@ app/
 
 ## What the other repos are
 
-**`gale-wings--api`** at `/Users/djmeyers/dev/gale-wings--api/` (`origin = git@github.com:DJ-Meyers/gale-wings--api.git`). Private pnpm monorepo: Hono + tRPC server on port `8787`, plus the published `@dj-meyers/gale-wings--api-types` package that exports only the tRPC `AppRouter` type. **Read-only from this repo's perspective** — API changes ship in their own PR cycle there.
+**`gale-wings--api`** at `/Users/djmeyers/dev/gale-wings/api/` (`origin = git@github.com:DJ-Meyers/gale-wings--api.git`). Private pnpm monorepo: Hono + tRPC server on port `8787`, plus the published `@dj-meyers/gale-wings--api-types` package that exports only the tRPC `AppRouter` type. **Read-only from this repo's perspective** — API changes ship in their own PR cycle there.
 
-**`gale-wings--data`** at `/Users/djmeyers/dev/gale-wings--data/` (`origin = git@github.com:DJ-Meyers/gale-wings--data.git`). Standalone repo that publishes `@dj-meyers/gale-wings` — zod schemas, derived types, regulation constants, dex accessors, and alias maps. Same read-only relationship.
+**`gale-wings--data`** at `/Users/djmeyers/dev/gale-wings/data/` (`origin = git@github.com:DJ-Meyers/gale-wings--data.git`). Standalone repo that publishes `@dj-meyers/gale-wings` — zod schemas, derived types, regulation constants, dex accessors, and alias maps. Same read-only relationship.
 
 Both are consumed from GitHub Packages (no workspace link):
 
@@ -69,7 +69,7 @@ Schema/type changes ship via a `@dj-meyers/gale-wings` version bump from `gale-w
 2. **AppRouter type inference.** `app/trpc/client.ts` does `createTRPCContext<AppRouter>()` so every `trpc.X.queryOptions(...)` is typed. But `@trpc/tanstack-react-query@11.17` × `@tanstack/react-query@5.100` **doesn't infer `TQueryFnData` through `queryOptions(...)`** — so every typed query goes through `useNamedQuery<T>` in `app/hooks/api/data.ts`. Consumers destructure `{ <name>, is<Name>Pending, ... }`, not `{ data, isPending }`. Memory-pinned at `project_galewings_trpc_query_inference.md`.
 3. **Per-side calc parameters.** `playerCalcParameters` and `opponentCalcParameters` both carry `move`, `teraType`, `boosts`, `status`, `isCrit`, `abilityOn`, `abilityOverride?`, `boostedStat`. The attacker side's `move` is what feeds `new Move`. The `gameType: 'Doubles'` field is hardcoded at the `computeDamage` boundary, not on `fieldConditions`.
 4. **Static data prefetch.** App boot prefetches `data.listSpecies / listMoves / listItems / listAbilities` with `staleTime: Infinity, gcTime: Infinity`.
-5. **CORS + auth.** API needs `ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174`. Dev bypass: `VITE_DEV_BYPASS_AUTH=true` here pairs with `DEV_BYPASS_AUTH=true` in `gale-wings--api/.env`.
+5. **CORS + auth.** API needs `ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174`. Dev bypass: `VITE_DEV_BYPASS_AUTH=true` here pairs with `DEV_BYPASS_AUTH=true` in `../api/.env`.
 6. **Regulation gating.** `app/data/mechanics.ts` derives `TERA_ENABLED` and `RUIN_ENABLED` from `currentRegulation`. Hidden inputs default to `''` / `false`; downstream renders stay silent without belt-and-suspenders guards. `vgc-2026-m-a legalItems` has known gaps (Booster Energy, Choice Specs, Safety Goggles, …) — that's API data, comment client-side checks with a "re-enable when X returns to legalItems" note rather than fixing it here.
 
 ## Working in this repo
@@ -93,11 +93,11 @@ Read in this order:
 1. **`~/dev/galewings-phase-b-handoff.md`** — current stack state, locked decisions D1–D15, gotchas (Graphite, tooling, CSS), first-moves checklist. **The most load-bearing doc in the project.**
 2. **`~/dev/galewings-client-plan.md`** — consolidated rebuild plan. §1 (status), §2 (locked decisions), §5 (Q1–Q16 with rationale), §7 (phase steps 11–14 for Phase C), §9 (process rules).
 3. **`~/.claude/projects/-Users-djmeyers-dev/memory/MEMORY.md`** — indexes the three load-bearing memories: SP→EV non-linear formula, `useNamedQuery` pattern, `pokemon`-not-`build` vocab.
-4. **`../gale-wings--api/AGENTS.md`** — the API-side counterpart to this doc, including the schema-first contract and stat-point ADR pointer.
+4. **`../api/AGENTS.md`** — the API-side counterpart to this doc, including the schema-first contract and stat-point ADR pointer.
 
 ## Don'ts
 
-- **Don't write to `../gale-wings--api/`.** API changes ship in their own PR cycle there. If you find a real API bug, surface it; don't patch around it silently. Document workarounds with a re-enable note.
+- **Don't write to `../api/`.** API changes ship in their own PR cycle there. If you find a real API bug, surface it; don't patch around it silently. Document workarounds with a re-enable note.
 - **Don't port TailRoom code blindly.** Field names and shapes have drifted — every TailRoom carryover needs a D-list pass (handoff §2 / plan §3).
 - **Don't add an `abilityOn` / `boostedStat` / `abilityOverride` / level control** without an explicit decision to unwind Q6/Q7/Q9.
 - **Don't reintroduce `build` as a `ChampionsPokemon` variable name**, ever.
