@@ -209,9 +209,93 @@ describe('useSandboxStore', () => {
         if (d.pokemon.move) {
           expect(s.defenderCalcParameters.move).toBe(d.pokemon.move)
         }
+        if (a.pokemon.status !== undefined) {
+          expect(s.attackerCalcParameters.status).toBe(a.pokemon.status)
+        }
+        if (d.pokemon.status !== undefined) {
+          expect(s.defenderCalcParameters.status).toBe(d.pokemon.status)
+        }
+        if (a.pokemon.isCrit !== undefined) {
+          expect(s.attackerCalcParameters.isCrit).toBe(a.pokemon.isCrit)
+        }
+        if (d.pokemon.isCrit !== undefined) {
+          expect(s.defenderCalcParameters.isCrit).toBe(d.pokemon.isCrit)
+        }
+
+        // Variable-power conditions land via parsedToConditions.
+        if (a.pokemon.basePowerOverride !== undefined) {
+          expect(s.attackerConditions.basePowerOverride).toBe(
+            a.pokemon.basePowerOverride,
+          )
+        }
+        if (d.pokemon.basePowerOverride !== undefined) {
+          expect(s.defenderConditions.basePowerOverride).toBe(
+            d.pokemon.basePowerOverride,
+          )
+        }
 
         // Field conditions are written wholesale.
         expect(s.fieldConditions).toMatchObject(fc)
+      },
+    )
+  })
+
+  // Snapshot pin: HP-quantity fields (`hpPercent`, `currentHp`, `maxHp`) the
+  // parser produces are NOT yet plumbed through `applyParseResult` into the
+  // store or @smogon/calc's `Pokemon({ curHP })`. The parser populates them
+  // (data 1.6.1's `minimal-hp-*` fixtures cover all three), but
+  // `parsedToCalcParameters` / `parsedToConditions` ignore them — they fall on
+  // the floor. Locked here so a future wiring PR breaks this test and is
+  // forced to delete the block while adding positive assertions to the corpus
+  // loop above.
+  describe('TODO: HP-quantity parse → store wiring gap', () => {
+    const HP_FIXTURES = PARSE_CORPUS.filter(
+      (fx) =>
+        fx.id === 'minimal-hp-percent' ||
+        fx.id.startsWith('minimal-hp-fraction'),
+    )
+
+    it('the corpus has fixtures that exercise the HP keys', () => {
+      // If this fails, the data corpus stopped exercising HP-quantity fields
+      // and the pin below is moot — delete the describe block.
+      expect(HP_FIXTURES.length).toBeGreaterThan(0)
+    })
+
+    it.each(HP_FIXTURES.map((fx) => [fx.id, fx] as const))(
+      '%s: hpPercent/currentHp/maxHp from parse are dropped (no wiring)',
+      (_id, fixture) => {
+        get().applyParseResult(fixture.expected)
+        const s = get() as unknown as Record<string, unknown>
+        // Confirm the side the fixture set actually carries HP info in the
+        // expected payload — guards against a fixture that drifts and no
+        // longer exercises this gap.
+        const setOnAttacker =
+          fixture.expected.attacker.pokemon.hpPercent !== undefined ||
+          fixture.expected.attacker.pokemon.currentHp !== undefined
+        const setOnDefender =
+          fixture.expected.defender.pokemon.hpPercent !== undefined ||
+          fixture.expected.defender.pokemon.currentHp !== undefined
+        expect(setOnAttacker || setOnDefender).toBe(true)
+
+        // No HP-shaped field appears on either CalcParameters or Conditions
+        // for either side. When wiring is added (likely as curHP on
+        // CalcParameters or a new HpState blob), these expects start failing
+        // — at which point delete this describe block and extend the
+        // PARSE_CORPUS loop above with positive assertions.
+        const calcParamShapes = [
+          s.attackerCalcParameters,
+          s.defenderCalcParameters,
+        ] as Array<Record<string, unknown>>
+        const conditionsShapes = [
+          s.attackerConditions,
+          s.defenderConditions,
+        ] as Array<Record<string, unknown>>
+        for (const shape of [...calcParamShapes, ...conditionsShapes]) {
+          expect(shape.hpPercent).toBeUndefined()
+          expect(shape.currentHp).toBeUndefined()
+          expect(shape.maxHp).toBeUndefined()
+          expect(shape.curHP).toBeUndefined()
+        }
       },
     )
   })
