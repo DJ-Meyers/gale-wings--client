@@ -98,6 +98,9 @@ export const parsedToConditions = (parsed: ParsedPokemon): MoveConditions => ({
   ...(parsed.alliesFainted !== undefined && {
     alliesFainted: parsed.alliesFainted,
   }),
+  ...(parsed.hpPercent !== undefined && { hpPercent: parsed.hpPercent }),
+  ...(parsed.currentHp !== undefined && { currentHp: parsed.currentHp }),
+  ...(parsed.maxHp !== undefined && { maxHp: parsed.maxHp }),
 })
 
 export const makeDefaultSandboxState = () => ({
