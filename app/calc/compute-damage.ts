@@ -1,4 +1,4 @@
-import { Field, Move, calculate, toID } from '@smogon/calc'
+import { Field, Move, type Pokemon, calculate, toID } from '@smogon/calc'
 
 import type { FieldConditions } from '@dj-meyers/gale-wings/types'
 
@@ -12,12 +12,36 @@ import type { CalcParameters, ChampionsPokemon } from '~/types'
 import { toCalcPokemon } from '~/utils/championsPokemon'
 
 // One side of a damage calc: the Pokémon row plus the per-side scenario
-// parameters (tera, boosts, status, isCrit, etc.). `conditions` carries the
-// history-dependent variable-power state; only the attacker's is read.
+// parameters (tera, boosts, status, isCrit, etc.). `conditions` carries
+// per-side state seeded by the parser or per-side toggles: history-dependent
+// variable-power (`alliesFainted`, `hits`) plus HP-quantity (`hpPercent`,
+// `currentHp`, `maxHp`). Read on BOTH sides — defender HP feeds the calc's
+// KO chance, attacker HP feeds Reversal/Flail/Eruption-style base power.
 export type CalcSide = {
   pokemon: ChampionsPokemon
   params: CalcParameters
   conditions?: MoveConditions
+}
+
+// Convert parsed HP-quantity state into a raw current-HP value for
+// @smogon/calc. Fraction form (`100/177`) populates `currentHp` and we hand
+// it through verbatim, clamped to the constructed Pokemon's max. Percent
+// form (`85%`) populates only `hpPercent`; we compute curHP from the local
+// max so rounding stays consistent with the displayed spread. Returns
+// undefined when no HP state is set (calc defaults curHP = maxHP).
+export const computeCurHp = (
+  pokemon: Pokemon,
+  conditions: MoveConditions | undefined,
+): number | undefined => {
+  const max = pokemon.maxHP()
+  if (conditions?.currentHp !== undefined) {
+    return Math.max(0, Math.min(conditions.currentHp, max))
+  }
+  if (conditions?.hpPercent !== undefined) {
+    const raw = Math.round((max * conditions.hpPercent) / 100)
+    return Math.max(0, Math.min(raw, max))
+  }
+  return undefined
 }
 
 export type DamageCalcResult = {
@@ -117,6 +141,16 @@ export const computeDamage = (
       conditions.alliesFainted,
     )
     const defPoke = toCalcPokemon(defender.pokemon, defParams)
+
+    // HP-quantity state from parsed `100/177` / `85%` tokens (or a future
+    // manual HP slider) shifts the calc's KO math and HP-scaling base power
+    // for both sides. @smogon/calc exposes `originalCurHP` as the per-side
+    // current-HP knob; setting it post-construction is the cheapest path
+    // (avoids reconstructing the Pokemon just to override curHP).
+    const atkCurHp = computeCurHp(atkPoke, attacker.conditions)
+    if (atkCurHp !== undefined) atkPoke.originalCurHP = atkCurHp
+    const defCurHp = computeCurHp(defPoke, defender.conditions)
+    if (defCurHp !== undefined) defPoke.originalCurHP = defCurHp
 
     // History-dependent moves (Last Respects, Rage Fist, …) aren't in the
     // calc's base-power switch, so drive them through overrides.basePower; it's

@@ -27,6 +27,7 @@ export const CalcSummarySection = () => {
   const attackerParams = useSandboxStore((s) => s.attackerCalcParameters)
   const defenderParams = useSandboxStore((s) => s.defenderCalcParameters)
   const attackerConditions = useSandboxStore((s) => s.attackerConditions)
+  const defenderConditions = useSandboxStore((s) => s.defenderConditions)
   const fieldConditions = useSandboxStore((s) => s.fieldConditions)
   const isSingleTarget = useSandboxStore((s) => s.isSingleTarget)
   const setKoTier = useSandboxStore((s) => s.setKoTier)
@@ -36,6 +37,7 @@ export const CalcSummarySection = () => {
   const attackerParamsDeferred = useDeferredValue(attackerParams)
   const defenderParamsDeferred = useDeferredValue(defenderParams)
   const attackerConditionsDeferred = useDeferredValue(attackerConditions)
+  const defenderConditionsDeferred = useDeferredValue(defenderConditions)
   const fieldConditionsDeferred = useDeferredValue(fieldConditions)
   const isSingleTargetDeferred = useDeferredValue(isSingleTarget)
 
@@ -48,6 +50,7 @@ export const CalcSummarySection = () => {
     const defSide: CalcSide = {
       pokemon: defenderDeferred,
       params: defenderParamsDeferred,
+      conditions: defenderConditionsDeferred,
     }
     return computeDamage(
       atkSide,
@@ -62,6 +65,7 @@ export const CalcSummarySection = () => {
     attackerParamsDeferred,
     defenderParamsDeferred,
     attackerConditionsDeferred,
+    defenderConditionsDeferred,
     fieldConditionsDeferred,
     isSingleTargetDeferred,
   ])

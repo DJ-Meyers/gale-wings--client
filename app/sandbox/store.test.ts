@@ -209,6 +209,48 @@ describe('useSandboxStore', () => {
         if (d.pokemon.move) {
           expect(s.defenderCalcParameters.move).toBe(d.pokemon.move)
         }
+        if (a.pokemon.status !== undefined) {
+          expect(s.attackerCalcParameters.status).toBe(a.pokemon.status)
+        }
+        if (d.pokemon.status !== undefined) {
+          expect(s.defenderCalcParameters.status).toBe(d.pokemon.status)
+        }
+        if (a.pokemon.isCrit !== undefined) {
+          expect(s.attackerCalcParameters.isCrit).toBe(a.pokemon.isCrit)
+        }
+        if (d.pokemon.isCrit !== undefined) {
+          expect(s.defenderCalcParameters.isCrit).toBe(d.pokemon.isCrit)
+        }
+
+        // Variable-power and HP-quantity conditions land via parsedToConditions.
+        if (a.pokemon.basePowerOverride !== undefined) {
+          expect(s.attackerConditions.basePowerOverride).toBe(
+            a.pokemon.basePowerOverride,
+          )
+        }
+        if (d.pokemon.basePowerOverride !== undefined) {
+          expect(s.defenderConditions.basePowerOverride).toBe(
+            d.pokemon.basePowerOverride,
+          )
+        }
+        if (a.pokemon.hpPercent !== undefined) {
+          expect(s.attackerConditions.hpPercent).toBe(a.pokemon.hpPercent)
+        }
+        if (d.pokemon.hpPercent !== undefined) {
+          expect(s.defenderConditions.hpPercent).toBe(d.pokemon.hpPercent)
+        }
+        if (a.pokemon.currentHp !== undefined) {
+          expect(s.attackerConditions.currentHp).toBe(a.pokemon.currentHp)
+        }
+        if (d.pokemon.currentHp !== undefined) {
+          expect(s.defenderConditions.currentHp).toBe(d.pokemon.currentHp)
+        }
+        if (a.pokemon.maxHp !== undefined) {
+          expect(s.attackerConditions.maxHp).toBe(a.pokemon.maxHp)
+        }
+        if (d.pokemon.maxHp !== undefined) {
+          expect(s.defenderConditions.maxHp).toBe(d.pokemon.maxHp)
+        }
 
         // Field conditions are written wholesale.
         expect(s.fieldConditions).toMatchObject(fc)

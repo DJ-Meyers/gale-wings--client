@@ -27,6 +27,20 @@ export type MoveConditions = {
   // @smogon/calc's `Move({ hits })`.
   basePowerOverride?: number
   hits?: number
+  // HP-quantity state parsed from `100/177` or `85%` tokens. Consumed by
+  // `computeCurHp` in compute-damage.ts to set the @smogon/calc Pokemon's
+  // `originalCurHP` before the calc runs (so KO chance, recoil math, and
+  // HP-scaling moves like Eruption/Reversal/Flail all see the right current
+  // HP). Population rules from the data parser:
+  //   - fraction form (`100/177`) sets `currentHp` + `maxHp` + `hpPercent`
+  //   - percent form (`85%`) sets `hpPercent` only
+  // `currentHp` takes precedence when present (verbatim, no rounding);
+  // otherwise `hpPercent` × the calc-side's computed maxHP gives a raw value.
+  // `maxHp` is the parser's read of the user's typed max — currently unused
+  // here (kept so a future UX check can warn on mismatch with the spread).
+  hpPercent?: number
+  currentHp?: number
+  maxHp?: number
 }
 
 export type ConditionControl =

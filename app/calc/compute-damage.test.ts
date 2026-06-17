@@ -2,10 +2,14 @@ import { describe, expect, it } from 'vitest'
 
 import type { FieldConditions } from '@dj-meyers/gale-wings/types'
 
+import { Pokemon } from '@smogon/calc'
+
 import {
+  computeCurHp,
   computeDamage,
   shouldActivateAbility,
 } from '~/calc/compute-damage'
+import { gen } from '~/data/gen'
 import type { CalcParameters, ChampionsPokemon } from '~/types'
 
 const baseParams: CalcParameters = {
@@ -278,6 +282,75 @@ describe('computeDamage', () => {
     expect(twoHits).not.toBeNull()
     expect(fiveHits).not.toBeNull()
     expect(fiveHits!.range[1]).toBeGreaterThan(twoHits!.range[1])
+  })
+
+  // Defender HP affects KO chance, not the damage range itself.
+  // `100/177` parsed = `currentHp: 100`. Verify the calc sees it.
+  it('routes parsed currentHp into the defender Pokemon for KO math', () => {
+    const fullHp = computeDamage(
+      { pokemon: floette, params: { ...baseParams, move: 'Moonblast' } },
+      { pokemon: incineroar, params: baseParams },
+      'Moonblast',
+      emptyField,
+    )
+    const lowHp = computeDamage(
+      { pokemon: floette, params: { ...baseParams, move: 'Moonblast' } },
+      {
+        pokemon: incineroar,
+        params: baseParams,
+        conditions: { currentHp: 1 },
+      },
+      'Moonblast',
+      emptyField,
+    )
+    expect(fullHp).not.toBeNull()
+    expect(lowHp).not.toBeNull()
+    // Same damage range either way (calc roll doesn't depend on cur HP).
+    expect(lowHp!.range).toEqual(fullHp!.range)
+    // KO chance shifts: full HP is unlikely to be OHKO; 1 HP is guaranteed.
+    expect(lowHp!.koChance).not.toBe(fullHp!.koChance)
+  })
+})
+
+describe('computeCurHp', () => {
+  // Build a Pokemon to read maxHP from; the spread doesn't matter much for
+  // the formula tests, just that maxHP is a known value to project against.
+  const mk = () =>
+    new Pokemon(gen, 'Incineroar', {
+      level: 50,
+      nature: 'Careful',
+      evs: { hp: 120, atk: 12, def: 48, spd: 68, spe: 16 },
+      ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+    })
+
+  it('returns undefined when no HP state is set', () => {
+    expect(computeCurHp(mk(), undefined)).toBeUndefined()
+    expect(computeCurHp(mk(), {})).toBeUndefined()
+  })
+
+  it('passes currentHp through verbatim when set', () => {
+    expect(computeCurHp(mk(), { currentHp: 50 })).toBe(50)
+  })
+
+  it('clamps currentHp to the constructed maxHP', () => {
+    const p = mk()
+    expect(computeCurHp(p, { currentHp: p.maxHP() + 100 })).toBe(p.maxHP())
+  })
+
+  it('clamps currentHp to 0 when negative', () => {
+    expect(computeCurHp(mk(), { currentHp: -5 })).toBe(0)
+  })
+
+  it('computes from hpPercent + the constructed maxHP when currentHp absent', () => {
+    const p = mk()
+    expect(computeCurHp(p, { hpPercent: 50 })).toBe(Math.round(p.maxHP() / 2))
+    expect(computeCurHp(p, { hpPercent: 100 })).toBe(p.maxHP())
+    expect(computeCurHp(p, { hpPercent: 0 })).toBe(0)
+  })
+
+  it('prefers currentHp over hpPercent when both are set', () => {
+    // Fraction form populates both currentHp and hpPercent; currentHp wins.
+    expect(computeCurHp(mk(), { currentHp: 33, hpPercent: 50 })).toBe(33)
   })
 })
 
