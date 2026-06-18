@@ -18,8 +18,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0
       '@smogon/calc':
-        specifier: ^0.10.0
-        version: 0.10.0
+        specifier: ^0.11.0
+        version: 0.11.0
       '@tailwindcss/vite':
         specifier: ^4.2.1
         version: 4.3.0(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0)(lightningcss@1.32.0))
@@ -37,7 +37,7 @@ importers:
         version: 11.17.0(@tanstack/react-query@5.100.14(react@19.2.6))(@trpc/client@11.17.0(@trpc/server@11.17.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.17.0(typescript@5.9.3))(react@19.2.6)(typescript@5.9.3)
       pokemon-sprites:
         specifier: github:PokeAPI/sprites
-        version: https://codeload.github.com/PokeAPI/sprites/tar.gz/3eee52bd999f586cd03683c4fb3a72ee68dee718
+        version: https://codeload.github.com/PokeAPI/sprites/tar.gz/1de17c408f2d03d2caa52cca06eabb9226a7a499
       react:
         specifier: ^19.2.0
         version: 19.2.6
@@ -549,6 +549,9 @@ packages:
 
   '@smogon/calc@0.10.0':
     resolution: {integrity: sha512-VmtTDVjF4z1Yzx1QN7NbsEcRLBAZGv/NVlb1ZK1//uppNmIg3Iqp7hDERGSM0FlmdogPEqw7iqY/3RuMSYPkmw==}
+
+  '@smogon/calc@0.11.0':
+    resolution: {integrity: sha512-ixP+IgQhI12R68FXxyt8+f4EZM/jdqBXZ2oCKu5zuUWXls4kYbIVdgE7t6+pkn/y6VxU+cXJhRgMkiU7wG8JHQ==}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -1237,8 +1240,8 @@ packages:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
 
-  pokemon-sprites@https://codeload.github.com/PokeAPI/sprites/tar.gz/3eee52bd999f586cd03683c4fb3a72ee68dee718:
-    resolution: {tarball: https://codeload.github.com/PokeAPI/sprites/tar.gz/3eee52bd999f586cd03683c4fb3a72ee68dee718}
+  pokemon-sprites@https://codeload.github.com/PokeAPI/sprites/tar.gz/1de17c408f2d03d2caa52cca06eabb9226a7a499:
+    resolution: {tarball: https://codeload.github.com/PokeAPI/sprites/tar.gz/1de17c408f2d03d2caa52cca06eabb9226a7a499}
     version: 1.0.0
 
   postcss@8.5.15:
@@ -1869,6 +1872,10 @@ snapshots:
     optional: true
 
   '@smogon/calc@0.10.0':
+    dependencies:
+      '@types/node': 18.19.130
+
+  '@smogon/calc@0.11.0':
     dependencies:
       '@types/node': 18.19.130
 
@@ -2526,7 +2533,7 @@ snapshots:
 
   picomatch@4.0.4: {}
 
-  pokemon-sprites@https://codeload.github.com/PokeAPI/sprites/tar.gz/3eee52bd999f586cd03683c4fb3a72ee68dee718: {}
+  pokemon-sprites@https://codeload.github.com/PokeAPI/sprites/tar.gz/1de17c408f2d03d2caa52cca06eabb9226a7a499: {}
 
   postcss@8.5.15:
     dependencies:
