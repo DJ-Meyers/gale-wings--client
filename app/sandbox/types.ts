@@ -1,5 +1,5 @@
 import type { KoTier } from '~/calc/classify-ko-range'
-import type { MoveConditions } from '~/calc/move-conditions'
+import type { MoveConditions } from '@dj-meyers/gale-wings/calc'
 import type {
   AttackerSideKey,
   DefenderSideKey,

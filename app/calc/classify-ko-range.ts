@@ -1,4 +1,4 @@
-import type { DamageCalcResult } from '~/calc/compute-damage'
+import type { DamageCalcResult } from '@dj-meyers/gale-wings/calc'
 
 // 0 = Guaranteed OHKO, 1 = chance OHKO, …, 5 = no result.
 export type KoTier = 0 | 1 | 2 | 3 | 4 | 5

@@ -1,6 +1,6 @@
 import type { CalcParameters, ChampionsPokemon, StatKey } from '~/types'
 
-import { toCalcPokemon } from './championsPokemon'
+import { toCalcPokemon } from '@dj-meyers/gale-wings/calc'
 
 export const STAT_KEYS: readonly StatKey[] = [
   'hp',
