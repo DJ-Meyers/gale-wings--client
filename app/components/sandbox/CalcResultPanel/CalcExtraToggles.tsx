@@ -1,9 +1,12 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 
-import { isSpreadMove } from '~/calc/is-spread-move'
-import type { ConditionId } from '~/calc/move-conditions'
-import { relevantConditions } from '~/calc/move-conditions'
-import { defaultHits, multiHitRange } from '~/calc/multi-hit'
+import {
+  defaultHits,
+  isSpreadMove,
+  multiHitRange,
+  relevantConditions,
+  type ConditionId,
+} from '@dj-meyers/gale-wings/calc'
 import {
   DoublerIcon,
   HeadstoneIcon,

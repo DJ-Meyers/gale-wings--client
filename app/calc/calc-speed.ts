@@ -1,7 +1,10 @@
 import type { FieldConditions } from '~/types'
 
-import { shouldActivateAbility, type CalcSide } from './compute-damage'
-import { toCalcPokemon } from '~/utils/championsPokemon'
+import {
+  shouldActivateAbility,
+  toCalcPokemon,
+  type CalcSide,
+} from '@dj-meyers/gale-wings/calc'
 
 const WEATHER_SPEED_ABILITIES: Record<string, string> = {
   Chlorophyll: 'Sun',

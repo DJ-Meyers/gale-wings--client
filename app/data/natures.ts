@@ -1,4 +1,4 @@
-import { gen } from '~/data/gen'
+import { gen } from '@dj-meyers/gale-wings/calc'
 
 export type NatureEntry = {
   name: string

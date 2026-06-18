@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { computeDamage, type CalcSide } from '~/calc/compute-damage'
+import { computeDamage, type CalcSide } from '@dj-meyers/gale-wings/calc'
 import { useCalcStore } from '~/calc/store'
 import type { CalcRowMode } from '~/calc/types'
 

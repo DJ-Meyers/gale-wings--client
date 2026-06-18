@@ -1,5 +1,5 @@
 import { computeEffectiveSpeed } from '~/calc/calc-speed'
-import type { CalcSide } from '~/calc/compute-damage'
+import type { CalcSide } from '@dj-meyers/gale-wings/calc'
 import { useCalcStore } from '~/calc/store'
 
 export type SpeedTier = 'faster' | 'tie' | 'slower'

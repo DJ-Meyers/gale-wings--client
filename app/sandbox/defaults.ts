@@ -1,6 +1,6 @@
 import { defaultCalcParameters, defaultFieldConditions } from '~/calc/defaults'
 import type { ParsedPokemon } from '@dj-meyers/gale-wings/types'
-import type { MoveConditions } from '~/calc/move-conditions'
+import type { MoveConditions } from '@dj-meyers/gale-wings/calc'
 import type { CalcParameters, ChampionsPokemon, FieldConditions } from '~/types'
 
 export const defaultSandboxAttacker: ChampionsPokemon = {

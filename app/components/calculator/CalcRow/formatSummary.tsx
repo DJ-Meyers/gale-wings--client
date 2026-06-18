@@ -15,8 +15,11 @@ import {
   WindIcon,
 } from '~/components/icons'
 import { PokemonWithItemIcon } from '~/components/icons/PokemonWithItemIcon'
-import { gen } from '~/data/gen'
-import type { CalcSide, DamageCalcResult } from '~/calc/compute-damage'
+import {
+  gen,
+  type CalcSide,
+  type DamageCalcResult,
+} from '@dj-meyers/gale-wings/calc'
 import type { FieldConditions, StatKey } from '~/types'
 
 const STATUS_SUMMARY: Record<string, string> = {
