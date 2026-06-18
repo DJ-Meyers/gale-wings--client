@@ -12,8 +12,8 @@ importers:
         specifier: ^6.1.0
         version: 6.7.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@dj-meyers/gale-wings':
-        specifier: ^1.6.1
-        version: 1.6.1
+        specifier: ^2.0.1
+        version: 2.0.1
       '@dj-meyers/gale-wings--api-types':
         specifier: ^0.4.0
         version: 0.4.0
@@ -207,8 +207,8 @@ packages:
   '@dj-meyers/gale-wings--api-types@0.4.0':
     resolution: {integrity: sha512-gheAyGcx2OJX7sE6JphJpq3dW5dXJswBz9a3KdnV2JvNL+SoZqNCHtlshXoUSI6oPQdt4TJu7q7ixA2ayN+nYg==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings--api-types/0.4.0/85b1a364a9f98250cb9eb5a4d9d0b736024e7bf1}
 
-  '@dj-meyers/gale-wings@1.6.1':
-    resolution: {integrity: sha512-cQpWwXaXi9afeefxVsNZ7yMhvlCtZvKL1MF2kaWPumGdbltUk9K/NrSWXCipDvEZlDUAScm9cuMewG3ZUbuyrA==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings/1.6.1/95a4d098869fd6d050a817c092ca817f84d01729}
+  '@dj-meyers/gale-wings@2.0.1':
+    resolution: {integrity: sha512-pnwJVtftDdK1SwPw7rbqDAFE0lFxXum7aJpjDtnFGtSby4wJfj3eBoQ1iX5r8n39LgQmffQaHNLL08c0Po59pw==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings/2.0.1/08f22858d2133730b3187add1525e15bc220e6de}
 
   '@esbuild/aix-ppc64@0.27.7':
     resolution: {integrity: sha512-EKX3Qwmhz1eMdEJokhALr0YiD0lhQNwDqkPYyPhiSwKrh7/4KRjQc04sZ8db+5DVVnZ1LmbNDI1uAMPEUBnQPg==}
@@ -382,17 +382,17 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@pkmn/data@0.10.9':
-    resolution: {integrity: sha512-VAXcHvQNW0AYDlsms64/9wlTNF3grqtpSjHeQoV+U6kyOAg2BqqERjiRUZToF+Zv5xww+HPjm6MaTMiLnNDc9g==}
+  '@pkmn/data@0.10.10':
+    resolution: {integrity: sha512-5EsAgMCUljqQYpadoVYl3jGcJfkG6gDMENdfkvYxz/Jx569D9Y2RNhHCfld1ir2ADZEpF8kZzokEmFeavFzWXQ==}
 
-  '@pkmn/dex-types@0.10.9':
-    resolution: {integrity: sha512-EPHMWM+JckpaT58VnNcazH6s6D//DmvXVqCJFUn8id19OSZgcIGqg62TJFebQ+kWeCHKcXzDX8UMxRzBjaJJXA==}
+  '@pkmn/dex-types@0.10.10':
+    resolution: {integrity: sha512-6tXyvC+xNhDqzbnOriNIF8RqQf/FevfLeJmuXTsFZYNkQjhE4JS6JVUcJCVpq8Aj86tmJqPFRVRZp5v8ZPFwyg==}
 
-  '@pkmn/dex@0.10.9':
-    resolution: {integrity: sha512-MzNQmIDrVb7kAheSvwD3fZm2gZRlsFKnKtp8FXHgVFlkTqaD0bv1M4ndFXicTKlsmeYX4WP+3mGZqFgKQTwahA==}
+  '@pkmn/dex@0.10.10':
+    resolution: {integrity: sha512-Hlw+HHaizSeVW/qsaUElnpV8jG93GIAy/c6QuH1cnLy2mplkQ3JxkxIIbIxR5bX5yEhjeXnpAeS7oStVp+Tl8A==}
 
-  '@pkmn/mods@0.10.9':
-    resolution: {integrity: sha512-8CF00ql7zMqEkaa/mg8i60f4DZrUvGLrXCXkgWWzLIcFtra8L4DHhGvqCwBM1iowrkhxJ47qZlqN78tK57mkbw==}
+  '@pkmn/mods@0.10.10':
+    resolution: {integrity: sha512-18HcKCFDztly6H97wXAUB4mTLrgFtA6m++0pRG5DMRDWEULpPrs+rOXxEGmclkmMXZaXGmrGUIRpCz3NZ8YQww==}
 
   '@pkmn/types@4.0.0':
     resolution: {integrity: sha512-gR2s/pxJYEegek1TtsYCQupNR3d5hMlcJFsiD+2LyfKr4tc+gETTql47tWLX5mFSbPcbXh7f4+7txlMIDoZx/g==}
@@ -546,9 +546,6 @@ packages:
     resolution: {integrity: sha512-QVTUovf40zgTqlFVrKA1uXMVvU2QWEFWfAH8Wdc48IxLvrJMQVMBRjuQyUpzZCDkakImib9eVazbWlC6ksWtJw==}
     cpu: [x64]
     os: [win32]
-
-  '@smogon/calc@0.10.0':
-    resolution: {integrity: sha512-VmtTDVjF4z1Yzx1QN7NbsEcRLBAZGv/NVlb1ZK1//uppNmIg3Iqp7hDERGSM0FlmdogPEqw7iqY/3RuMSYPkmw==}
 
   '@smogon/calc@0.11.0':
     resolution: {integrity: sha512-ixP+IgQhI12R68FXxyt8+f4EZM/jdqBXZ2oCKu5zuUWXls4kYbIVdgE7t6+pkn/y6VxU+cXJhRgMkiU7wG8JHQ==}
@@ -1663,12 +1660,12 @@ snapshots:
 
   '@dj-meyers/gale-wings--api-types@0.4.0': {}
 
-  '@dj-meyers/gale-wings@1.6.1':
+  '@dj-meyers/gale-wings@2.0.1':
     dependencies:
-      '@pkmn/data': 0.10.9
-      '@pkmn/dex': 0.10.9
-      '@pkmn/mods': 0.10.9
-      '@smogon/calc': 0.10.0
+      '@pkmn/data': 0.10.10
+      '@pkmn/dex': 0.10.10
+      '@pkmn/mods': 0.10.10
+      '@smogon/calc': 0.11.0
       zod: 4.4.3
 
   '@esbuild/aix-ppc64@0.27.7':
@@ -1768,21 +1765,21 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@pkmn/data@0.10.9':
+  '@pkmn/data@0.10.10':
     dependencies:
-      '@pkmn/dex-types': 0.10.9
+      '@pkmn/dex-types': 0.10.10
 
-  '@pkmn/dex-types@0.10.9':
+  '@pkmn/dex-types@0.10.10':
     dependencies:
       '@pkmn/types': 4.0.0
 
-  '@pkmn/dex@0.10.9':
+  '@pkmn/dex@0.10.10':
     dependencies:
-      '@pkmn/dex-types': 0.10.9
+      '@pkmn/dex-types': 0.10.10
 
-  '@pkmn/mods@0.10.9':
+  '@pkmn/mods@0.10.10':
     dependencies:
-      '@pkmn/dex-types': 0.10.9
+      '@pkmn/dex-types': 0.10.10
 
   '@pkmn/types@4.0.0': {}
 
@@ -1870,10 +1867,6 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.60.4':
     optional: true
-
-  '@smogon/calc@0.10.0':
-    dependencies:
-      '@types/node': 18.19.130
 
   '@smogon/calc@0.11.0':
     dependencies:
