@@ -26,6 +26,7 @@ export const useSandboxStore = create<SandboxStore>((set) => ({
       attackerConditions: parsedToConditions(result.attacker.pokemon),
       defenderConditions: parsedToConditions(result.defender.pokemon),
       fieldConditions: { ...result.fieldConditions },
+      isSingleTarget: result.attacker.pokemon.isSingleTarget ?? false,
     })),
 
   setAttacker: (patch) =>
