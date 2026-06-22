@@ -129,6 +129,6 @@ const TeamDetailPage = () => {
   )
 }
 
-export const Route = createFileRoute('/_authenticated/teams/$slug')({
+export const Route = createFileRoute('/_authenticated/teams_/$slug')({
   component: TeamDetailPage,
 })
