@@ -3,8 +3,8 @@ import { useEffect, useState, type FormEvent } from 'react'
 
 import { Button } from '~/components/ui/Button'
 import {
-  usePokemonByTeam,
-  useTeamBySlug,
+  useGetTeamBySlug,
+  useListPokemonByTeam,
   useUpdateTeam,
 } from '~/hooks/api/teams'
 
@@ -14,8 +14,8 @@ const SLOTS = [0, 1, 2, 3, 4, 5] as const
 const TeamDetailPage = () => {
   const { slug } = Route.useParams()
   const navigate = useNavigate()
-  const { team, isTeamPending, teamError } = useTeamBySlug(slug)
-  const { teamPokemon } = usePokemonByTeam(team?.id)
+  const { team, isTeamPending, teamError } = useGetTeamBySlug(slug)
+  const { teamPokemon } = useListPokemonByTeam(team?.id)
   const { updateTeam, isUpdateTeamPending } = useUpdateTeam()
   const [isRenaming, setIsRenaming] = useState(false)
   const [draftName, setDraftName] = useState('')

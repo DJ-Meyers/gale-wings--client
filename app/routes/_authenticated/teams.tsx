@@ -3,12 +3,12 @@ import { useState, type FormEvent } from 'react'
 
 import { Button } from '~/components/ui/Button'
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog'
-import { useCreateTeam, useDeleteTeam, useTeamList } from '~/hooks/api/teams'
+import { useCreateTeam, useDeleteTeam, useListTeams } from '~/hooks/api/teams'
 
 const MAX_TEAM_NAME = 24
 
 const TeamsPage = () => {
-  const { teams, isTeamsPending, teamsError } = useTeamList()
+  const { teams, isTeamsPending, teamsError } = useListTeams()
   const { createTeam, isCreateTeamPending } = useCreateTeam()
   const { deleteTeam, isDeleteTeamPending } = useDeleteTeam()
   const [newName, setNewName] = useState('')

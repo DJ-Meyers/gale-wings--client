@@ -4,12 +4,12 @@ import { useNamedMutation } from '~/hooks/useNamedMutation'
 import { useNamedQuery } from '~/hooks/useNamedQuery'
 import { useTRPC } from '~/trpc/client'
 
-export const useTeamList = () => {
+export const useListTeams = () => {
   const trpc = useTRPC()
   return useNamedQuery(trpc.team.list.queryOptions(), 'teams')
 }
 
-export const useTeamBySlug = (slug: string) => {
+export const useGetTeamBySlug = (slug: string) => {
   const trpc = useTRPC()
   return useNamedQuery(
     trpc.team.getBySlug.queryOptions({ slug }, { enabled: Boolean(slug) }),
@@ -17,7 +17,7 @@ export const useTeamBySlug = (slug: string) => {
   )
 }
 
-export const usePokemonByTeam = (teamId: string | undefined) => {
+export const useListPokemonByTeam = (teamId: string | undefined) => {
   const trpc = useTRPC()
   return useNamedQuery(
     trpc.pokemon.listByTeam.queryOptions(
