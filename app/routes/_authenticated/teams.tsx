@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
 
 import { Button } from '~/components/ui/Button'
@@ -80,25 +80,32 @@ const TeamsPage = () => {
           {teams.map((team) => (
             <li
               key={team.id}
-              className="bg-surface border-border rounded-lg border p-4"
+              className="bg-surface border-border hover:border-primary rounded-lg border transition-colors"
             >
-              <div className="mb-2 flex items-start justify-between gap-2">
-                <h2 className="text-text-heading text-lg font-semibold">
-                  {team.name}
-                </h2>
-                <Button
-                  size="sm"
-                  variant="tertiary"
-                  onClick={() =>
-                    setPendingDelete({ id: team.id, name: team.name })
-                  }
-                >
-                  Delete
-                </Button>
-              </div>
-              <p className="text-text-dim text-xs">
-                Updated {new Date(team.updatedAt).toLocaleDateString()}
-              </p>
+              <Link
+                className="block p-4"
+                params={{ slug: team.slug }}
+                to="/teams/$slug"
+              >
+                <div className="mb-2 flex items-start justify-between gap-2">
+                  <h2 className="text-text-heading text-lg font-semibold">
+                    {team.name}
+                  </h2>
+                  <Button
+                    size="sm"
+                    variant="tertiary"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      setPendingDelete({ id: team.id, name: team.name })
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+                <p className="text-text-dim text-xs">
+                  Updated {new Date(team.updatedAt).toLocaleDateString()}
+                </p>
+              </Link>
             </li>
           ))}
         </ul>
