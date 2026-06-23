@@ -3,13 +3,22 @@ import { useMemo } from 'react'
 import { StatFieldRow } from '~/components/calculator/PokemonInfoSection/StatFieldRow'
 import { FIELD_LABEL_CLASS } from '~/components/fields/FieldLabel'
 import { naturesList } from '~/data/natures'
-import { usePokemonStats } from '~/hooks/calc/usePokemonStats'
+import type { ChampionsPokemon, StatKey } from '~/types'
 import { MAX_TOTAL_SP, STAT_KEYS, rawStatsFor } from '~/utils/pokemonStats'
 
 const natureMap = new Map(naturesList.map((n) => [n.name, n]))
 
-export const PokemonInfoStatPointInputs = () => {
-  const { pokemon, compact, onStatPointChange } = usePokemonStats()
+interface PokemonInfoStatPointInputsProps {
+  pokemon: ChampionsPokemon
+  compact?: boolean
+  onStatPointChange: (stat: StatKey, value: number) => void
+}
+
+export const PokemonInfoStatPointInputs = ({
+  pokemon,
+  compact,
+  onStatPointChange,
+}: PokemonInfoStatPointInputsProps) => {
   const { statPoints, nature } = pokemon
 
   const totalSp = STAT_KEYS.reduce((sum, key) => sum + statPoints[key], 0)

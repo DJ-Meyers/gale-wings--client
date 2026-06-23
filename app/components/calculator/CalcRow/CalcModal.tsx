@@ -7,7 +7,6 @@ import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
 import { PokemonIcon } from '~/components/icons'
 import { Modal } from '~/components/layout/Modal'
 import { UnsavedChangesDialog } from '~/components/ui/UnsavedChangesDialog'
-import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
 import { useCalcRowContext } from '~/context/CalcRowContext'
 import { useCalcRow } from '~/hooks/calc/useCalcRow'
 import { useExpandedCalc } from '~/hooks/calc/useExpandedCalc'
@@ -115,46 +114,45 @@ export const CalcModal = () => {
         </div>
         <ModifiersSection side={topSide} />
         <FieldConditionsSection />
-        <CalcPokemonStatsProvider
-          value={{
-            pokemon: calc.opponent,
-            speciesAbilities: opponentAbilities ?? [],
-            compact: true,
-            name: calc.name,
-            notes: calc.notes,
-            onSpeciesChange: (species) =>
-              onOpponentUpdate({
-                species: species as ChampionsPokemon['species'],
-              }),
-            onNatureChange: (nature) =>
-              onOpponentUpdate({
-                nature: nature as ChampionsPokemon['nature'],
-              }),
-            onAbilityChange: (ability) =>
-              onOpponentUpdate({
-                ability: ability as ChampionsPokemon['ability'],
-              }),
-            onItemChange: (item) =>
-              onOpponentUpdate({
-                item: (item || undefined) as ChampionsPokemon['item'],
-              }),
-            onStatPointChange: (stat, value) =>
-              onOpponentUpdate({
-                statPoints: { ...calc.opponent.statPoints, [stat]: value },
-              }),
-            onNameChange: (name) => patchCalc(calcId, { name }),
-            onNotesChange: (notes) => patchCalc(calcId, { notes }),
-            onMoveChange: (slot, move) => {
-              const moves = [...calc.opponent.moves] as string[]
-              moves[slot] = move
-              onOpponentUpdate({
-                moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
-              })
-            },
+        <PokemonInfoSection
+          compact
+          name={calc.name}
+          notes={calc.notes}
+          pokemon={calc.opponent}
+          speciesAbilities={opponentAbilities ?? []}
+          onAbilityChange={(ability) =>
+            onOpponentUpdate({
+              ability: ability as ChampionsPokemon['ability'],
+            })
+          }
+          onItemChange={(item) =>
+            onOpponentUpdate({
+              item: (item || undefined) as ChampionsPokemon['item'],
+            })
+          }
+          onMoveChange={(slot, move) => {
+            const moves = [...calc.opponent.moves] as string[]
+            moves[slot] = move
+            onOpponentUpdate({
+              moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
+            })
           }}
-        >
-          <PokemonInfoSection />
-        </CalcPokemonStatsProvider>
+          onNameChange={(name) => patchCalc(calcId, { name })}
+          onNatureChange={(nature) =>
+            onOpponentUpdate({ nature: nature as ChampionsPokemon['nature'] })
+          }
+          onNotesChange={(notes) => patchCalc(calcId, { notes })}
+          onSpeciesChange={(species) =>
+            onOpponentUpdate({
+              species: species as ChampionsPokemon['species'],
+            })
+          }
+          onStatPointChange={(stat, value) =>
+            onOpponentUpdate({
+              statPoints: { ...calc.opponent.statPoints, [stat]: value },
+            })
+          }
+        />
         <div className="mt-2 mb-1 flex items-end gap-1 leading-none">
           <PokemonIcon className={pokemonIconClass} species={bottomSpecies} />
           <span className="text-text-dim text-sm font-semibold">

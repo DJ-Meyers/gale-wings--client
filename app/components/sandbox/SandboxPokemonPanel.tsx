@@ -8,7 +8,6 @@ import { NatureSelectField } from '~/components/fields/NatureSelectField'
 import { PokemonSelectField } from '~/components/fields/PokemonSelectField'
 import { SwapIcon } from '~/components/icons'
 import { PokemonWithItemIcon } from '~/components/icons/PokemonWithItemIcon'
-import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
 import { useSpeciesAbilities } from '~/hooks/api/data'
 import { useLearnableMoves } from '~/hooks/useLearnableMoves'
 import { useSandboxStore } from '~/sandbox/store'
@@ -56,12 +55,6 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
   const onItemChange = (i: string) =>
     setPokemon({ item: (i || undefined) as ChampionsPokemon['item'] })
 
-  const moveOverride = {
-    value: move ?? '',
-    onChange: (m: string) => setParams({ move: m }),
-    options: learnableMoves ?? [],
-  }
-
   return (
     <section
       aria-labelledby={`panel-heading-${side}`}
@@ -93,33 +86,6 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
         </button>
       </div>
       <div className="px-4 pb-4">
-        {/* panel body */}
-      <CalcPokemonStatsProvider
-        value={{
-          pokemon,
-          speciesAbilities: speciesAbilities ?? [],
-          compact: true,
-          collapsibleMoves: true,
-          name: '',
-          notes: '',
-          moveOverride,
-          onSpeciesChange,
-          onNatureChange,
-          onAbilityChange,
-          onItemChange,
-          onStatPointChange: (stat, value) =>
-            setPokemon({
-              statPoints: { ...pokemon.statPoints, [stat]: value },
-            }),
-          onMoveChange: (slot, nextMove) => {
-            const moves = [...pokemon.moves] as string[]
-            moves[slot] = nextMove
-            setPokemon({
-              moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
-            })
-          },
-        }}
-      >
         <div className="flex items-center gap-2">
           <PokemonWithItemIcon item={item} species={species} />
           <div className="min-w-0 flex-1">
@@ -149,15 +115,21 @@ export const SandboxPokemonPanel = ({ side }: { side: Side }) => {
           />
           <MoveSelectField
             compact
-            options={moveOverride.options}
-            value={moveOverride.value}
-            onChange={moveOverride.onChange}
+            options={learnableMoves ?? []}
+            value={move ?? ''}
+            onChange={(m) => setParams({ move: m })}
           />
         </div>
-        <PokemonInfoStatPointInputs />
-      </CalcPokemonStatsProvider>
+        <PokemonInfoStatPointInputs
+          compact
+          pokemon={pokemon}
+          onStatPointChange={(stat, value) =>
+            setPokemon({
+              statPoints: { ...pokemon.statPoints, [stat]: value },
+            })
+          }
+        />
       </div>
     </section>
   )
 }
-

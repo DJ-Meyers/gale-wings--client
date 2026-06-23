@@ -4,7 +4,6 @@ import { useMemo } from 'react'
 import { CalcRow } from '~/components/calculator/CalcRow'
 import { PokemonInfoSection } from '~/components/calculator/PokemonInfoSection'
 import { SpeedCalcRow } from '~/components/SpeedCalcRow'
-import { CalcPokemonStatsProvider } from '~/context/CalcPokemonStatsContext'
 import { useSpeciesAbilities } from '~/hooks/api/data'
 import { useCalcStore } from '~/calc/store'
 import type { CalcRowMode, Calc } from '~/calc/types'
@@ -16,39 +15,41 @@ const PlayerPokemonPanel = () => {
   const { speciesAbilities } = useSpeciesAbilities(player.species)
 
   return (
-    <CalcPokemonStatsProvider
-      value={{
-        pokemon: player,
-        speciesAbilities: speciesAbilities ?? [],
-        compact: false,
-        collapsibleMoves: true,
-        name: '',
-        notes: '',
-        onSpeciesChange: (species) =>
-          setPlayer({ species: species as ChampionsPokemon['species'] }),
-        onNatureChange: (nature) =>
-          setPlayer({ nature: nature as ChampionsPokemon['nature'] }),
-        onAbilityChange: (ability) =>
-          setPlayer({ ability: ability as ChampionsPokemon['ability'] }),
-        onItemChange: (item) =>
-          setPlayer({
-            item: (item || undefined) as ChampionsPokemon['item'],
-          }),
-        onStatPointChange: (stat, value) =>
-          setPlayer({
-            statPoints: { ...player.statPoints, [stat]: value },
-          }),
-        onMoveChange: (slot, move) => {
-          const moves = [...player.moves] as string[]
-          moves[slot] = move
-          setPlayer({
-            moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
-          })
-        },
+    <PokemonInfoSection
+      collapsibleMoves
+      name=""
+      notes=""
+      pokemon={player}
+      speciesAbilities={speciesAbilities ?? []}
+      onAbilityChange={(ability) =>
+        setPlayer({ ability: ability as ChampionsPokemon['ability'] })
+      }
+      onItemChange={(item) =>
+        setPlayer({
+          item: (item || undefined) as ChampionsPokemon['item'],
+        })
+      }
+      onMoveChange={(slot, move) => {
+        const moves = [...player.moves] as string[]
+        moves[slot] = move
+        setPlayer({
+          moves: moves.filter(Boolean) as ChampionsPokemon['moves'],
+        })
       }}
-    >
-      <PokemonInfoSection />
-    </CalcPokemonStatsProvider>
+      onNameChange={() => {}}
+      onNatureChange={(nature) =>
+        setPlayer({ nature: nature as ChampionsPokemon['nature'] })
+      }
+      onNotesChange={() => {}}
+      onSpeciesChange={(species) =>
+        setPlayer({ species: species as ChampionsPokemon['species'] })
+      }
+      onStatPointChange={(stat, value) =>
+        setPlayer({
+          statPoints: { ...player.statPoints, [stat]: value },
+        })
+      }
+    />
   )
 }
 

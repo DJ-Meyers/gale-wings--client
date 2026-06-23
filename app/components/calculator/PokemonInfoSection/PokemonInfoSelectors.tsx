@@ -3,22 +3,39 @@ import { ItemSelectField } from '~/components/fields/ItemSelectField'
 import { MoveSelectField } from '~/components/fields/MoveSelectField'
 import { NatureSelectField } from '~/components/fields/NatureSelectField'
 import { PokemonSelectField } from '~/components/fields/PokemonSelectField'
-import { usePokemonStats } from '~/hooks/calc/usePokemonStats'
 import { useLearnableMoves } from '~/hooks/useLearnableMoves'
+import type { ChampionsPokemon } from '~/types'
 
-export const PokemonInfoSelectors = () => {
-  const {
-    pokemon,
-    speciesAbilities,
-    compact,
-    collapsibleMoves,
-    moveOverride,
-    onSpeciesChange,
-    onNatureChange,
-    onAbilityChange,
-    onItemChange,
-    onMoveChange,
-  } = usePokemonStats()
+interface PokemonInfoSelectorsProps {
+  pokemon: ChampionsPokemon
+  speciesAbilities: string[]
+  compact?: boolean
+  collapsibleMoves?: boolean
+  moveOverride?: {
+    value: string
+    onChange: (move: string) => void
+    disabled?: boolean
+    options?: string[]
+  }
+  onSpeciesChange: (species: string) => void
+  onNatureChange: (nature: string) => void
+  onAbilityChange: (ability: string) => void
+  onItemChange: (item: string) => void
+  onMoveChange?: (slot: number, move: string) => void
+}
+
+export const PokemonInfoSelectors = ({
+  pokemon,
+  speciesAbilities,
+  compact,
+  collapsibleMoves,
+  moveOverride,
+  onSpeciesChange,
+  onNatureChange,
+  onAbilityChange,
+  onItemChange,
+  onMoveChange,
+}: PokemonInfoSelectorsProps) => {
   const { species, nature, ability, item, moves } = pokemon
 
   const { learnableMoves } = useLearnableMoves(species)
