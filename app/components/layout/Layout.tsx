@@ -1,5 +1,6 @@
-import { Link } from '@tanstack/react-router'
-
+import { AccountButton } from '~/components/ui/AccountButton'
+import { SiteTitle } from '~/components/ui/SiteTitle'
+import { TeamsNavLink } from '~/components/ui/TeamsNavLink'
 import { ThemeToggle } from '~/components/ui/ThemeToggle'
 
 // Shared page chrome. Matches the container the root previously applied so no
@@ -13,14 +14,19 @@ interface Properties {
 export const Layout = ({ children }: Properties) => (
   <div className="flex min-h-screen flex-col">
     <header>
-      <div className={`${CONTAINER} flex items-center justify-between gap-2 py-3`}>
-        <Link
-          to="/"
-          className="from-accent via-primary via-80% to-red light:bg-linear-to-tl inline-block bg-linear-to-br bg-clip-text text-2xl leading-tight font-bold text-transparent"
-        >
-          Gale Wings
-        </Link>
-        <ThemeToggle />
+      <div
+        className={`${CONTAINER} flex items-center justify-between gap-4 py-3`}
+      >
+        <div className="flex items-center gap-6">
+          <SiteTitle />
+          <nav className="flex items-center gap-4">
+            <TeamsNavLink />
+          </nav>
+        </div>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <AccountButton />
+        </div>
       </div>
     </header>
 
