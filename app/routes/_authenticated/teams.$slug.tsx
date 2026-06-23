@@ -9,7 +9,6 @@ import {
 } from '~/hooks/api/teams'
 
 const MAX_TEAM_NAME = 24
-const SLOTS = [0, 1, 2, 3, 4, 5] as const
 
 const TeamDetailPage = () => {
   const { slug } = Route.useParams()
@@ -37,10 +36,6 @@ const TeamDetailPage = () => {
   if (!team) {
     return <p className="text-text-dim py-8 text-sm">Team not found.</p>
   }
-
-  const slotMap = new Map(
-    (teamPokemon ?? []).map((entry) => [entry.slot, entry.pokemon]),
-  )
 
   const handleRenameSubmit = (event: FormEvent) => {
     event.preventDefault()
@@ -106,47 +101,34 @@ const TeamDetailPage = () => {
       </div>
 
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {SLOTS.map((slot) => {
-          const pokemon = slotMap.get(slot)
-          return (
-            <li
-              key={slot}
-              className="bg-surface border-border rounded-lg border p-4"
-            >
-              {pokemon ? (
-                <div className="flex items-center gap-3">
-                  <div className="bg-detail-bg h-14 w-14 shrink-0 rounded" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-text-heading truncate text-sm font-semibold">
-                      {pokemon.name || pokemon.species}
-                    </p>
-                    {pokemon.name && (
-                      <p className="text-text-dim truncate text-xs">
-                        {pokemon.species}
-                      </p>
-                    )}
-                    <Button
-                      className="mt-2"
-                      disabled
-                      size="sm"
-                      variant="tertiary"
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  className="text-text-dim hover:text-text border-border hover:border-primary flex h-full w-full items-center justify-center rounded border border-dashed py-6 text-sm"
+        {(teamPokemon ?? []).map(({ slot, pokemon }) => (
+          <li
+            key={slot}
+            className="bg-surface border-border rounded-lg border p-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="bg-detail-bg h-14 w-14 shrink-0 rounded" />
+              <div className="min-w-0 flex-1">
+                <p className="text-text-heading truncate text-sm font-semibold">
+                  {pokemon.name || pokemon.species}
+                </p>
+                {pokemon.name && (
+                  <p className="text-text-dim truncate text-xs">
+                    {pokemon.species}
+                  </p>
+                )}
+                <Button
+                  className="mt-2"
                   disabled
-                  type="button"
+                  size="sm"
+                  variant="tertiary"
                 >
-                  + Add Pokémon
-                </button>
-              )}
-            </li>
-          )
-        })}
+                  Edit
+                </Button>
+              </div>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   )
