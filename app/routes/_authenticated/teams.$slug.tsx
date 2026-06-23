@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState, type FormEvent } from 'react'
 
-import { PokemonSelectField } from '~/components/fields/PokemonSelectField'
+import { AddTeamPokemonCard } from '~/components/teams/AddTeamPokemonCard'
+import { TeamPokemonCard } from '~/components/teams/TeamPokemonCard'
 import { Button } from '~/components/ui/Button'
 import { useCreatePokemon } from '~/hooks/api/pokemon'
 import {
@@ -22,8 +23,6 @@ const TeamDetailPage = () => {
   const { createPokemon, isCreatePokemonPending } = useCreatePokemon()
   const [isRenaming, setIsRenaming] = useState(false)
   const [draftName, setDraftName] = useState('')
-  const [isAdding, setIsAdding] = useState(false)
-  const [draftSpecies, setDraftSpecies] = useState('')
 
   useEffect(() => {
     if (team && !isRenaming) setDraftName(team.name)
@@ -112,87 +111,18 @@ const TeamDetailPage = () => {
 
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {populated.map(({ slot, pokemon }) => (
-          <li
-            key={slot}
-            className="bg-surface border-border rounded-lg border p-4"
-          >
-            <div className="flex items-center gap-3">
-              <div className="bg-detail-bg h-14 w-14 shrink-0 rounded" />
-              <div className="min-w-0 flex-1">
-                <p className="text-text-heading truncate text-sm font-semibold">
-                  {pokemon.name || pokemon.species}
-                </p>
-                {pokemon.name && (
-                  <p className="text-text-dim truncate text-xs">
-                    {pokemon.species}
-                  </p>
-                )}
-                <Button
-                  className="mt-2"
-                  disabled
-                  size="sm"
-                  variant="tertiary"
-                >
-                  Edit
-                </Button>
-              </div>
-            </div>
-          </li>
+          <TeamPokemonCard key={slot} pokemon={pokemon} />
         ))}
         {canAdd && (
-          <li className="bg-surface border-border rounded-lg border p-4">
-            {isAdding ? (
-              <div className="flex flex-col gap-2">
-                <PokemonSelectField
-                  compact
-                  value={draftSpecies}
-                  onChange={setDraftSpecies}
-                />
-                <div className="flex justify-end gap-2">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => {
-                      setIsAdding(false)
-                      setDraftSpecies('')
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    disabled={!draftSpecies.trim() || isCreatePokemonPending}
-                    size="sm"
-                    onClick={() => {
-                      const species = draftSpecies.trim()
-                      if (!species) return
-                      createPokemon(
-                        { teamId: team.id, slot: nextSlot, species },
-                        {
-                          onSuccess: () => {
-                            setIsAdding(false)
-                            setDraftSpecies('')
-                          },
-                        },
-                      )
-                    }}
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <button
-                className="text-text-dim hover:text-text border-border hover:border-primary flex h-full w-full items-center justify-center rounded border border-dashed py-6 text-sm"
-                type="button"
-                onClick={() => {
-                  setIsAdding(true)
-                  setDraftSpecies('')
-                }}
-              >
-                + Add Pokémon
-              </button>
-            )}
-          </li>
+          <AddTeamPokemonCard
+            isPending={isCreatePokemonPending}
+            onAdd={(species, onSuccess) =>
+              createPokemon(
+                { teamId: team.id, slot: nextSlot, species },
+                { onSuccess },
+              )
+            }
+          />
         )}
       </ul>
     </div>
