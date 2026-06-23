@@ -1,10 +1,12 @@
+import { Link } from '@tanstack/react-router'
+
 import { PokemonIcon } from '~/components/icons/PokemonIcon'
-import { Button } from '~/components/ui/Button'
 
 interface TeamPokemonCardProps {
   pokemon: {
     species: string
     name: string | null
+    slug: string
   }
 }
 
@@ -23,9 +25,13 @@ export const TeamPokemonCard = ({ pokemon }: TeamPokemonCardProps) => {
           {pokemon.name && (
             <p className="text-text-dim truncate text-xs">{pokemon.species}</p>
           )}
-          <Button className="mt-2" disabled size="sm" variant="tertiary">
+          <Link
+            className="text-primary hover:text-primary-hover mt-2 inline-block text-xs"
+            params={{ slug: pokemon.slug }}
+            to="/pokemon/$slug"
+          >
             Edit
-          </Button>
+          </Link>
         </div>
       </div>
     </li>
