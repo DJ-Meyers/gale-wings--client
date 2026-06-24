@@ -42,6 +42,9 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (err, query) => {
       if (query.meta?.silentError) return
+      // Skip background prefetches (no component is waiting on the result, so
+      // a toast would be a UX surprise the user didn't ask for).
+      if (query.getObserversCount() === 0) return
       // UNAUTHORIZED is handled by the route guard / sign-in redirect; toasting
       // it on every protected-procedure failure would spam the user during
       // sign-out.
