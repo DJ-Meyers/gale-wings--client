@@ -1,5 +1,7 @@
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 import { Button } from '~/components/ui/Button'
 import { Fieldset } from '~/components/ui/Fieldset'
@@ -295,6 +297,43 @@ const IconCell = ({
   </div>
 )
 
+const ToastDebug = () => {
+  const failingQuery = useQuery({
+    queryKey: ['debug', 'failing-query'],
+    queryFn: () => {
+      throw new Error('Synthetic query error from /design')
+    },
+    enabled: false,
+    retry: false,
+  })
+
+  const failingMutation = useMutation({
+    mutationFn: async () => {
+      throw new Error('Synthetic mutation error from /design')
+    },
+  })
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button variant="secondary" onClick={() => failingQuery.refetch()}>
+        Trigger query error
+      </Button>
+      <Button
+        variant="secondary"
+        onClick={() => failingMutation.mutate()}
+      >
+        Trigger mutation error
+      </Button>
+      <Button
+        variant="tertiary"
+        onClick={() => toast.error('Manual toast.error() from /design')}
+      >
+        Trigger toast.error() manually
+      </Button>
+    </div>
+  )
+}
+
 const DesignPage = () => {
   const [text, setText] = useState('')
   const [num, setNum] = useState(50)
@@ -572,6 +611,21 @@ const DesignPage = () => {
             <SingleTargetIcon />
           </IconCell>
         </div>
+      </Section>
+
+      <Section title="Toasts">
+        <p className="text-text-muted mb-4 text-sm">
+          Verify the global error pipeline. The first two go through{' '}
+          <code className="font-mono text-xs">QueryCache</code> /{' '}
+          <code className="font-mono text-xs">MutationCache</code>{' '}
+          <code className="font-mono text-xs">onError</code> handlers in{' '}
+          <code className="font-mono text-xs">app/trpc/query-client.ts</code>;
+          the third calls{' '}
+          <code className="font-mono text-xs">toast.error</code> directly to
+          confirm the <code className="font-mono text-xs">&lt;Toaster /&gt;</code>{' '}
+          is mounted.
+        </p>
+        <ToastDebug />
       </Section>
     </div>
   )
