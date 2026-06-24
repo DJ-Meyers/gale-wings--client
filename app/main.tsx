@@ -2,6 +2,7 @@ import { ClerkProvider, useAuth } from '@clerk/react'
 import { RouterProvider } from '@tanstack/react-router'
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
+import { Toaster } from 'sonner'
 
 import { prefetchStaticData } from '~/data/prefetch'
 import { getRouter } from '~/router'
@@ -36,6 +37,7 @@ createRoot(document.querySelector('#root')!).render(
       signInFallbackRedirectUrl="/teams"
     >
       <App />
+      <Toaster closeButton position="bottom-center" richColors theme="system" />
     </ClerkProvider>
   </StrictMode>,
 )
