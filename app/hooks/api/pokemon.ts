@@ -1,7 +1,44 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useNamedMutation } from '~/hooks/useNamedMutation'
+import { useNamedQuery } from '~/hooks/useNamedQuery'
 import { useTRPC } from '~/trpc/client'
+
+export const useGetPokemonBySlug = (slug: string) => {
+  const trpc = useTRPC()
+  return useNamedQuery(
+    trpc.pokemon.getBySlug.queryOptions({ slug }, { enabled: Boolean(slug) }),
+    'pokemon',
+  )
+}
+
+export const useUpdatePokemon = () => {
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+  return useNamedMutation(
+    trpc.pokemon.update.mutationOptions({
+      onSuccess: (updated) => {
+        if (!updated) return
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.get.queryKey({ id: updated.id }),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.getBySlug.queryKey(),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.listByTeam.queryKey(),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.listAll.queryKey(),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.team.history.queryKey(),
+        })
+      },
+    }),
+    'updatePokemon',
+  )
+}
 
 export const useCreatePokemon = () => {
   const trpc = useTRPC()
