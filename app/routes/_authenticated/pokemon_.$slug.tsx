@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
 
-import { PokemonEditorForm } from '~/components/pokemon-editor/PokemonEditorForm'
+import {
+  PokemonEditorForm,
+  usePokemonEditorForm,
+} from '~/components/pokemon-editor/PokemonEditorForm'
 import { PokemonEditorHeader } from '~/components/pokemon-editor/PokemonEditorHeader'
 import type { ChampionsPokemon } from '~/types'
 
@@ -16,25 +18,31 @@ const STUB_DRAFT = {
 
 const PokemonEditorPage = () => {
   const { slug } = Route.useParams()
-  const [draft, setDraft] = useState<ChampionsPokemon>(STUB_DRAFT)
-  const [name, setName] = useState('Ember')
-  const [notes, setNotes] = useState('')
+  const form = usePokemonEditorForm({
+    defaultValues: {
+      name: 'Ember',
+      notes: '',
+      pokemon: STUB_DRAFT,
+    },
+  })
 
   return (
     <div className="py-8">
-      <PokemonEditorHeader
-        displayName={name || draft.species}
-        slug={slug}
-        species={draft.species}
-      />
-      <PokemonEditorForm
-        name={name}
-        notes={notes}
-        pokemon={draft}
-        onNameChange={setName}
-        onNotesChange={setNotes}
-        onPokemonChange={(patch) => setDraft((d) => ({ ...d, ...patch }))}
-      />
+      <form.Subscribe
+        selector={(s) => ({
+          name: s.values.name,
+          species: s.values.pokemon.species,
+        })}
+      >
+        {({ name, species }) => (
+          <PokemonEditorHeader
+            displayName={name || species}
+            slug={slug}
+            species={species}
+          />
+        )}
+      </form.Subscribe>
+      <PokemonEditorForm form={form} />
     </div>
   )
 }
