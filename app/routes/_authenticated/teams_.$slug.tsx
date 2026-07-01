@@ -6,6 +6,7 @@ import { TeamPokemonCard } from '~/components/teams/TeamPokemonCard'
 import { Button } from '~/components/ui/Button'
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog'
 import {
+  useAddPokemonToTeam,
   useCreatePokemon,
   useRemovePokemonFromTeam,
   useReorderPokemon,
@@ -29,6 +30,7 @@ const TeamDetailPage = () => {
   const { removePokemonFromTeam, isRemovePokemonFromTeamPending } =
     useRemovePokemonFromTeam()
   const { reorderPokemon, isReorderPokemonPending } = useReorderPokemon()
+  const { addPokemonToTeam, isAddPokemonToTeamPending } = useAddPokemonToTeam()
   const [isRenaming, setIsRenaming] = useState(false)
   const [draftName, setDraftName] = useState('')
   const [pendingRemove, setPendingRemove] = useState<{
@@ -153,10 +155,18 @@ const TeamDetailPage = () => {
         ))}
         {canAdd && (
           <AddTeamPokemonCard
+            existingPokemonIds={populated.map(({ pokemon: p }) => p.id)}
             isPending={isCreatePokemonPending}
+            isPickPending={isAddPokemonToTeamPending}
             onAdd={(species, onSuccess) =>
               createPokemon(
                 { teamId: team.id, slot: nextSlot, species },
+                { onSuccess },
+              )
+            }
+            onPickExisting={(pokemonId, onSuccess) =>
+              addPokemonToTeam(
+                { pokemonId, teamId: team.id, slot: nextSlot },
                 { onSuccess },
               )
             }
