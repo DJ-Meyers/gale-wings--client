@@ -1,6 +1,12 @@
 import { Link } from '@tanstack/react-router'
 
 import { PokemonIcon } from '~/components/icons/PokemonIcon'
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  TrashIcon,
+} from '~/components/icons'
+import { Button } from '~/components/ui/Button'
 
 interface TeamPokemonCardProps {
   pokemon: {
@@ -8,9 +14,23 @@ interface TeamPokemonCardProps {
     name: string | null
     slug: string
   }
+  isFirst: boolean
+  isLast: boolean
+  isBusy: boolean
+  onMoveUp: () => void
+  onMoveDown: () => void
+  onRemove: () => void
 }
 
-export const TeamPokemonCard = ({ pokemon }: TeamPokemonCardProps) => {
+export const TeamPokemonCard = ({
+  pokemon,
+  isFirst,
+  isLast,
+  isBusy,
+  onMoveUp,
+  onMoveDown,
+  onRemove,
+}: TeamPokemonCardProps) => {
   return (
     <li className="bg-surface border-border rounded-lg border p-4">
       <div className="flex items-center gap-3">
@@ -32,6 +52,32 @@ export const TeamPokemonCard = ({ pokemon }: TeamPokemonCardProps) => {
           >
             Edit
           </Link>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Button
+            aria-label="Move up"
+            disabled={isFirst || isBusy}
+            icon={ChevronUpIcon}
+            size="sm"
+            variant="tertiary"
+            onClick={onMoveUp}
+          />
+          <Button
+            aria-label="Move down"
+            disabled={isLast || isBusy}
+            icon={ChevronDownIcon}
+            size="sm"
+            variant="tertiary"
+            onClick={onMoveDown}
+          />
+          <Button
+            aria-label="Remove from team"
+            disabled={isBusy}
+            icon={TrashIcon}
+            size="sm"
+            variant="tertiary"
+            onClick={onRemove}
+          />
         </div>
       </div>
     </li>

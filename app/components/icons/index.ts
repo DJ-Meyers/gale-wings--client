@@ -1,4 +1,5 @@
 export { CalculatorIcon } from './CalculatorIcon'
+export { ChevronDownIcon, ChevronUpIcon } from './ChevronIcon'
 export { ClockIcon } from './ClockIcon'
 export { CritIcon } from './CritIcon'
 export { DoublerIcon } from './DoublerIcon'
