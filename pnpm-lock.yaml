@@ -15,8 +15,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       '@dj-meyers/gale-wings--api-types':
-        specifier: ^0.10.0
-        version: 0.10.0
+        specifier: ^0.11.0
+        version: 0.11.0
       '@smogon/calc':
         specifier: ^0.11.0
         version: 0.11.0
@@ -210,8 +210,8 @@ packages:
       react-dom:
         optional: true
 
-  '@dj-meyers/gale-wings--api-types@0.10.0':
-    resolution: {integrity: sha512-vsKZXIldBfJYohTdmXKf8Rzt8qErJ8x3VA65CupJ0efG88JhEFO89P/CPGY+mPlzS7LCuPlZ8BoBjMkWGDk/XA==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings--api-types/0.10.0/169cc2a601fbe7589268c802bc86660fac080839}
+  '@dj-meyers/gale-wings--api-types@0.11.0':
+    resolution: {integrity: sha512-10/2PkTKZQgm7ZjB4EYc63eqZ8V8wnqOAO9ECXam52fATGh4SewNwHz5aoBs6TqCpiS9IOkVksizfaxPq4mEMQ==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings--api-types/0.11.0/2e38a7a54b0a4d6c8a69f8a15294513ace9d59e4}
 
   '@dj-meyers/gale-wings@2.2.0':
     resolution: {integrity: sha512-KxsSqyRE8lw4+bDe+hFHVx2Oz7Ez1qinD5b3L6zsMDO0xcdSJXdZiQJn6mDfn38sOg2dfGXp3WmQf8S1xdVikw==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings/2.2.0/e1b8e51d5adc87510b321a948e0f31fab3ed0ac7}
@@ -1700,7 +1700,7 @@ snapshots:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
 
-  '@dj-meyers/gale-wings--api-types@0.10.0': {}
+  '@dj-meyers/gale-wings--api-types@0.11.0': {}
 
   '@dj-meyers/gale-wings@2.2.0':
     dependencies:
