@@ -64,3 +64,42 @@ export const useCreatePokemon = () => {
     'createPokemon',
   )
 }
+
+export const useRemovePokemonFromTeam = () => {
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+  return useNamedMutation(
+    trpc.pokemon.removeFromTeam.mutationOptions({
+      onSuccess: (_data, { teamId }) => {
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.listAll.queryKey(),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.team.history.queryKey({ teamId }),
+        })
+      },
+    }),
+    'removePokemonFromTeam',
+  )
+}
+
+export const useReorderPokemon = () => {
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+  return useNamedMutation(
+    trpc.pokemon.reorder.mutationOptions({
+      onSuccess: (_data, { teamId }) => {
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.team.history.queryKey({ teamId }),
+        })
+      },
+    }),
+    'reorderPokemon',
+  )
+}
