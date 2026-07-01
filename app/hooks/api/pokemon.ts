@@ -12,6 +12,14 @@ export const useGetPokemonBySlug = (slug: string) => {
   )
 }
 
+export const useListAllPokemon = (input?: {
+  search?: string
+  sortBy?: 'recent' | 'name' | 'species'
+}) => {
+  const trpc = useTRPC()
+  return useNamedQuery(trpc.pokemon.listAll.queryOptions(input), 'allPokemon')
+}
+
 export const useUpdatePokemon = () => {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
