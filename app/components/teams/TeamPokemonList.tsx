@@ -38,7 +38,7 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
   const canAdd = nextSlot < MAX_TEAM_SIZE
   const isBusy = isRemovePokemonFromTeamPending || isReorderPokemonPending
 
-  const swapWithNeighbor = (index: number, direction: -1 | 1) => {
+  const swapWithNeighbor = (index: number, direction: -1 | 1) => () => {
     const neighborIndex = index + direction
     if (neighborIndex < 0 || neighborIndex >= populated.length) return
     const order = populated.map(({ pokemon }) => pokemon.id)
@@ -47,6 +47,25 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
     order[neighborIndex] = tmp
     reorderPokemon({ teamId, order })
   }
+
+  const requestRemove = (pokemonId: string, name: string) => () =>
+    setPendingRemove({ pokemonId, name })
+
+  const dismissRemove = () => setPendingRemove(null)
+
+  const confirmRemove = () => {
+    if (!pendingRemove) return
+    removePokemonFromTeam(
+      { pokemonId: pendingRemove.pokemonId, teamId },
+      { onSettled: dismissRemove },
+    )
+  }
+
+  const handleAdd = (species: string, onSuccess: () => void) =>
+    createPokemon({ teamId, slot: nextSlot, species }, { onSuccess })
+
+  const handlePickExisting = (pokemonId: string, onSuccess: () => void) =>
+    addPokemonToTeam({ pokemonId, teamId, slot: nextSlot }, { onSuccess })
 
   return (
     <>
@@ -58,14 +77,12 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
             isBusy={isBusy}
             pokemon={pokemon}
             teamSize={populated.length}
-            onMoveDown={() => swapWithNeighbor(index, 1)}
-            onMoveUp={() => swapWithNeighbor(index, -1)}
-            onRemove={() =>
-              setPendingRemove({
-                pokemonId: pokemon.id,
-                name: pokemon.name || pokemon.species,
-              })
-            }
+            onMoveDown={swapWithNeighbor(index, 1)}
+            onMoveUp={swapWithNeighbor(index, -1)}
+            onRemove={requestRemove(
+              pokemon.id,
+              pokemon.name || pokemon.species,
+            )}
           />
         ))}
         {canAdd && (
@@ -73,15 +90,8 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
             existingPokemonIds={populated.map(({ pokemon: p }) => p.id)}
             isPending={isCreatePokemonPending}
             isPickPending={isAddPokemonToTeamPending}
-            onAdd={(species, onSuccess) =>
-              createPokemon({ teamId, slot: nextSlot, species }, { onSuccess })
-            }
-            onPickExisting={(pokemonId, onSuccess) =>
-              addPokemonToTeam(
-                { pokemonId, teamId, slot: nextSlot },
-                { onSuccess },
-              )
-            }
+            onAdd={handleAdd}
+            onPickExisting={handlePickExisting}
           />
         )}
       </ul>
@@ -96,14 +106,8 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
         destructive
         open={pendingRemove !== null}
         title="Remove from team"
-        onCancel={() => setPendingRemove(null)}
-        onConfirm={() => {
-          if (!pendingRemove) return
-          removePokemonFromTeam(
-            { pokemonId: pendingRemove.pokemonId, teamId },
-            { onSettled: () => setPendingRemove(null) },
-          )
-        }}
+        onCancel={dismissRemove}
+        onConfirm={confirmRemove}
       />
     </>
   )
