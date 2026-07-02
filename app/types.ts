@@ -1,4 +1,6 @@
 export type {
+  AllItemName,
+  AllSpeciesName,
   CalcParameters,
   ChampionsAbility,
   ChampionsPokemon,
