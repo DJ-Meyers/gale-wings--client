@@ -4,7 +4,12 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { AddTeamPokemonCard } from '~/components/teams/AddTeamPokemonCard'
 import { TeamPokemonCard } from '~/components/teams/TeamPokemonCard'
 import { Button } from '~/components/ui/Button'
-import { useCreatePokemon } from '~/hooks/api/pokemon'
+import { ConfirmDialog } from '~/components/ui/ConfirmDialog'
+import {
+  useCreatePokemon,
+  useRemovePokemonFromTeam,
+  useReorderPokemon,
+} from '~/hooks/api/pokemon'
 import {
   useGetTeamBySlug,
   useListPokemonByTeam,
@@ -21,8 +26,15 @@ const TeamDetailPage = () => {
   const { teamPokemon } = useListPokemonByTeam(team?.id)
   const { updateTeam, isUpdateTeamPending } = useUpdateTeam()
   const { createPokemon, isCreatePokemonPending } = useCreatePokemon()
+  const { removePokemonFromTeam, isRemovePokemonFromTeamPending } =
+    useRemovePokemonFromTeam()
+  const { reorderPokemon, isReorderPokemonPending } = useReorderPokemon()
   const [isRenaming, setIsRenaming] = useState(false)
   const [draftName, setDraftName] = useState('')
+  const [pendingRemove, setPendingRemove] = useState<{
+    pokemonId: string
+    name: string
+  } | null>(null)
 
   useEffect(() => {
     if (team && !isRenaming) setDraftName(team.name)
@@ -69,6 +81,18 @@ const TeamDetailPage = () => {
   const populated = teamPokemon ?? []
   const nextSlot = populated.length
   const canAdd = nextSlot < MAX_TEAM_SIZE
+  const isBusy =
+    isRemovePokemonFromTeamPending || isReorderPokemonPending
+
+  const swapWithNeighbor = (index: number, direction: -1 | 1) => {
+    const neighborIndex = index + direction
+    if (neighborIndex < 0 || neighborIndex >= populated.length) return
+    const order = populated.map(({ pokemon }) => pokemon.id)
+    const tmp = order[index]
+    order[index] = order[neighborIndex]
+    order[neighborIndex] = tmp
+    reorderPokemon({ teamId: team.id, order })
+  }
 
   return (
     <div className="py-8">
@@ -110,8 +134,22 @@ const TeamDetailPage = () => {
       </div>
 
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {populated.map(({ slot, pokemon }) => (
-          <TeamPokemonCard key={slot} pokemon={pokemon} />
+        {populated.map(({ slot, pokemon }, index) => (
+          <TeamPokemonCard
+            key={slot}
+            isBusy={isBusy}
+            isFirst={index === 0}
+            isLast={index === populated.length - 1}
+            pokemon={pokemon}
+            onMoveDown={() => swapWithNeighbor(index, 1)}
+            onMoveUp={() => swapWithNeighbor(index, -1)}
+            onRemove={() =>
+              setPendingRemove({
+                pokemonId: pokemon.id,
+                name: pokemon.name || pokemon.species,
+              })
+            }
+          />
         ))}
         {canAdd && (
           <AddTeamPokemonCard
@@ -125,6 +163,26 @@ const TeamDetailPage = () => {
           />
         )}
       </ul>
+
+      <ConfirmDialog
+        confirmLabel="Remove"
+        description={
+          pendingRemove
+            ? `Remove ${pendingRemove.name} from ${team.name}? The Pokémon stays in your library and remains linked to any other teams.`
+            : ''
+        }
+        destructive
+        open={pendingRemove !== null}
+        title="Remove from team"
+        onCancel={() => setPendingRemove(null)}
+        onConfirm={() => {
+          if (!pendingRemove) return
+          removePokemonFromTeam(
+            { pokemonId: pendingRemove.pokemonId, teamId: team.id },
+            { onSettled: () => setPendingRemove(null) },
+          )
+        }}
+      />
     </div>
   )
 }
