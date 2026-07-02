@@ -183,3 +183,13 @@ body {
 [data-mode='light'] .stat-chip .text-text {
   color: #fff;
 }
+
+/* Move chips (TeamPokemonCard). The type-hued fill is set via --type-bg. The
+   vivid type colors read too bright on the light panel, so deepen them toward
+   black in light mode for a calmer fill that keeps the white text legible. */
+.move-chip {
+  background-color: var(--type-bg);
+}
+[data-mode='light'] .move-chip {
+  background-color: color-mix(in srgb, var(--type-bg) 80%, #000);
+}

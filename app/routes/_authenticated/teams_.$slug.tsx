@@ -135,7 +135,7 @@ const TeamDetailPage = () => {
         )}
       </div>
 
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3">
         {populated.map(({ slot, pokemon }, index) => (
           <TeamPokemonCard
             key={slot}
@@ -143,6 +143,7 @@ const TeamDetailPage = () => {
             isFirst={index === 0}
             isLast={index === populated.length - 1}
             pokemon={pokemon}
+            slotNumber={index + 1}
             onMoveDown={() => swapWithNeighbor(index, 1)}
             onMoveUp={() => swapWithNeighbor(index, -1)}
             onRemove={() =>
