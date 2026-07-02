@@ -22,9 +22,12 @@ const PokemonLibraryPage = () => {
     <div className="py-8">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">Pokémon</h1>
-        <span className="text-text-dim text-xs italic">
-          + New Pokémon (wires up in D2)
-        </span>
+        <Link
+          className="text-primary hover:text-primary-hover text-sm"
+          to="/pokemon/new"
+        >
+          + New Pokémon
+        </Link>
       </div>
 
       <div className="mb-4 flex items-center gap-2">
