@@ -26,9 +26,10 @@ type TeamPokemon = Omit<ChampionsPokemon, 'ability'> & {
 
 interface TeamPokemonCardProps {
   pokemon: TeamPokemon
-  slotNumber: number
-  isFirst: boolean
-  isLast: boolean
+  // Zero-based position within the team and the team's size; the slot label and
+  // the reorder-button edge states are derived from these.
+  index: number
+  teamSize: number
   isBusy: boolean
   onMoveUp: () => void
   onMoveDown: () => void
@@ -39,14 +40,16 @@ const MOVE_SLOTS = [0, 1, 2, 3]
 
 export const TeamPokemonCard = ({
   pokemon,
-  slotNumber,
-  isFirst,
-  isLast,
+  index,
+  teamSize,
   isBusy,
   onMoveUp,
   onMoveDown,
   onRemove,
 }: TeamPokemonCardProps) => {
+  const slotNumber = index + 1
+  const isFirst = index === 0
+  const isLast = index === teamSize - 1
   const stats = rawStatsFor(pokemon as ChampionsPokemon)
   const nature = gen.natures.get(toID(pokemon.nature))
   const natureModFor = (stat: StatKey): '+' | '-' | undefined =>

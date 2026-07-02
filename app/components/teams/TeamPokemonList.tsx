@@ -54,11 +54,10 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
         {populated.map(({ slot, pokemon }, index) => (
           <TeamPokemonCard
             key={slot}
+            index={index}
             isBusy={isBusy}
-            isFirst={index === 0}
-            isLast={index === populated.length - 1}
             pokemon={pokemon}
-            slotNumber={index + 1}
+            teamSize={populated.length}
             onMoveDown={() => swapWithNeighbor(index, 1)}
             onMoveUp={() => swapWithNeighbor(index, -1)}
             onRemove={() =>
