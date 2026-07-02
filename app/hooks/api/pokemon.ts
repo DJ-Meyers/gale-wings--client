@@ -53,15 +53,13 @@ export const useCreatePokemon = () => {
   const queryClient = useQueryClient()
   return useNamedMutation(
     trpc.pokemon.create.mutationOptions({
-      onSuccess: (_data, variables) => {
-        if (variables.teamId) {
+      onSuccess: (_data, { teamId }) => {
+        if (teamId) {
           queryClient.invalidateQueries({
-            queryKey: trpc.pokemon.listByTeam.queryKey({
-              teamId: variables.teamId,
-            }),
+            queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
           })
           queryClient.invalidateQueries({
-            queryKey: trpc.team.history.queryKey(),
+            queryKey: trpc.team.history.queryKey({ teamId }),
           })
         }
         queryClient.invalidateQueries({
