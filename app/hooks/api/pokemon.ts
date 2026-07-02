@@ -73,6 +73,27 @@ export const useCreatePokemon = () => {
   )
 }
 
+export const useAddPokemonToTeam = () => {
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+  return useNamedMutation(
+    trpc.pokemon.addToTeam.mutationOptions({
+      onSuccess: (_data, { teamId }) => {
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.pokemon.listAll.queryKey(),
+        })
+        queryClient.invalidateQueries({
+          queryKey: trpc.team.history.queryKey({ teamId }),
+        })
+      },
+    }),
+    'addPokemonToTeam',
+  )
+}
+
 export const useRemovePokemonFromTeam = () => {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
