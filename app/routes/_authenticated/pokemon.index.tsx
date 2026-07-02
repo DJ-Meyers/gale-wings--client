@@ -2,54 +2,21 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { PokemonIcon } from '~/components/icons/PokemonIcon'
+import { useListAllPokemon } from '~/hooks/api/pokemon'
+import { useDebouncedValue } from '~/hooks/useDebouncedValue'
 
 type SortBy = 'recent' | 'name' | 'species'
 
-interface StubRow {
-  id: string
-  name: string | null
-  species: string
-  slug: string
-  teams: Array<{ teamName: string; teamSlug: string }>
-}
-
-const STUB_ROWS: StubRow[] = [
-  {
-    id: '1',
-    name: 'Aegis',
-    species: 'Chi-Yu',
-    slug: 'aegis',
-    teams: [
-      { teamName: 'Alpha', teamSlug: 'alpha' },
-      { teamName: 'Bravo', teamSlug: 'bravo' },
-    ],
-  },
-  {
-    id: '2',
-    name: null,
-    species: 'Iron Bundle',
-    slug: 'iron-bundle',
-    teams: [{ teamName: 'Alpha', teamSlug: 'alpha' }],
-  },
-  {
-    id: '3',
-    name: 'Ceres',
-    species: 'Rillaboom',
-    slug: 'ceres',
-    teams: [],
-  },
-  {
-    id: '4',
-    name: 'Doubler',
-    species: 'Amoonguss',
-    slug: 'doubler',
-    teams: [{ teamName: 'Charlie', teamSlug: 'charlie' }],
-  },
-]
+const SEARCH_DEBOUNCE_MS = 200
 
 const PokemonLibraryPage = () => {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState<SortBy>('recent')
+  const debouncedSearch = useDebouncedValue(search, SEARCH_DEBOUNCE_MS)
+  const { allPokemon, isAllPokemonPending, allPokemonError } = useListAllPokemon({
+    search: debouncedSearch || undefined,
+    sortBy,
+  })
 
   return (
     <div className="py-8">
@@ -82,50 +49,60 @@ const PokemonLibraryPage = () => {
         </label>
       </div>
 
-      <ul className="border-border divide-border divide-y border-y">
-        {STUB_ROWS.map((row) => (
-          <li key={row.id}>
-            <Link
-              className="bg-surface hover:bg-detail-bg flex items-center gap-3 px-3 py-2 transition-colors"
-              params={{ slug: row.slug }}
-              to="/pokemon/$slug"
-            >
-              <PokemonIcon
-                className="bg-detail-bg relative inline-block h-10 w-10 shrink-0 overflow-hidden rounded"
-                species={row.species}
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-text-heading truncate text-sm font-medium">
-                  {row.name || row.species}
-                </p>
-                {row.name && (
-                  <p className="text-text-dim truncate text-xs">
-                    {row.species}
+      {isAllPokemonPending ? (
+        <p className="text-text-dim text-sm">Loading…</p>
+      ) : allPokemonError ? (
+        <p className="text-sm text-red-500">
+          Failed to load Pokémon: {allPokemonError.message}
+        </p>
+      ) : !allPokemon || allPokemon.length === 0 ? (
+        <p className="text-text-dim text-sm">
+          {debouncedSearch
+            ? `No Pokémon match "${debouncedSearch}".`
+            : 'No Pokémon yet. Create one from a team or via +New (once D2 lands).'}
+        </p>
+      ) : (
+        <ul className="border-border divide-border divide-y border-y">
+          {allPokemon.map(({ pokemon: p, teams }) => (
+            <li key={p.id}>
+              <Link
+                className="bg-surface hover:bg-detail-bg flex items-center gap-3 px-3 py-2 transition-colors"
+                params={{ slug: p.slug }}
+                to="/pokemon/$slug"
+              >
+                <PokemonIcon
+                  className="bg-detail-bg relative inline-block h-10 w-10 shrink-0 overflow-hidden rounded"
+                  species={p.species}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-text-heading truncate text-sm font-medium">
+                    {p.name || p.species}
                   </p>
-                )}
-              </div>
-              <div className="text-text-dim shrink-0 text-xs">
-                {row.teams.length === 0 ? (
-                  <span className="italic">Orphan</span>
-                ) : (
-                  <span>
-                    {row.teams.map((t, index) => (
-                      <span key={t.teamSlug}>
-                        {index > 0 && ', '}
-                        {t.teamName}
-                      </span>
-                    ))}
-                  </span>
-                )}
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <p className="text-text-dim mt-4 text-xs italic">
-        Stub data — real Pokémon list wires up in D1.
-      </p>
+                  {p.name && (
+                    <p className="text-text-dim truncate text-xs">
+                      {p.species}
+                    </p>
+                  )}
+                </div>
+                <div className="text-text-dim shrink-0 text-xs">
+                  {teams.length === 0 ? (
+                    <span className="italic">Orphan</span>
+                  ) : (
+                    <span>
+                      {teams.map((t, index) => (
+                        <span key={t.teamSlug}>
+                          {index > 0 && ', '}
+                          {t.teamName}
+                        </span>
+                      ))}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
