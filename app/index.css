@@ -161,6 +161,25 @@ body {
   color-scheme: light;
 }
 
+/* Smoothly cross-fade theme colors when switching light/dark, instead of an
+   instant flash. `useTheme` adds `.theme-transition` to <html> only for the
+   duration of a switch (see THEME_TRANSITION_MS), so hovers and other state
+   changes stay instant. Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: no-preference) {
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease,
+      fill 0.25s ease,
+      stroke 0.25s ease !important;
+    transition-delay: 0s !important;
+  }
+}
+
 /* Stat chip (StatDisplay). Each chip exposes --stat (pastel hue) and --stat-fill
    (darker same-hue solid). Dark mode: faint tint fill with the pastel as value
    text. Light mode keeps the pastel value text but sits it on the darker solid
