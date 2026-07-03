@@ -31,10 +31,28 @@ const getSnapshot = (): ThemeMode => {
 
 const getServerSnapshot = (): ThemeMode => 'dark'
 
+// Duration must match the `.theme-transition` rule in index.css.
+const THEME_TRANSITION_MS = 250
+let transitionTimer: ReturnType<typeof setTimeout> | undefined
+
+// Enable color transitions only for the duration of a mode switch. Doing this
+// on every element permanently would also animate hovers/focus and slow them
+// down; gating it behind a temporary class keeps those instant.
+const flashTransition = () => {
+  const root = document.documentElement
+  root.classList.add('theme-transition')
+  clearTimeout(transitionTimer)
+  transitionTimer = setTimeout(
+    () => root.classList.remove('theme-transition'),
+    THEME_TRANSITION_MS,
+  )
+}
+
 export const useTheme = () => {
   const mode = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
   const setMode = (next: ThemeMode) => {
+    flashTransition()
     localStorage.setItem(THEME_MODE_KEY, next)
     // Same-tab listeners don't receive the native storage event, so replay it.
     window.dispatchEvent(
