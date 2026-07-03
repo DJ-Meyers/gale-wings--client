@@ -1,5 +1,5 @@
-import sunIcon from '~/assets/weather/Harsh_sunlight_icon_SV.png'
-import { MoonIcon } from '~/components/icons'
+import lunatoneIcon from '~/assets/lunatone.png'
+import solrockIcon from '~/assets/solrock.png'
 import { useTheme } from '~/hooks/useTheme'
 
 export const ThemeToggle = () => {
@@ -23,16 +23,12 @@ export const ThemeToggle = () => {
       type="button"
       onClick={toggleMode}
     >
-      {isDark ? (
-        <img
-          alt=""
-          aria-hidden="true"
-          className="h-5 w-5 object-contain"
-          src={sunIcon}
-        />
-      ) : (
-        <MoonIcon className="text-text-muted h-4 w-4" />
-      )}
+      <img
+        alt=""
+        aria-hidden="true"
+        className="h-5 w-5 object-contain"
+        src={isDark ? solrockIcon : lunatoneIcon}
+      />
     </button>
   )
 }
