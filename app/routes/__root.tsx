@@ -2,6 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { useLayoutEffect } from 'react'
 
+import 'hamburgers/dist/hamburgers.css'
 import '~/index.css'
 import { Layout } from '~/components/layout/Layout'
 import { useTheme } from '~/hooks/useTheme'

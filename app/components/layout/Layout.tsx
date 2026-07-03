@@ -1,4 +1,5 @@
 import { AccountButton } from '~/components/ui/AccountButton'
+import { MobileNav } from '~/components/ui/MobileNav'
 import { PokemonNavLink } from '~/components/ui/PokemonNavLink'
 import { SiteTitle } from '~/components/ui/SiteTitle'
 import { TeamsNavLink } from '~/components/ui/TeamsNavLink'
@@ -20,14 +21,17 @@ export const Layout = ({ children }: Properties) => (
       >
         <div className="flex items-center gap-6">
           <SiteTitle />
-          <nav className="flex items-center gap-4">
+          <nav className="hidden items-center gap-4 md:flex">
             <TeamsNavLink />
             <PokemonNavLink />
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <AccountButton />
+          <div className="hidden items-center gap-3 md:flex">
+            <ThemeToggle />
+            <AccountButton />
+          </div>
+          <MobileNav />
         </div>
       </div>
     </header>
