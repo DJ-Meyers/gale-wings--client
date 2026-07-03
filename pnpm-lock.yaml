@@ -38,6 +38,9 @@ importers:
       '@trpc/tanstack-react-query':
         specifier: ^11.12.0
         version: 11.17.0(@tanstack/react-query@5.100.14(react@19.2.6))(@trpc/client@11.17.0(@trpc/server@11.17.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.17.0(typescript@5.9.3))(react@19.2.6)(typescript@5.9.3)
+      hamburgers:
+        specifier: ^1.2.1
+        version: 1.2.1
       pokemon-sprites:
         specifier: github:PokeAPI/sprites
         version: https://codeload.github.com/PokeAPI/sprites/tar.gz/1de17c408f2d03d2caa52cca06eabb9226a7a499
@@ -1099,6 +1102,9 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  hamburgers@1.2.1:
+    resolution: {integrity: sha512-uFuVVF7/MeUtRWrA+S1FGGo4iVi7RgPzZAmljBnSeDh4snOZzaQ+oB6CI1m4vKD5RGz9s70ufgiJLxgivqA26Q==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -2470,6 +2476,8 @@ snapshots:
   glob-to-regexp@0.4.1: {}
 
   graceful-fs@4.2.11: {}
+
+  hamburgers@1.2.1: {}
 
   import-fresh@3.3.1:
     dependencies:

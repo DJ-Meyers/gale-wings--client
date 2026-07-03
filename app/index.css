@@ -193,3 +193,26 @@ body {
 [data-mode='light'] .move-chip {
   background-color: color-mix(in srgb, var(--type-bg) 80%, #000);
 }
+
+/* npm `hamburgers` menu button (mobile nav). Tune it for the compact nav slot:
+   drop the package's 15px padding and scale the whole button down so its
+   animation geometry stays intact, and drive the bar color from currentColor
+   so it follows the button's text color (theme-adaptive, hover-aware). */
+.hamburger {
+  display: flex;
+  padding: 0;
+  transform: scale(0.5);
+  transform-origin: center;
+}
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after,
+.hamburger.is-active .hamburger-inner,
+.hamburger.is-active .hamburger-inner::before,
+.hamburger.is-active .hamburger-inner::after {
+  /* Match the nav links' resting color. Set here (unlayered) rather than via a
+     Tailwind text utility on the button: the vendor `.hamburger { color: inherit }`
+     is also unlayered and would beat any layered utility, leaving the bars the
+     page's default (brighter) text color. */
+  background-color: var(--color-text-dim);
+}
