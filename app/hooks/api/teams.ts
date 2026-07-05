@@ -56,6 +56,13 @@ export const useCreateTeam = () => {
     trpc.team.create.mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: trpc.team.list.queryKey() })
+        // A previously-deleted team with this same name may have left a stale
+        // slug -> team entry cached (delete deliberately doesn't purge
+        // getBySlug — see useDeleteTeam). Invalidate so the new team's detail
+        // page resolves the slug to the new id instead of the dead one.
+        queryClient.invalidateQueries({
+          queryKey: trpc.team.getBySlug.queryKey(),
+        })
       },
     }),
     'createTeam',
@@ -67,10 +74,24 @@ export const useDeleteTeam = () => {
   const queryClient = useQueryClient()
   return useNamedMutation(
     trpc.team.delete.mutationOptions({
-      onSuccess: () => {
+      onSuccess: (_data, { id }) => {
         queryClient.invalidateQueries({ queryKey: trpc.team.list.queryKey() })
         queryClient.invalidateQueries({
           queryKey: trpc.pokemon.listAll.queryKey(),
+        })
+        // Drop the deleted team's per-id caches so re-creating a team with the
+        // same name doesn't briefly flash the old roster via listByTeam(oldId).
+        // Deliberately DON'T touch getBySlug here: the detail page is still
+        // observing it at delete time, so removing/invalidating it would refetch
+        // the just-deleted slug and cache a "not found" (getBySlug returns null),
+        // leaving the recreated team stuck on "team doesn't exist" for the 30s
+        // staleTime. The stale slug entry is refreshed by useCreateTeam instead.
+        queryClient.removeQueries({ queryKey: trpc.team.get.queryKey({ id }) })
+        queryClient.removeQueries({
+          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId: id }),
+        })
+        queryClient.removeQueries({
+          queryKey: trpc.team.history.queryKey({ teamId: id }),
         })
       },
     }),
