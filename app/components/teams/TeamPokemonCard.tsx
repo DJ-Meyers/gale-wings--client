@@ -7,7 +7,7 @@ import {
   ChevronUpIcon,
   EditIcon,
   PokemonWithItemIcon,
-  TrashIcon,
+  XIcon,
 } from '~/components/icons'
 import { StatDisplay } from '~/components/pokemon/StatDisplay'
 import { Button } from '~/components/ui/Button'
@@ -106,7 +106,7 @@ export const TeamPokemonCard = ({
             aria-label="Remove from team"
             className="!bg-red hover:!bg-red/80 !text-white"
             disabled={isBusy}
-            icon={TrashIcon}
+            icon={XIcon}
             size="sm"
             variant="tertiary"
             onClick={onRemove}
