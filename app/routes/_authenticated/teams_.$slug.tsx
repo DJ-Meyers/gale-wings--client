@@ -20,17 +20,17 @@ const TeamDetailPage = () => {
   }, [team, isRenaming])
 
   if (isTeamPending) {
-    return <p className="text-text-dim py-8 text-sm">Loading…</p>
+    return <p className="text-text-dim text-sm">Loading…</p>
   }
   if (teamError) {
     return (
-      <p className="py-8 text-sm text-red-500">
+      <p className="text-sm text-red-500">
         Failed to load team: {teamError.message}
       </p>
     )
   }
   if (!team) {
-    return <p className="text-text-dim py-8 text-sm">Team not found.</p>
+    return <p className="text-text-dim text-sm">Team not found.</p>
   }
 
   const handleRenameSubmit = (event: FormEvent) => {
@@ -58,7 +58,7 @@ const TeamDetailPage = () => {
   }
 
   return (
-    <div className="py-8">
+    <div>
       <div className="mb-6 flex items-center justify-between gap-4">
         {isRenaming ? (
           <form className="flex flex-1 gap-2" onSubmit={handleRenameSubmit}>

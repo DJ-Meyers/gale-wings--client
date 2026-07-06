@@ -19,7 +19,7 @@ const PokemonLibraryPage = () => {
   })
 
   return (
-    <div className="py-8">
+    <div>
       <div className="mb-6 flex items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">Pokémon</h1>
         <Link

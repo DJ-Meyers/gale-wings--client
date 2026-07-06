@@ -40,17 +40,17 @@ const PokemonEditorPage = () => {
     useGetPokemonBySlug(slug)
 
   if (isPokemonPending) {
-    return <p className="text-text-dim py-8 text-sm">Loading…</p>
+    return <p className="text-text-dim text-sm">Loading…</p>
   }
   if (pokemonError) {
     return (
-      <p className="py-8 text-sm text-red-500">
+      <p className="text-sm text-red-500">
         Failed to load Pokémon: {pokemonError.message}
       </p>
     )
   }
   if (!serverPokemon) {
-    return <p className="text-text-dim py-8 text-sm">Pokémon not found.</p>
+    return <p className="text-text-dim text-sm">Pokémon not found.</p>
   }
 
   return <PokemonEditorView slug={slug} serverPokemon={serverPokemon} />
@@ -127,7 +127,7 @@ const PokemonEditorView = ({ slug, serverPokemon }: PokemonEditorViewProps) => {
   const showUnsaved = status === 'blocked'
 
   return (
-    <div className="py-8">
+    <div>
       <form.Subscribe
         selector={(s) => ({
           name: s.values.name,
