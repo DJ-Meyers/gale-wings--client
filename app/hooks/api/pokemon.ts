@@ -118,7 +118,32 @@ export const useReorderPokemon = () => {
   const queryClient = useQueryClient()
   return useNamedMutation(
     trpc.pokemon.reorder.mutationOptions({
-      onSuccess: (_data, { teamId }) => {
+      // Optimistically reorder the cached list so the cards move the instant
+      // the user clicks, driving the auto-animate swap without waiting for the
+      // server round-trip. Reconciled by the onSettled invalidation.
+      onMutate: async ({ teamId, order }) => {
+        const queryKey = trpc.pokemon.listByTeam.queryKey({ teamId })
+        await queryClient.cancelQueries({ queryKey })
+        const previous = queryClient.getQueryData(queryKey)
+        queryClient.setQueryData(queryKey, (old) => {
+          if (!old) return old
+          const byId = new Map(old.map((entry) => [entry.pokemon.id, entry]))
+          return order.flatMap((id, index) => {
+            const entry = byId.get(id)
+            return entry ? [{ ...entry, slot: index }] : []
+          })
+        })
+        return { previous }
+      },
+      onError: (_err, { teamId }, context) => {
+        if (context?.previous) {
+          queryClient.setQueryData(
+            trpc.pokemon.listByTeam.queryKey({ teamId }),
+            context.previous,
+          )
+        }
+      },
+      onSettled: (_data, _err, { teamId }) => {
         queryClient.invalidateQueries({
           queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
         })

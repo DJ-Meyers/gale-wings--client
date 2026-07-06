@@ -1,3 +1,4 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useState } from 'react'
 
 import { AddTeamPokemonCard } from '~/components/teams/AddTeamPokemonCard'
@@ -10,6 +11,7 @@ import {
   useReorderPokemon,
 } from '~/hooks/api/pokemon'
 import { useListPokemonByTeam } from '~/hooks/api/teams'
+import { useDelayedFlag } from '~/hooks/useDelayedFlag'
 
 const MAX_TEAM_SIZE = 6
 
@@ -32,11 +34,18 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
     pokemonId: string
     name: string
   } | null>(null)
+  // Animates the FLIP transition when reorder swaps two cards. Paired with the
+  // stable `key={pokemon.id}` below so auto-animate tracks each card's identity.
+  const [listRef] = useAutoAnimate<HTMLUListElement>()
 
   const populated = teamPokemon ?? []
   const nextSlot = populated.length
   const canAdd = nextSlot < MAX_TEAM_SIZE
-  const isBusy = isRemovePokemonFromTeamPending || isReorderPokemonPending
+  // Reorder is optimistic and usually resolves in a frame or two, so gate its
+  // disable behind a short delay — otherwise the buttons flash disabled on
+  // every swap. Removal stays immediate (destructive, and refetch-bound).
+  const isReorderBusy = useDelayedFlag(isReorderPokemonPending, 200)
+  const isBusy = isRemovePokemonFromTeamPending || isReorderBusy
 
   const swapWithNeighbor = (index: number, direction: -1 | 1) => () => {
     const neighborIndex = index + direction
@@ -69,10 +78,13 @@ export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
 
   return (
     <>
-      <ul className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3">
-        {populated.map(({ slot, pokemon }, index) => (
+      <ul
+        ref={listRef}
+        className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3"
+      >
+        {populated.map(({ pokemon }, index) => (
           <TeamPokemonCard
-            key={slot}
+            key={pokemon.id}
             index={index}
             isBusy={isBusy}
             pokemon={pokemon}
