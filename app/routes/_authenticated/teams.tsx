@@ -41,7 +41,7 @@ const TeamsPage = () => {
   }
 
   return (
-    <div className="py-8">
+    <div>
       <div className="mb-6 flex items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">Teams</h1>
         <form className="flex gap-2" onSubmit={handleCreate}>

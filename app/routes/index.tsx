@@ -5,7 +5,7 @@ import { SandboxPokemonPanel } from '~/components/sandbox/SandboxPokemonPanel'
 import { VsParseInput } from '~/components/sandbox/VsParseInput'
 
 const IndexPage = () => (
-  <div className="mx-auto flex max-w-[1400px] flex-col gap-3 py-4">
+  <div className="mx-auto flex max-w-[1400px] flex-col gap-3">
     <VsParseInput />
     <CalcResultPanel />
     <div className="grid grid-cols-[repeat(auto-fit,minmax(236px,1fr))] gap-4">

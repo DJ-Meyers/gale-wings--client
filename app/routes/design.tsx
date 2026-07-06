@@ -341,7 +341,7 @@ const DesignPage = () => {
   const [notes, setNotes] = useState('')
 
   return (
-    <div className="mx-auto max-w-[1100px] px-4 py-6">
+    <div className="mx-auto max-w-[1100px] px-4">
       <header className="mb-8">
         <h1 className="text-3xl font-bold">Design</h1>
         <p className="text-text-muted text-sm">
