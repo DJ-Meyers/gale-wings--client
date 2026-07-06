@@ -35,10 +35,17 @@ export const useUpdateTeam = () => {
     trpc.team.update.mutationOptions({
       onSuccess: (updated) => {
         queryClient.invalidateQueries({ queryKey: trpc.team.list.queryKey() })
-        queryClient.invalidateQueries({
-          queryKey: trpc.team.getBySlug.queryKey(),
-        })
         if (updated) {
+          // Prime the renamed team's slug lookup so navigating to its new
+          // detail URL resolves from cache instead of dropping the whole page
+          // to a loading state. The stale old-slug entry is dropped by the
+          // caller after it navigates away (see teams_.$slug.tsx) — clearing it
+          // here would refetch a slug the detail page is still observing and
+          // cache the null miss for the 30s staleTime.
+          queryClient.setQueryData(
+            trpc.team.getBySlug.queryKey({ slug: updated.slug }),
+            updated,
+          )
           queryClient.invalidateQueries({
             queryKey: trpc.team.get.queryKey({ id: updated.id }),
           })
