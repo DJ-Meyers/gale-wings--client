@@ -7,6 +7,7 @@ import {
   ChevronUpIcon,
   EditIcon,
   PokemonWithItemIcon,
+  SaveIcon,
   XIcon,
 } from '~/components/icons'
 import { StatDisplay } from '~/components/pokemon/StatDisplay'
@@ -18,14 +19,17 @@ import { rawStatsFor, STAT_KEYS } from '~/utils/pokemonStats'
 
 // The team query returns full DB rows, where `ability` is optional (unset until
 // the pokemon is edited) — looser than ChampionsPokemon, so relax it here.
-type TeamPokemon = Omit<ChampionsPokemon, 'ability'> & {
+export type TeamPokemon = Omit<ChampionsPokemon, 'ability'> & {
   ability?: ChampionsPokemon['ability']
+  id: string
   slug: string
   name: string | null
 }
 
 interface TeamPokemonCardProps {
   pokemon: TeamPokemon
+  // Slug of the owning team, for the nested edit link (/teams/$slug/$pokemonSlug).
+  teamSlug: string
   // Zero-based position within the team and the team's size; the slot label and
   // the reorder-button edge states are derived from these.
   index: number
@@ -34,18 +38,26 @@ interface TeamPokemonCardProps {
   onMoveUp: () => void
   onMoveDown: () => void
   onRemove: () => void
+  // Snapshot this pokemon into the library as a template. Omit to hide the
+  // action (only offered for already-persisted pokemon). Runs immediately.
+  onSaveToLibrary?: () => void
+  // A draft entry not yet persisted (added this session): shows an "Unsaved" tag.
+  unsaved?: boolean
 }
 
 const MOVE_SLOTS = [0, 1, 2, 3]
 
 export const TeamPokemonCard = ({
   pokemon,
+  teamSlug,
   index,
   teamSize,
   isBusy,
   onMoveUp,
   onMoveDown,
   onRemove,
+  onSaveToLibrary,
+  unsaved = false,
 }: TeamPokemonCardProps) => {
   const slotNumber = index + 1
   const isFirst = index === 0
@@ -83,8 +95,13 @@ export const TeamPokemonCard = ({
             </button>
           </div>
           <div className="min-w-0">
-            <p className="text-text-heading truncate text-sm font-semibold">
+            <p className="text-text-heading flex items-center gap-1.5 truncate text-sm font-semibold">
               {pokemon.name || pokemon.species}
+              {unsaved && (
+                <span className="bg-slate text-text-dim shrink-0 rounded px-1 py-0.5 text-[0.625rem] font-medium">
+                  Unsaved
+                </span>
+              )}
             </p>
             {pokemon.name && (
               <p className="text-text-dim truncate text-xs">
@@ -94,11 +111,22 @@ export const TeamPokemonCard = ({
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-1">
+          {onSaveToLibrary && (
+            <Button
+              aria-label="Save to library"
+              className="!bg-green hover:!bg-pale-green !text-white"
+              disabled={isBusy}
+              icon={SaveIcon}
+              size="sm"
+              variant="tertiary"
+              onClick={onSaveToLibrary}
+            />
+          )}
           <Link
             aria-label="Edit"
             className="bg-blue hover:bg-pale-blue inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-white"
-            params={{ slug: pokemon.slug }}
-            to="/pokemon/$slug"
+            params={{ slug: teamSlug, pokemonSlug: pokemon.slug }}
+            to="/teams/$slug/$pokemonSlug"
           >
             <EditIcon className="h-3.5 w-3.5" />
           </Link>

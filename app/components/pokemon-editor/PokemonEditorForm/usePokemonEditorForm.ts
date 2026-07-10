@@ -17,13 +17,14 @@ import { z } from 'zod'
 // "unset" value, then `.refine` against it so the form's canSubmit stays false
 // until the user picks a real ability — Save is correctly disabled for fresh
 // pokemon and re-enables once a valid ability is selected.
-const formPokemonSchema = looseChampionsPokemonSchema.extend({
+// IVs are locked at 31 (see toCalcPokemon's PERFECT_IVS default) and level at
+// 50, so neither is an editable form field — omit ivs from the base shape.
+const formPokemonSchema = looseChampionsPokemonSchema.omit({ ivs: true }).extend({
   nature: looseChampionsPokemonSchema.shape.nature.unwrap(),
   ability: z
     .union([looseChampionsPokemonSchema.shape.ability, z.literal('')])
     .refine((v) => v !== '', { message: 'Ability is required' }),
   statPoints: z.record(statKeySchema, z.number()),
-  ivs: z.record(statKeySchema, z.number()).optional(),
 })
 
 export const pokemonEditorFormSchema = z.object({
