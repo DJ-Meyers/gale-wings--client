@@ -2,6 +2,7 @@ import { Show, useUser } from '@clerk/react'
 import { Link } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 
+import { UserIcon } from '~/components/icons'
 import lunatoneIcon from '~/assets/lunatone.png'
 import pikachuIcon from '~/assets/pikachu.png'
 import PokeballPartyIcon from '~/assets/pokeball-party.svg?react'
@@ -64,7 +65,11 @@ export const MobileNav = () => {
         >
           <Show when="signed-out">
             <Link className={rowClass} to="/sign-in">
-              <span aria-hidden="true" className={iconSlot} />
+              <span className={iconSlot}>
+                <span className="border-border bg-surface text-text-dim flex h-5 w-5 items-center justify-center rounded-full border">
+                  <UserIcon className="h-3 w-3" />
+                </span>
+              </span>
               Sign in
             </Link>
           </Show>
