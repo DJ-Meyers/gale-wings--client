@@ -27,6 +27,7 @@ export {
 } from './TerrainIcon'
 export { TrashIcon } from './TrashIcon'
 export { TypeIcon } from './TypeIcon'
+export { UserIcon } from './UserIcon'
 export { WeatherIcon } from './WeatherIcon'
 export { WindIcon } from './WindIcon'
 export { XIcon } from './XIcon'
