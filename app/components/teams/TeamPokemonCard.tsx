@@ -86,6 +86,7 @@ export const TeamPokemonCard = ({
               aria-label="Move up"
               className="text-text-muted hover:text-text inline-flex cursor-pointer items-center justify-center disabled:opacity-50 disabled:hover:text-text-muted"
               disabled={isFirst || isBusy}
+              title="Move up"
               type="button"
               onClick={onMoveUp}
             >
@@ -98,6 +99,7 @@ export const TeamPokemonCard = ({
               aria-label="Move down"
               className="text-text-muted hover:text-text inline-flex cursor-pointer items-center justify-center disabled:opacity-50 disabled:hover:text-text-muted"
               disabled={isLast || isBusy}
+              title="Move down"
               type="button"
               onClick={onMoveDown}
             >
@@ -128,6 +130,7 @@ export const TeamPokemonCard = ({
               disabled={isBusy}
               icon={AddToLibraryIcon}
               size="sm"
+              title="Save to library"
               variant="tertiary"
               onClick={onSaveToLibrary}
             />
@@ -136,6 +139,7 @@ export const TeamPokemonCard = ({
             aria-label="Edit"
             className="bg-blue hover:bg-pale-blue inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-white"
             params={{ slug: teamSlug, pokemonSlug: pokemon.slug }}
+            title="Edit"
             to="/teams/$slug/$pokemonSlug"
           >
             <EditIcon className="h-3.5 w-3.5" />
@@ -146,6 +150,7 @@ export const TeamPokemonCard = ({
             disabled={isBusy}
             icon={XIcon}
             size="sm"
+            title="Remove from team"
             variant="tertiary"
             onClick={onRemove}
           />
