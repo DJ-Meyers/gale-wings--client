@@ -10,6 +10,7 @@ import {
 
 import type { PokemonEditorFormValues } from '~/components/pokemon-editor/PokemonEditorForm'
 import type { TeamPokemon } from '~/components/teams/TeamPokemonCard'
+import { STAT_KEYS } from '~/utils/pokemonStats'
 
 export const MAX_TEAM_SIZE = 6
 
@@ -95,12 +96,31 @@ const toSaveEntry = (e: DraftEntry) => {
 const speciesKey = (e: DraftEntry) =>
   e.values.pokemon.species.trim().toLowerCase()
 
+// A comparison-only view of an entry: exactly the fields that get saved, in a
+// stable shape. Dirty detection diffs this rather than the raw form values, so
+// cosmetic re-normalizations that don't change what would be saved — statPoints
+// key order, empty trailing move slots, `item: undefined` vs. an absent key,
+// name whitespace — never register as edits. (Without this, focusing the team
+// name field and blurring it, or merely opening a pokemon's editor, could flip
+// the draft to "dirty" and wrongly trip the unsaved-changes guard.)
+const canonicalEntry = (e: DraftEntry) => {
+  const { name, notes, pokemon: p } = e.values
+  return {
+    id: e.pokemonId ?? null,
+    name: name.trim(),
+    notes: notes ?? '',
+    species: p.species,
+    nature: p.nature,
+    ability: p.ability ?? '',
+    item: p.item ?? '',
+    moves: (p.moves ?? []).filter(Boolean),
+    stats: STAT_KEYS.map((k) => p.statPoints?.[k] ?? 0),
+  }
+}
+
 // Stable string identity of the draft, for dirty detection (order-sensitive).
 const signature = (name: string, entries: DraftEntry[]) =>
-  JSON.stringify({
-    name,
-    list: entries.map((e) => ({ id: e.pokemonId ?? null, v: e.values })),
-  })
+  JSON.stringify({ name: name.trim(), list: entries.map(canonicalEntry) })
 
 interface TeamDraftContextValue {
   name: string
