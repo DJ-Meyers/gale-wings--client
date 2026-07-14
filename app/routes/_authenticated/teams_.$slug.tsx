@@ -4,7 +4,7 @@ import {
   useBlocker,
   useNavigate,
 } from '@tanstack/react-router'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { FIELD_LABEL_CLASS } from '~/components/fields/FieldLabel'
 import { CheckIcon, SaveIcon, TrashIcon } from '~/components/icons'
@@ -79,13 +79,6 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
   const showSaving = useDelayedFlag(isSaveTeamLayoutPending, 200)
   const [justSaved, markSaved] = useTimedFlag(1600)
 
-  useEffect(() => {
-    if (!isDirty) return
-    const handler = (event: BeforeUnloadEvent) => event.preventDefault()
-    window.addEventListener('beforeunload', handler)
-    return () => window.removeEventListener('beforeunload', handler)
-  }, [isDirty])
-
   // Block leaving with unsaved changes — but NOT navigations that stay within
   // this team (the roster ⇄ per-pokemon editor), since the draft persists there.
   const {
@@ -102,6 +95,13 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
         next.pathname === base || next.pathname.startsWith(`${base}/`)
       return isDirty && !suppressed && !savingRef.current && !internal
     },
+    // The native reload/close prompt is a SEPARATE path from shouldBlockFn: on
+    // `beforeunload` the router consults only enableBeforeUnload, never
+    // shouldBlockFn. Its default is `true`, which prompts on every reload while
+    // this route is mounted — even with a pristine draft (this is why the Save
+    // button stayed correctly disabled while reload was still blocked). Gate it
+    // on the same dirty state instead. Replaces a manual beforeunload listener.
+    enableBeforeUnload: () => isDirty && !suppressed && !savingRef.current,
     withResolver: true,
   })
   const showUnsaved = status === 'blocked'
