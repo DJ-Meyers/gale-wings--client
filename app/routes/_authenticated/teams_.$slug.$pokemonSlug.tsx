@@ -1,6 +1,6 @@
 import { useStore } from '@tanstack/react-form'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useEffect, useRef } from 'react'
 
 import { ChevronUpIcon } from '~/components/icons'
 import {
@@ -16,8 +16,44 @@ import { useTeamDraft, type DraftEntry } from '~/context/TeamDraftContext'
 // the draft — and this edit — survive navigating here and back).
 const TeamPokemonEditorPage = () => {
   const { slug, pokemonSlug } = Route.useParams()
-  const { findBySlug, updateEntryValues } = useTeamDraft()
+  const navigate = useNavigate()
+  const { findBySlug, updateEntryValues, entries } = useTeamDraft()
   const entry = findBySlug(pokemonSlug)
+
+  // Remember which pokemon this page is editing, keyed by its stable id and its
+  // species, so we can follow it if a save changes its slug (below).
+  const editingRef = useRef<{ key: string; species: string } | null>(null)
+  useEffect(() => {
+    if (entry) {
+      editingRef.current = {
+        key: entry.key,
+        species: entry.values.pokemon.species,
+      }
+    }
+  }, [entry])
+
+  // A save reseeds the draft from the server, and a pokemon's slug is derived
+  // from its name (see computeRosterSlugs) — so renaming it and hitting Save
+  // leaves this URL's slug stale and findBySlug empty, stranding the page on a
+  // "not found". Re-resolve the same pokemon by its stable key (an existing
+  // entry keeps its id) or, failing that, its species (a newly-added entry's
+  // temp key is replaced with a real id on save), and swap in the new slug.
+  const moved =
+    !entry && editingRef.current
+      ? (entries.find((e) => e.key === editingRef.current!.key) ??
+        entries.find(
+          (e) => e.values.pokemon.species === editingRef.current!.species,
+        ))
+      : undefined
+  useEffect(() => {
+    if (moved) {
+      void navigate({
+        to: '/teams/$slug/$pokemonSlug',
+        params: { slug, pokemonSlug: moved.slug },
+        replace: true,
+      })
+    }
+  }, [moved, navigate, slug])
 
   const backLink = (
     <Link
@@ -35,7 +71,9 @@ const TeamPokemonEditorPage = () => {
       <div>
         {backLink}
         <p className="text-text-dim text-sm">
-          That Pokémon isn’t in this team’s draft.
+          {moved
+            ? 'Loading…'
+            : 'That Pokémon isn’t in this team’s draft.'}
         </p>
       </div>
     )
