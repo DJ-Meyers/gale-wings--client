@@ -5,9 +5,9 @@ import type { CSSProperties } from 'react'
 import {
   ChevronDownIcon,
   ChevronUpIcon,
+  AddToLibraryIcon,
   EditIcon,
   PokemonWithItemIcon,
-  SaveIcon,
   XIcon,
 } from '~/components/icons'
 import { StatDisplay } from '~/components/pokemon/StatDisplay'
@@ -116,7 +116,7 @@ export const TeamPokemonCard = ({
               aria-label="Save to library"
               className="!bg-green hover:!bg-pale-green !text-white"
               disabled={isBusy}
-              icon={SaveIcon}
+              icon={AddToLibraryIcon}
               size="sm"
               variant="tertiary"
               onClick={onSaveToLibrary}
