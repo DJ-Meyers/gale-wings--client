@@ -196,6 +196,7 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
             className={`!bg-green hover:!bg-pale-green !text-white ${showDone ? 'done-pop !opacity-100' : ''}`}
             disabled={!canSave}
             icon={showDone ? CheckIcon : SaveIcon}
+            title={showSaving ? 'Saving…' : showDone ? 'Done' : 'Save'}
             type="submit"
             variant="tertiary"
           >
@@ -207,6 +208,7 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
             aria-label="Delete team"
             className="!bg-red hover:!bg-red/80 !text-white"
             icon={TrashIcon}
+            title="Delete Team"
             type="button"
             variant="tertiary"
             onClick={() => setIsConfirmingDelete(true)}
