@@ -43,6 +43,9 @@ interface TeamPokemonCardProps {
   onSaveToLibrary?: () => void
   // A draft entry not yet persisted (added this session): shows an "Unsaved" tag.
   unsaved?: boolean
+  // This pokemon has unsaved changes (added or edited since the last save):
+  // gives the card a highlight so pending edits are visible from the roster.
+  changed?: boolean
 }
 
 const MOVE_SLOTS = [0, 1, 2, 3]
@@ -58,6 +61,7 @@ export const TeamPokemonCard = ({
   onRemove,
   onSaveToLibrary,
   unsaved = false,
+  changed = false,
 }: TeamPokemonCardProps) => {
   const slotNumber = index + 1
   const isFirst = index === 0
@@ -68,7 +72,13 @@ export const TeamPokemonCard = ({
     nature?.plus === stat ? '+' : nature?.minus === stat ? '-' : undefined
 
   return (
-    <li className="bg-surface border-border flex h-[210px] min-w-[300px] flex-col justify-between rounded-lg border p-4">
+    <li
+      className={`bg-surface flex h-[210px] min-w-[300px] flex-col justify-between rounded-lg border p-4 transition-shadow duration-200 ${
+        changed
+          ? 'border-primary/60 shadow-[0_0_16px_-4px_var(--color-primary)]'
+          : 'border-border'
+      }`}
+    >
       <div className="-mt-2 flex items-center justify-between">
         <div className="flex min-w-0 items-center gap-2">
           <div className="flex flex-col items-center">
