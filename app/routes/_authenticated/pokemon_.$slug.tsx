@@ -30,7 +30,6 @@ const toFormValues = (row: LoadedPokemon): PokemonEditorFormValues => ({
     item: row.item || undefined,
     statPoints: row.statPoints,
     moves: row.moves ?? [],
-    ...(row.ivs ? { ivs: row.ivs } : {}),
   },
 })
 

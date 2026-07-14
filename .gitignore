@@ -6,5 +6,6 @@ dist
 .env.*.local
 *.log
 .vite
+.tanstack
 app/routeTree.gen.ts
 *.tsbuildinfo

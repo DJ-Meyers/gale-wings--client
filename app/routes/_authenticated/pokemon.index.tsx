@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { PokemonIcon } from '~/components/icons/PokemonIcon'
-import { useListAllPokemon } from '~/hooks/api/pokemon'
+import { useListLibrary } from '~/hooks/api/pokemon'
 import { useDebouncedValue } from '~/hooks/useDebouncedValue'
 
 type SortBy = 'recent' | 'name' | 'species'
@@ -13,7 +13,7 @@ const PokemonLibraryPage = () => {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState<SortBy>('recent')
   const debouncedSearch = useDebouncedValue(search, SEARCH_DEBOUNCE_MS)
-  const { allPokemon, isAllPokemonPending, allPokemonError } = useListAllPokemon({
+  const { library, isLibraryPending, libraryError } = useListLibrary({
     search: debouncedSearch || undefined,
     sortBy,
   })
@@ -33,7 +33,7 @@ const PokemonLibraryPage = () => {
       <div className="mb-4 flex items-center gap-2">
         <input
           className="bg-surface border-border flex-1 rounded border px-3 py-1.5 text-sm"
-          placeholder="Search by name, species, item, ability, or team…"
+          placeholder="Search by name, species, item, or ability…"
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -52,21 +52,21 @@ const PokemonLibraryPage = () => {
         </label>
       </div>
 
-      {isAllPokemonPending ? (
+      {isLibraryPending ? (
         <p className="text-text-dim text-sm">Loading…</p>
-      ) : allPokemonError ? (
+      ) : libraryError ? (
         <p className="text-sm text-red-500">
-          Failed to load Pokémon: {allPokemonError.message}
+          Failed to load library: {libraryError.message}
         </p>
-      ) : !allPokemon || allPokemon.length === 0 ? (
+      ) : !library || library.length === 0 ? (
         <p className="text-text-dim text-sm">
           {debouncedSearch
-            ? `No Pokémon match "${debouncedSearch}".`
-            : 'No Pokémon yet. Create one from a team or via +New (once D2 lands).'}
+            ? `No templates match "${debouncedSearch}".`
+            : 'No library templates yet. Save a build from a team, or create one with +New Pokémon.'}
         </p>
       ) : (
         <ul className="border-border divide-border divide-y border-y">
-          {allPokemon.map(({ pokemon: p, teams }) => (
+          {library.map((p) => (
             <li key={p.id}>
               <Link
                 className="bg-surface hover:bg-detail-bg flex items-center gap-3 px-3 py-2 transition-colors"
@@ -85,20 +85,6 @@ const PokemonLibraryPage = () => {
                     <p className="text-text-dim truncate text-xs">
                       {p.species}
                     </p>
-                  )}
-                </div>
-                <div className="text-text-dim shrink-0 text-xs">
-                  {teams.length === 0 ? (
-                    <span className="italic">Orphan</span>
-                  ) : (
-                    <span>
-                      {teams.map((t, index) => (
-                        <span key={t.teamSlug}>
-                          {index > 0 && ', '}
-                          {t.teamName}
-                        </span>
-                      ))}
-                    </span>
                   )}
                 </div>
               </Link>

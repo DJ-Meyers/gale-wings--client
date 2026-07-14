@@ -31,7 +31,7 @@ const NewPokemonPage = () => {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">New Pokémon</h1>
+        <h1 className="text-2xl font-bold">New library template</h1>
       </div>
 
       <form className="max-w-md space-y-4" onSubmit={handleSubmit}>
@@ -44,7 +44,8 @@ const NewPokemonPage = () => {
           </label>
           <PokemonSelectField value={species} onChange={setSpecies} />
           <p className="text-text-muted text-xs">
-            Creates an orphan Pokémon. You can add it to a team later.
+            Creates a detached library template. You can add a copy to any team
+            later.
           </p>
         </div>
 

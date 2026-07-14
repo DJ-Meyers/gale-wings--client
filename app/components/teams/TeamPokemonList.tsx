@@ -1,126 +1,77 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { useState } from 'react'
 
 import { AddTeamPokemonCard } from '~/components/teams/AddTeamPokemonCard'
-import { TeamPokemonCard } from '~/components/teams/TeamPokemonCard'
-import { ConfirmDialog } from '~/components/ui/ConfirmDialog'
 import {
-  useAddPokemonToTeam,
-  useCreatePokemon,
-  useRemovePokemonFromTeam,
-  useReorderPokemon,
-} from '~/hooks/api/pokemon'
-import { useListPokemonByTeam } from '~/hooks/api/teams'
-import { useDelayedFlag } from '~/hooks/useDelayedFlag'
-
-const MAX_TEAM_SIZE = 6
+  TeamPokemonCard,
+  type TeamPokemon,
+} from '~/components/teams/TeamPokemonCard'
+import { useTeamDraft, type DraftEntry } from '~/context/TeamDraftContext'
 
 interface TeamPokemonListProps {
-  // Ownership of `teamId` is assumed already verified by the parent page (which
-  // gates on a loaded, owned team before rendering this). `teamName` is only
-  // used for the removal confirmation copy.
-  teamId: string
-  teamName: string
+  // Slug of the owning team, for the nested per-pokemon edit links.
+  teamSlug: string
+  // Disables per-card controls (e.g. while a save is in flight).
+  disabled?: boolean
+  // Snapshot an already-persisted team pokemon into the library (server call).
+  onSaveToLibrary: (pokemonId: string) => void
 }
 
-export const TeamPokemonList = ({ teamId, teamName }: TeamPokemonListProps) => {
-  const { teamPokemon } = useListPokemonByTeam(teamId)
-  const { createPokemon, isCreatePokemonPending } = useCreatePokemon()
-  const { removePokemonFromTeam, isRemovePokemonFromTeamPending } =
-    useRemovePokemonFromTeam()
-  const { reorderPokemon, isReorderPokemonPending } = useReorderPokemon()
-  const { addPokemonToTeam, isAddPokemonToTeamPending } = useAddPokemonToTeam()
-  const [pendingRemove, setPendingRemove] = useState<{
-    pokemonId: string
-    name: string
-  } | null>(null)
-  // Animates the FLIP transition when reorder swaps two cards. Paired with the
-  // stable `key={pokemon.id}` below so auto-animate tracks each card's identity.
+// A draft entry carries the full build as editor-form values, whose types are
+// looser than TeamPokemon: string fields instead of literal unions, and a
+// *partial* statPoints record (keys may be absent) vs. TeamPokemon's full six.
+// This cast is runtime-safe because the only consumer that requires all six
+// keys is stat math via rawStatsFor, which wraps the calc in try/catch and
+// returns null on a missing key (StatDisplay renders blank) rather than
+// throwing. So a single cast here can't crash the card.
+const toCardPokemon = (e: DraftEntry): TeamPokemon =>
+  ({
+    id: e.key,
+    slug: e.slug,
+    name: e.values.name,
+    species: e.values.pokemon.species,
+    nature: e.values.pokemon.nature,
+    ability: e.values.pokemon.ability || undefined,
+    item: e.values.pokemon.item,
+    moves: e.values.pokemon.moves,
+    statPoints: e.values.pokemon.statPoints,
+  }) as unknown as TeamPokemon
+
+export const TeamPokemonList = ({
+  teamSlug,
+  disabled = false,
+  onSaveToLibrary,
+}: TeamPokemonListProps) => {
+  const { entries, canAdd, swapEntry, removeEntry } = useTeamDraft()
+
+  // Animates the FLIP transition on reorder. Paired with the stable per-entry
+  // key below so auto-animate tracks each card's identity across swaps.
   const [listRef] = useAutoAnimate<HTMLUListElement>()
 
-  const populated = teamPokemon ?? []
-  const nextSlot = populated.length
-  const canAdd = nextSlot < MAX_TEAM_SIZE
-  // Reorder is optimistic and usually resolves in a frame or two, so gate its
-  // disable behind a short delay — otherwise the buttons flash disabled on
-  // every swap. Removal stays immediate (destructive, and refetch-bound).
-  const isReorderBusy = useDelayedFlag(isReorderPokemonPending, 200)
-  const isBusy = isRemovePokemonFromTeamPending || isReorderBusy
-
-  const swapWithNeighbor = (index: number, direction: -1 | 1) => () => {
-    const neighborIndex = index + direction
-    if (neighborIndex < 0 || neighborIndex >= populated.length) return
-    const order = populated.map(({ pokemon }) => pokemon.id)
-    const tmp = order[index]
-    order[index] = order[neighborIndex]
-    order[neighborIndex] = tmp
-    reorderPokemon({ teamId, order })
-  }
-
-  const requestRemove = (pokemonId: string, name: string) => () =>
-    setPendingRemove({ pokemonId, name })
-
-  const dismissRemove = () => setPendingRemove(null)
-
-  const confirmRemove = () => {
-    if (!pendingRemove) return
-    removePokemonFromTeam(
-      { pokemonId: pendingRemove.pokemonId, teamId },
-      { onSettled: dismissRemove },
-    )
-  }
-
-  const handleAdd = (species: string, onSuccess: () => void) =>
-    createPokemon({ teamId, slot: nextSlot, species }, { onSuccess })
-
-  const handlePickExisting = (pokemonId: string, onSuccess: () => void) =>
-    addPokemonToTeam({ pokemonId, teamId, slot: nextSlot }, { onSuccess })
-
   return (
-    <>
-      <ul
-        ref={listRef}
-        className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3"
-      >
-        {populated.map(({ pokemon }, index) => (
-          <TeamPokemonCard
-            key={pokemon.id}
-            index={index}
-            isBusy={isBusy}
-            pokemon={pokemon}
-            teamSize={populated.length}
-            onMoveDown={swapWithNeighbor(index, 1)}
-            onMoveUp={swapWithNeighbor(index, -1)}
-            onRemove={requestRemove(
-              pokemon.id,
-              pokemon.name || pokemon.species,
-            )}
-          />
-        ))}
-        {canAdd && (
-          <AddTeamPokemonCard
-            existingPokemonIds={populated.map(({ pokemon: p }) => p.id)}
-            isPending={isCreatePokemonPending}
-            isPickPending={isAddPokemonToTeamPending}
-            onAdd={handleAdd}
-            onPickExisting={handlePickExisting}
-          />
-        )}
-      </ul>
-
-      <ConfirmDialog
-        confirmLabel="Remove"
-        description={
-          pendingRemove
-            ? `Remove ${pendingRemove.name} from ${teamName}? The Pokémon stays in your library and remains linked to any other teams.`
-            : ''
-        }
-        destructive
-        open={pendingRemove !== null}
-        title="Remove from team"
-        onCancel={dismissRemove}
-        onConfirm={confirmRemove}
-      />
-    </>
+    <ul
+      ref={listRef}
+      className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3"
+    >
+      {entries.map((entry, index) => (
+        <TeamPokemonCard
+          key={entry.key}
+          index={index}
+          isBusy={disabled}
+          pokemon={toCardPokemon(entry)}
+          teamSize={entries.length}
+          teamSlug={teamSlug}
+          unsaved={!entry.pokemonId}
+          onMoveDown={() => swapEntry(index, 1)}
+          onMoveUp={() => swapEntry(index, -1)}
+          onRemove={() => removeEntry(entry.key)}
+          onSaveToLibrary={
+            entry.pokemonId
+              ? () => onSaveToLibrary(entry.pokemonId!)
+              : undefined
+          }
+        />
+      ))}
+      {canAdd && <AddTeamPokemonCard />}
+    </ul>
   )
 }
