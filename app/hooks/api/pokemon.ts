@@ -12,12 +12,15 @@ export const useGetPokemonBySlug = (slug: string) => {
   )
 }
 
-export const useListAllPokemon = (input?: {
+// The library view: detached templates only (teamId IS NULL). Team pokemon are
+// read via useListPokemonByTeam. Returns a flat pokemon[] — there are no team
+// associations to fold in anymore.
+export const useListLibrary = (input?: {
   search?: string
   sortBy?: 'recent' | 'name' | 'species'
 }) => {
   const trpc = useTRPC()
-  return useNamedQuery(trpc.pokemon.listAll.queryOptions(input), 'allPokemon')
+  return useNamedQuery(trpc.pokemon.listLibrary.queryOptions(input), 'library')
 }
 
 export const useUpdatePokemon = () => {
@@ -33,15 +36,23 @@ export const useUpdatePokemon = () => {
         queryClient.invalidateQueries({
           queryKey: trpc.pokemon.getBySlug.queryKey(),
         })
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listByTeam.queryKey(),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listAll.queryKey(),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.team.history.queryKey(),
-        })
+        // A pokemon belongs to exactly one team, so invalidate only that team's
+        // roster (if any) instead of every listByTeam. A template edit
+        // (teamId null) refreshes the library view instead.
+        if (updated.teamId) {
+          queryClient.invalidateQueries({
+            queryKey: trpc.pokemon.listByTeam.queryKey({
+              teamId: updated.teamId,
+            }),
+          })
+          queryClient.invalidateQueries({
+            queryKey: trpc.team.history.queryKey({ teamId: updated.teamId }),
+          })
+        } else {
+          queryClient.invalidateQueries({
+            queryKey: trpc.pokemon.listLibrary.queryKey(),
+          })
+        }
       },
     }),
     'updatePokemon',
@@ -53,17 +64,11 @@ export const useCreatePokemon = () => {
   const queryClient = useQueryClient()
   return useNamedMutation(
     trpc.pokemon.create.mutationOptions({
-      onSuccess: (_data, { teamId }) => {
-        if (teamId) {
-          queryClient.invalidateQueries({
-            queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
-          })
-          queryClient.invalidateQueries({
-            queryKey: trpc.team.history.queryKey({ teamId }),
-          })
-        }
+      onSuccess: () => {
+        // pokemon.create only ever makes a library template; team pokemon are
+        // added through team.saveLayout. Refresh the library list.
         queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listAll.queryKey(),
+          queryKey: trpc.pokemon.listLibrary.queryKey(),
         })
       },
     }),
@@ -71,87 +76,18 @@ export const useCreatePokemon = () => {
   )
 }
 
-export const useAddPokemonToTeam = () => {
+// Snapshot a team pokemon into the library as a detached template (build only).
+export const useSaveToLibrary = () => {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
   return useNamedMutation(
-    trpc.pokemon.addToTeam.mutationOptions({
-      onSuccess: (_data, { teamId }) => {
+    trpc.pokemon.saveToLibrary.mutationOptions({
+      onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listAll.queryKey(),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.team.history.queryKey({ teamId }),
+          queryKey: trpc.pokemon.listLibrary.queryKey(),
         })
       },
     }),
-    'addPokemonToTeam',
-  )
-}
-
-export const useRemovePokemonFromTeam = () => {
-  const trpc = useTRPC()
-  const queryClient = useQueryClient()
-  return useNamedMutation(
-    trpc.pokemon.removeFromTeam.mutationOptions({
-      onSuccess: (_data, { teamId }) => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listAll.queryKey(),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.team.history.queryKey({ teamId }),
-        })
-      },
-    }),
-    'removePokemonFromTeam',
-  )
-}
-
-export const useReorderPokemon = () => {
-  const trpc = useTRPC()
-  const queryClient = useQueryClient()
-  return useNamedMutation(
-    trpc.pokemon.reorder.mutationOptions({
-      // Optimistically reorder the cached list so the cards move the instant
-      // the user clicks, driving the auto-animate swap without waiting for the
-      // server round-trip. Reconciled by the onSettled invalidation.
-      onMutate: async ({ teamId, order }) => {
-        const queryKey = trpc.pokemon.listByTeam.queryKey({ teamId })
-        await queryClient.cancelQueries({ queryKey })
-        const previous = queryClient.getQueryData(queryKey)
-        queryClient.setQueryData(queryKey, (old) => {
-          if (!old) return old
-          const byId = new Map(old.map((entry) => [entry.pokemon.id, entry]))
-          return order.flatMap((id, index) => {
-            const entry = byId.get(id)
-            return entry ? [{ ...entry, slot: index }] : []
-          })
-        })
-        return { previous }
-      },
-      onError: (_err, { teamId }, context) => {
-        if (context?.previous) {
-          queryClient.setQueryData(
-            trpc.pokemon.listByTeam.queryKey({ teamId }),
-            context.previous,
-          )
-        }
-      },
-      onSettled: (_data, _err, { teamId }) => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId }),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.team.history.queryKey({ teamId }),
-        })
-      },
-    }),
-    'reorderPokemon',
+    'saveToLibrary',
   )
 }

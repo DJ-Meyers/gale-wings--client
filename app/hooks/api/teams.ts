@@ -56,6 +56,42 @@ export const useUpdateTeam = () => {
   )
 }
 
+export const useSaveTeamLayout = () => {
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+  return useNamedMutation(
+    trpc.team.saveLayout.mutationOptions({
+      // The server returns the committed team + fresh roster, so prime those
+      // caches directly — the page (and a rename navigate) resolves from cache
+      // without a flash. The caller reseeds its local draft from the same
+      // result. See team.saveLayout in the API for the returned shape.
+      onSuccess: (result) => {
+        queryClient.invalidateQueries({ queryKey: trpc.team.list.queryKey() })
+        queryClient.setQueryData(
+          trpc.team.getBySlug.queryKey({ slug: result.team.slug }),
+          result.team,
+        )
+        queryClient.setQueryData(
+          trpc.pokemon.listByTeam.queryKey({ teamId: result.team.id }),
+          result.pokemon,
+        )
+        queryClient.invalidateQueries({
+          queryKey: trpc.team.get.queryKey({ id: result.team.id }),
+        })
+        // saveLayout writes audit rows (renamed / added / removed / updated),
+        // so refresh this team's history like every other roster mutation.
+        queryClient.invalidateQueries({
+          queryKey: trpc.team.history.queryKey({ teamId: result.team.id }),
+        })
+        // The library view (detached templates) is unaffected by roster edits:
+        // fromLibrary clones the template without mutating it, and removals
+        // delete team-owned rows, not templates.
+      },
+    }),
+    'saveTeamLayout',
+  )
+}
+
 export const useCreateTeam = () => {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
@@ -83,9 +119,8 @@ export const useDeleteTeam = () => {
     trpc.team.delete.mutationOptions({
       onSuccess: (_data, { id }) => {
         queryClient.invalidateQueries({ queryKey: trpc.team.list.queryKey() })
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listAll.queryKey(),
-        })
+        // Deleting a team cascade-deletes its team-owned pokemon, but library
+        // templates (teamId null) are untouched — no listLibrary invalidation.
         // Drop the deleted team's per-id caches so re-creating a team with the
         // same name doesn't briefly flash the old roster via listByTeam(oldId).
         // Deliberately DON'T touch getBySlug here: the detail page is still
