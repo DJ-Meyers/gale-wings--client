@@ -41,7 +41,7 @@ export const TeamPokemonList = ({
   disabled = false,
   onSaveToLibrary,
 }: TeamPokemonListProps) => {
-  const { entries, canAdd, swapEntry, removeEntry } = useTeamDraft()
+  const { entries, canAdd, swapEntry, removeEntry, dirtyKeys } = useTeamDraft()
 
   // Animates the FLIP transition on reorder. Paired with the stable per-entry
   // key below so auto-animate tracks each card's identity across swaps.
@@ -55,6 +55,7 @@ export const TeamPokemonList = ({
       {entries.map((entry, index) => (
         <TeamPokemonCard
           key={entry.key}
+          changed={dirtyKeys.has(entry.key)}
           index={index}
           isBusy={disabled}
           pokemon={toCardPokemon(entry)}

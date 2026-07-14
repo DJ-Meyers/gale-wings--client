@@ -118,6 +118,10 @@ const canonicalEntry = (e: DraftEntry) => {
   }
 }
 
+// Per-entry canonical string, for both the whole-draft signature and the
+// per-pokemon "changed since save" check (see dirtyKeys).
+const entrySignature = (e: DraftEntry) => JSON.stringify(canonicalEntry(e))
+
 // Stable string identity of the draft, for dirty detection (order-sensitive).
 const signature = (name: string, entries: DraftEntry[]) =>
   JSON.stringify({ name: name.trim(), list: entries.map(canonicalEntry) })
@@ -135,6 +139,9 @@ interface TeamDraftContextValue {
   updateEntryValues: (key: string, values: PokemonEditorFormValues) => void
   findBySlug: (slug: string) => DraftEntry | undefined
   isDirty: boolean
+  // Keys of entries with unsaved changes: added this session, or edited away
+  // from the server baseline. Drives the roster's per-card "changed" glow.
+  dirtyKeys: Set<string>
   toSaveRoster: () => ReturnType<typeof toSaveEntry>[]
 }
 
@@ -165,6 +172,9 @@ export const TeamDraftProvider = ({
   const [name, setName] = useState(team.name)
   const [entries, setEntries] = useState<DraftEntry[]>([])
   const baselineRef = useRef<string>('')
+  // Per-entry baseline signature (keyed by the seeded entry key), so the roster
+  // can tell which specific pokemon changed since the last save.
+  const baselineByKeyRef = useRef<Map<string, string>>(new Map())
   const tempCounter = useRef(0)
   // The version we last seeded from; reseed only when it advances so in-progress
   // edits aren't clobbered on every re-render.
@@ -181,6 +191,9 @@ export const TeamDraftProvider = ({
     }))
     seededVersion.current = team.version
     baselineRef.current = signature(team.name, seeded)
+    baselineByKeyRef.current = new Map(
+      seeded.map((e) => [e.key, entrySignature(e)]),
+    )
     setName(team.name)
     setEntries(seeded)
   }
@@ -248,6 +261,21 @@ export const TeamDraftProvider = ({
   )
 
   const isDirty = signature(name, entries) !== baselineRef.current
+
+  // Which entries changed since the last save: added this session (no baseline
+  // for the key) or edited away from their seeded server signature. Order/slot
+  // changes aren't per-card dirty — a reordered-but-otherwise-identical pokemon
+  // isn't "changed" — so this diffs content only, keyed by entry, not position.
+  const dirtyKeys = useMemo(() => {
+    const baseline = baselineByKeyRef.current
+    const keys = new Set<string>()
+    for (const e of entries) {
+      const base = baseline.get(e.key)
+      if (base === undefined || base !== entrySignature(e)) keys.add(e.key)
+    }
+    return keys
+  }, [entries])
+
   const toSaveRoster = useCallback(() => entries.map(toSaveEntry), [entries])
 
   const value: TeamDraftContextValue = {
@@ -263,6 +291,7 @@ export const TeamDraftProvider = ({
     updateEntryValues,
     findBySlug,
     isDirty,
+    dirtyKeys,
     toSaveRoster,
   }
 
