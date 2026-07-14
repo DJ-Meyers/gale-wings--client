@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import {
   Outlet,
   createFileRoute,
@@ -22,7 +21,8 @@ import {
 import { useDelayedFlag } from '~/hooks/useDelayedFlag'
 import { useSuppressUnsavedWarning } from '~/hooks/useSuppressUnsavedWarning'
 import { useTimedFlag } from '~/hooks/useTimedFlag'
-import { useTRPC } from '~/trpc/client'
+import { invalidatePokemonByTeam } from '~/trpc/cache/pokemon'
+import { invalidateTeamBySlug, removeTeamBySlug } from '~/trpc/cache/teams'
 
 const MAX_TEAM_NAME = 24
 
@@ -64,8 +64,6 @@ interface TeamDetailChromeProps {
 
 const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
   const navigate = useNavigate()
-  const trpc = useTRPC()
-  const queryClient = useQueryClient()
   const { name, setName, isDirty, toSaveRoster } = useTeamDraft()
   const { saveTeamLayoutAsync, isSaveTeamLayoutPending } = useSaveTeamLayout()
   const { deleteTeam, isDeleteTeamPending } = useDeleteTeam()
@@ -132,9 +130,7 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
           params: { slug: result.team.slug },
           replace: true,
         })
-        queryClient.removeQueries({
-          queryKey: trpc.team.getBySlug.queryKey({ slug }),
-        })
+        removeTeamBySlug(slug)
       }
       // The hook primes getBySlug/listByTeam and the team version bumps, so the
       // provider reseeds the draft to the saved state (real ids for new pokemon).
@@ -144,12 +140,8 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
         setSaveError(
           'This team was changed in another session. The latest version has been reloaded — reapply your changes and save again.',
         )
-        queryClient.invalidateQueries({
-          queryKey: trpc.team.getBySlug.queryKey({ slug }),
-        })
-        queryClient.invalidateQueries({
-          queryKey: trpc.pokemon.listByTeam.queryKey({ teamId: team.id }),
-        })
+        invalidateTeamBySlug(slug)
+        invalidatePokemonByTeam(team.id)
       } else {
         setSaveError('Could not save changes. Please try again.')
       }

@@ -54,15 +54,13 @@ type NamedMutationResult<
  *
  * @example
  * ```ts
- * // In app/hooks/api/team.ts — hook owns invalidation
+ * // In app/hooks/api/teams.ts — hook owns invalidation via named cache helpers
+ * // (see app/trpc/cache/teams.ts)
  * export const useCreateTeam = () => {
  *   const trpc = useTRPC()
- *   const queryClient = useQueryClient()
  *   return useNamedMutation(
  *     trpc.team.create.mutationOptions({
- *       onSuccess: () => {
- *         queryClient.invalidateQueries({ queryKey: trpc.team.list.queryKey() })
- *       },
+ *       onSuccess: () => invalidateTeamsList(),
  *     }),
  *     'createTeam',
  *   )
