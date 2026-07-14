@@ -11,6 +11,8 @@
   --color-bright-orange: #e76d3f;
   --color-pale-orange: #f09e70;
   --color-pale-blue: #7ab8e8;
+  --color-green: #4caf50;
+  --color-pale-green: #7bc97e;
   --color-yellow: #f6e34f;
   --color-white: #f7f9fb;
   --color-light-gray: #aeb0b2;
@@ -124,6 +126,30 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .calc-pop {
+    animation: none;
+  }
+}
+
+/* Save button success feedback: a quick pop with a slight overshoot when a
+   save completes, so the "Done" state reads as a confirmation. */
+@keyframes done-pop {
+  0% {
+    transform: scale(0.8);
+  }
+  55% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.done-pop {
+  animation: done-pop 320ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .done-pop {
     animation: none;
   }
 }
