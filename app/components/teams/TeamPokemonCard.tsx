@@ -12,6 +12,7 @@ import {
 } from '~/components/icons'
 import { StatDisplay } from '~/components/pokemon/StatDisplay'
 import { Button } from '~/components/ui/Button'
+import type { EntryFieldChanges } from '~/context/TeamDraftContext'
 import { typeColor } from '~/data/constants/typeColors'
 import { gen } from '@dj-meyers/gale-wings/calc'
 import type { ChampionsPokemon, StatKey } from '~/types'
@@ -44,11 +45,19 @@ interface TeamPokemonCardProps {
   // A draft entry not yet persisted (added this session): shows an "Unsaved" tag.
   unsaved?: boolean
   // This pokemon has unsaved changes (added or edited since the last save):
-  // gives the card a highlight so pending edits are visible from the roster.
+  // gives the card a blue border so pending edits are visible from the roster.
   changed?: boolean
+  // Which specific fields changed since the last save, to blue-highlight the
+  // exact ability / move / stat that differs. Omitted for a newly-added entry
+  // (there's no saved baseline to diff — the whole card is new).
+  changes?: EntryFieldChanges
 }
 
 const MOVE_SLOTS = [0, 1, 2, 3]
+
+// Blue outline marking a field that changed since the last save. Inset so it
+// doesn't nudge the tight card layout.
+const CHANGED_RING = 'ring-1 ring-inset ring-blue'
 
 export const TeamPokemonCard = ({
   pokemon,
@@ -62,6 +71,7 @@ export const TeamPokemonCard = ({
   onSaveToLibrary,
   unsaved = false,
   changed = false,
+  changes,
 }: TeamPokemonCardProps) => {
   const slotNumber = index + 1
   const isFirst = index === 0
@@ -73,10 +83,8 @@ export const TeamPokemonCard = ({
 
   return (
     <li
-      className={`bg-surface flex h-[210px] min-w-[300px] flex-col justify-between rounded-lg border p-4 transition-shadow duration-200 ${
-        changed
-          ? 'border-primary/60 shadow-[0_0_16px_-4px_var(--color-primary)]'
-          : 'border-border'
+      className={`bg-surface flex h-[210px] min-w-[300px] flex-col justify-between rounded-lg border p-4 transition-colors duration-200 ${
+        changed ? 'border-blue' : 'border-border'
       }`}
     >
       <div className="-mt-2 flex items-center justify-between">
@@ -165,7 +173,9 @@ export const TeamPokemonCard = ({
         />
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div
-            className="bg-slate light:bg-light-gray truncate rounded px-1.5 py-1 text-[10px] font-medium text-white"
+            className={`bg-slate light:bg-light-gray truncate rounded px-1.5 py-1 text-[10px] font-medium text-white ${
+              changes?.ability ? CHANGED_RING : ''
+            }`}
             title={pokemon.ability || undefined}
           >
             Ability: {pokemon.ability || '—'}
@@ -173,11 +183,12 @@ export const TeamPokemonCard = ({
           <div className="grid grid-cols-2 gap-1">
             {MOVE_SLOTS.map((slot) => {
               const move = pokemon.moves[slot]
+              const ring = changes?.moves.has(slot) ? CHANGED_RING : ''
               if (!move) {
                 return (
                   <span
                     key={slot}
-                    className="bg-slate light:bg-light-gray rounded px-1.5 py-1 text-[10px] font-medium text-white"
+                    className={`bg-slate light:bg-light-gray rounded px-1.5 py-1 text-[10px] font-medium text-white ${ring}`}
                   >
                     —
                   </span>
@@ -187,7 +198,7 @@ export const TeamPokemonCard = ({
               return (
                 <span
                   key={slot}
-                  className="move-chip truncate rounded px-1.5 py-1 text-[10px] font-medium text-white"
+                  className={`move-chip truncate rounded px-1.5 py-1 text-[10px] font-medium text-white ${ring}`}
                   style={{ '--type-bg': typeColor(type) } as CSSProperties}
                   title={move}
                 >
@@ -203,7 +214,7 @@ export const TeamPokemonCard = ({
         {STAT_KEYS.map((stat) => (
           <StatDisplay
             key={stat}
-            className="flex-1"
+            className={`flex-1 ${changes?.stats.has(stat) ? CHANGED_RING : ''}`}
             natureMod={stat === 'hp' ? undefined : natureModFor(stat)}
             sp={pokemon.statPoints[stat]}
             stat={stat}
