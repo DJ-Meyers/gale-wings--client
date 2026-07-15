@@ -15,8 +15,8 @@ import { Button } from '~/components/ui/Button'
 import type { EntryFieldChanges } from '~/context/TeamDraftContext'
 import { typeColor } from '~/data/constants/typeColors'
 import { gen } from '@dj-meyers/gale-wings/calc'
-import type { ChampionsPokemon, StatKey } from '~/types'
-import { rawStatsFor, STAT_KEYS } from '~/utils/pokemonStats'
+import type { ChampionsPokemon } from '~/types'
+import { natureModifier, rawStatsFor, STAT_KEYS } from '~/utils/pokemonStats'
 
 // The team query returns full DB rows, where `ability` is optional (unset until
 // the pokemon is edited) — looser than ChampionsPokemon, so relax it here.
@@ -78,8 +78,6 @@ export const TeamPokemonCard = ({
   const isLast = index === teamSize - 1
   const stats = rawStatsFor(pokemon as ChampionsPokemon)
   const nature = gen.natures.get(toID(pokemon.nature))
-  const natureModFor = (stat: StatKey): '+' | '-' | undefined =>
-    nature?.plus === stat ? '+' : nature?.minus === stat ? '-' : undefined
 
   return (
     <li
@@ -220,7 +218,7 @@ export const TeamPokemonCard = ({
           <StatDisplay
             key={stat}
             className={`flex-1 ${changes?.stats.has(stat) ? CHANGED_RING : ''}`}
-            natureMod={stat === 'hp' ? undefined : natureModFor(stat)}
+            natureMod={natureModifier(nature, stat)}
             sp={pokemon.statPoints[stat]}
             stat={stat}
             total={stats?.[stat] ?? null}
