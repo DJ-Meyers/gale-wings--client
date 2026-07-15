@@ -19,6 +19,7 @@ import { STAT_KEYS } from '~/utils/pokemonStats'
 // means "no per-field diff" — a brand-new entry (no baseline) or a clean one.
 export interface EntryFieldChanges {
   ability: boolean
+  item: boolean
   moves: Set<number>
   stats: Set<StatKey>
 }
@@ -308,6 +309,7 @@ export const TeamDraftProvider = ({
       }
       return {
         ability: (b.ability ?? '') !== (c.ability ?? ''),
+        item: (b.item ?? '') !== (c.item ?? ''),
         moves,
         stats,
       }

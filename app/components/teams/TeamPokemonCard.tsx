@@ -166,8 +166,13 @@ export const TeamPokemonCard = ({
       </div>
 
       <div className="flex items-center gap-3">
+        {/* The ability/moves column is a touch taller than the 72px sprite, so
+            bottom-align just the sprite: its bottom edge (and the item badge
+            pinned to it) then line up with the moves' bottom edge. */}
         <PokemonWithItemIcon
+          className="self-end"
           item={pokemon.item}
+          itemClassName={changes?.item ? CHANGED_RING : undefined}
           size="lg"
           species={pokemon.species}
         />
