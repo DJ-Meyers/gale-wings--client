@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import type { StatKey } from '~/types'
+import { formatStatSubLabel } from '~/utils/pokemonStats'
 
 // Each chip exposes two hues to the CSS (see .stat-chip in index.css): --stat is
 // the pastel used for the value text, --stat-fill is the darker same-hue fill the
@@ -36,7 +37,6 @@ export const StatDisplay = ({
   flushRight?: boolean
 }) => {
   const { label, color, fill } = STAT_STYLES[stat]
-  const suffix = natureMod ?? ''
   const radiusClass = flushRight ? 'rounded-l' : 'rounded'
   const labeledSizeClass = flushRight ? 'h-[32px] w-[34px] shrink-0' : 'size-[34px] shrink-0'
 
@@ -60,10 +60,7 @@ export const StatDisplay = ({
             {total ?? '?'}
           </span>
           <span className="text-text text-[8px] leading-tight">
-            {/* With points, show them (e.g. "252+"); with none but a nature
-                modifier, show the stat name + sign (e.g. "Atk+", "SpA-") rather
-                than a bare "0+"; otherwise just the stat name. */}
-            {sp ? `${sp}${suffix}` : suffix ? `${label}${suffix}` : label}
+            {formatStatSubLabel(sp, natureMod, label)}
           </span>
         </>
       )}

@@ -4,7 +4,12 @@ import { useMemo } from 'react'
 import { StatFieldRow } from '~/components/calculator/PokemonInfoSection/StatFieldRow'
 import { FIELD_LABEL_CLASS } from '~/components/fields/FieldLabel'
 import { naturesList } from '~/data/natures'
-import { MAX_TOTAL_SP, STAT_KEYS, rawStatsFor } from '~/utils/pokemonStats'
+import {
+  MAX_TOTAL_SP,
+  STAT_KEYS,
+  natureModifier,
+  rawStatsFor,
+} from '~/utils/pokemonStats'
 
 import { SectionHeading } from './SectionHeading'
 import type { PokemonEditorFormApi } from './usePokemonEditorForm'
@@ -33,8 +38,7 @@ export const StatPointsSection = ({ form }: StatPointsSectionProps) => {
         </div>
         <div className="flex flex-wrap gap-2">
           {STAT_KEYS.map((stat) => {
-            const natureMod =
-              n?.plus === stat ? '+' : n?.minus === stat ? '-' : undefined
+            const natureMod = natureModifier(n, stat)
             return (
               <form.Field key={stat} name={`pokemon.statPoints.${stat}`}>
                 {(field) => (
