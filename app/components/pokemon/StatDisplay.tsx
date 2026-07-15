@@ -60,7 +60,10 @@ export const StatDisplay = ({
             {total ?? '?'}
           </span>
           <span className="text-text text-[8px] leading-tight">
-            {sp || suffix ? `${sp}${suffix}` : label}
+            {/* With points, show them (e.g. "252+"); with none but a nature
+                modifier, show the stat name + sign (e.g. "Atk+", "SpA-") rather
+                than a bare "0+"; otherwise just the stat name. */}
+            {sp ? `${sp}${suffix}` : suffix ? `${label}${suffix}` : label}
           </span>
         </>
       )}
