@@ -15,8 +15,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       '@dj-meyers/gale-wings--api-types':
-        specifier: ^0.11.0
-        version: 0.11.0
+        specifier: ^0.12.0
+        version: 0.12.7
       '@formkit/auto-animate':
         specifier: ^0.9.0
         version: 0.9.0
@@ -216,8 +216,8 @@ packages:
       react-dom:
         optional: true
 
-  '@dj-meyers/gale-wings--api-types@0.11.0':
-    resolution: {integrity: sha512-10/2PkTKZQgm7ZjB4EYc63eqZ8V8wnqOAO9ECXam52fATGh4SewNwHz5aoBs6TqCpiS9IOkVksizfaxPq4mEMQ==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings--api-types/0.11.0/2e38a7a54b0a4d6c8a69f8a15294513ace9d59e4}
+  '@dj-meyers/gale-wings--api-types@0.12.7':
+    resolution: {integrity: sha512-umVs9jPq8LXDewAB7Qz/aH6sdPlv+SL0fx9z/3iOiPX1rJpOUR23YklZpNVcVV8D71PD9SmzwhZLZjR3hs3Vdg==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings--api-types/0.12.7/bf8cdd5d3f5b62a09cb432fd28272abab068408a}
 
   '@dj-meyers/gale-wings@2.2.0':
     resolution: {integrity: sha512-KxsSqyRE8lw4+bDe+hFHVx2Oz7Ez1qinD5b3L6zsMDO0xcdSJXdZiQJn6mDfn38sOg2dfGXp3WmQf8S1xdVikw==, tarball: https://npm.pkg.github.com/download/@dj-meyers/gale-wings/2.2.0/e1b8e51d5adc87510b321a948e0f31fab3ed0ac7}
@@ -1712,7 +1712,7 @@ snapshots:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
 
-  '@dj-meyers/gale-wings--api-types@0.11.0': {}
+  '@dj-meyers/gale-wings--api-types@0.12.7': {}
 
   '@dj-meyers/gale-wings@2.2.0':
     dependencies:
