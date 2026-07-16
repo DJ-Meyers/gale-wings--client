@@ -4,7 +4,12 @@ import { StatFieldRow } from '~/components/calculator/PokemonInfoSection/StatFie
 import { FIELD_LABEL_CLASS } from '~/components/fields/FieldLabel'
 import { naturesList } from '~/data/natures'
 import { usePokemonStats } from '~/hooks/calc/usePokemonStats'
-import { MAX_TOTAL_SP, STAT_KEYS, rawStatsFor } from '~/utils/pokemonStats'
+import {
+  MAX_TOTAL_SP,
+  STAT_KEYS,
+  natureModifier,
+  rawStatsFor,
+} from '~/utils/pokemonStats'
 
 const natureMap = new Map(naturesList.map((n) => [n.name, n]))
 
@@ -23,8 +28,7 @@ export const PokemonInfoStatPointInputs = () => {
       </div>
       <div className="flex flex-wrap gap-2">
         {STAT_KEYS.map((stat) => {
-          const natureMod =
-            n?.plus === stat ? '+' : n?.minus === stat ? '-' : undefined
+          const natureMod = natureModifier(n, stat)
           return (
             <StatFieldRow
               key={stat}

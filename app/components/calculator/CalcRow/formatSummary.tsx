@@ -21,6 +21,7 @@ import {
   type DamageCalcResult,
 } from '@dj-meyers/gale-wings/calc'
 import type { FieldConditions, StatKey } from '~/types'
+import { natureModifier } from '~/utils/pokemonStats'
 
 const STATUS_SUMMARY: Record<string, string> = {
   brn: 'Burn',
@@ -210,14 +211,12 @@ export const formatSummary = (
     ) : null
 
   const atkNature = gen.natures.get(toID(attacker.nature))
-  const atkNatureSign =
-    atkNature?.plus === atkStat ? '+' : atkNature?.minus === atkStat ? '-' : ''
+  const atkNatureSign = natureModifier(atkNature, atkStat) ?? ''
   const atkEvs = attacker.statPoints[atkStat]
   const atkSpread = `${atkEvs}${atkNatureSign} ${ATK_STAT_LABEL[atkStat]}`
 
   const nature = gen.natures.get(toID(defender.nature))
-  const natureSign =
-    nature?.plus === defStat ? '+' : nature?.minus === defStat ? '-' : ''
+  const natureSign = natureModifier(nature, defStat) ?? ''
   const hpEVs = defender.statPoints.hp
   const defEVs = defender.statPoints[defStat]
   const defBoost = defenderParams.boosts[defStat as Exclude<StatKey, 'hp'>]
