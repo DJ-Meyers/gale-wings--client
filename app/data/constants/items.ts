@@ -1,19 +1,14 @@
 // Items that boost a Pokémon's damage output (move-power multipliers and
 // species-locked stat doublers). Megastones and utility items (Choice Scarf,
-// Sitrus Berry, Assault Vest, Focus Sash, Leftovers, etc.) are omitted.
+// Sitrus Berry, Focus Sash, Leftovers, etc.) are omitted. Limited to the
+// Champions-legal item pool (see ITEM_SPRITE_SLUGS in ~/data/itemSpriteNames).
 // Used to prefix the attacker's item in the calc-result title.
 export const POWER_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
-  'Choice Band',
-  'Choice Specs',
   'Light Ball',
-  'Thick Club',
-  'Deep Sea Tooth',
   'Life Orb',
   'Expert Belt',
   'Muscle Band',
   'Wise Glasses',
-  'Punching Glove',
-  'Loaded Dice',
   'Metronome',
   'Charcoal',
   'Mystic Water',
@@ -32,43 +27,14 @@ export const POWER_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
   'Dragon Fang',
   'Never-Melt Ice',
   'Silk Scarf',
-  'Sea Incense',
-  'Wave Incense',
-  'Rose Incense',
-  'Odd Incense',
-  'Rock Incense',
-  'Soul Dew',
-  'Adamant Orb',
-  'Adamant Crystal',
-  'Lustrous Orb',
-  'Lustrous Globe',
-  'Griseous Orb',
-  'Griseous Core',
-  'Draco Plate',
-  'Dread Plate',
-  'Earth Plate',
-  'Fist Plate',
-  'Flame Plate',
-  'Icicle Plate',
-  'Insect Plate',
-  'Iron Plate',
-  'Meadow Plate',
-  'Mind Plate',
-  'Pixie Plate',
-  'Sky Plate',
-  'Splash Plate',
-  'Spooky Plate',
-  'Stone Plate',
-  'Toxic Plate',
-  'Zap Plate',
 ])
 
-// Items that boost a Pokémon's defensive outcome in the calc — flat damage
-// reducers (Assault Vest), single-hit survivability (Focus Sash), and the
-// type-resist berries (one-time half-damage on a super-effective hit).
+// Items that boost a Pokémon's defensive outcome in the calc — single-hit
+// survivability (Focus Sash) and the type-resist berries (one-time half-damage
+// on a super-effective hit). Limited to the Champions-legal item pool (see
+// ITEM_SPRITE_SLUGS in ~/data/itemSpriteNames).
 // Used to prefix the defender's item in the calc-result title.
 export const DEFENSE_BOOSTING_ITEMS: ReadonlySet<string> = new Set([
-  'Assault Vest',
   'Focus Sash',
   'Babiri Berry',
   'Charti Berry',

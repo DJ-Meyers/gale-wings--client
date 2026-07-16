@@ -137,7 +137,7 @@ const WideInputVariant = ({ label, className }: InputVariant) => (
     <div className="text-text-muted mb-1 text-xs">{label}</div>
     <input
       type="text"
-      placeholder="252+ Atk Choice Band Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
+      placeholder="252+ Atk Life Orb Tinkaton Gigaton Hammer vs. 252 HP / 4 Def Iron Hands"
       className={`${className} w-full`}
     />
   </div>
@@ -404,7 +404,7 @@ const DesignPage = () => {
           <p className="text-text-dim">text-text-dim (60%)</p>
           <p className="text-text-muted">text-text-muted</p>
           <p className="text-text-faint">text-text-faint (40%)</p>
-          <p className="font-mono text-sm">font-mono — 252+ Atk Choice Band</p>
+          <p className="font-mono text-sm">font-mono — 252+ Atk Life Orb</p>
           <p className="tabular-nums">tabular-nums — 100.0% – 117.6%</p>
         </div>
       </Section>
@@ -539,7 +539,7 @@ const DesignPage = () => {
             <PokemonIcon species="Incineroar" />
           </IconCell>
           <IconCell name="ItemIcon">
-            <ItemIcon item="Choice Band" />
+            <ItemIcon item="Life Orb" />
           </IconCell>
           <IconCell name="TypeIcon">
             <TypeIcon typeName="Fire" />
