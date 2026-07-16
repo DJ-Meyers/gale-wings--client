@@ -10,7 +10,18 @@ import {
 
 import type { PokemonEditorFormValues } from '~/components/pokemon-editor/PokemonEditorForm'
 import type { TeamPokemon } from '~/components/teams/TeamPokemonCard'
+import type { StatKey } from '~/types'
 import { STAT_KEYS } from '~/utils/pokemonStats'
+
+// Which visible parts of a card differ from the last-saved state, so the roster
+// can highlight exactly what changed (not just that something did). Only the
+// build fields the card surfaces are tracked. `undefined` from getChangedFields
+// means "no per-field diff" — a brand-new entry (no baseline) or a clean one.
+export interface EntryFieldChanges {
+  ability: boolean
+  moves: Set<number>
+  stats: Set<StatKey>
+}
 
 export const MAX_TEAM_SIZE = 6
 
@@ -140,8 +151,12 @@ interface TeamDraftContextValue {
   findBySlug: (slug: string) => DraftEntry | undefined
   isDirty: boolean
   // Keys of entries with unsaved changes: added this session, or edited away
-  // from the server baseline. Drives the roster's per-card "changed" glow.
+  // from the server baseline. Drives the roster's per-card "changed" highlight.
   dirtyKeys: Set<string>
+  // The specific fields that changed for an already-persisted entry, for the
+  // per-field highlight on its card. Returns undefined for a clean entry or a
+  // newly-added one (no server baseline to diff against).
+  getChangedFields: (key: string) => EntryFieldChanges | undefined
   toSaveRoster: () => ReturnType<typeof toSaveEntry>[]
 }
 
@@ -172,9 +187,9 @@ export const TeamDraftProvider = ({
   const [name, setName] = useState(team.name)
   const [entries, setEntries] = useState<DraftEntry[]>([])
   const baselineRef = useRef<string>('')
-  // Per-entry baseline signature (keyed by the seeded entry key), so the roster
-  // can tell which specific pokemon changed since the last save.
-  const baselineByKeyRef = useRef<Map<string, string>>(new Map())
+  // The seeded (last-saved) entry per key, so the roster can tell which specific
+  // pokemon — and which of its fields — changed since the last save.
+  const baselineByKeyRef = useRef<Map<string, DraftEntry>>(new Map())
   const tempCounter = useRef(0)
   // The version we last seeded from; reseed only when it advances so in-progress
   // edits aren't clobbered on every re-render.
@@ -191,9 +206,7 @@ export const TeamDraftProvider = ({
     }))
     seededVersion.current = team.version
     baselineRef.current = signature(team.name, seeded)
-    baselineByKeyRef.current = new Map(
-      seeded.map((e) => [e.key, entrySignature(e)]),
-    )
+    baselineByKeyRef.current = new Map(seeded.map((e) => [e.key, e]))
     setName(team.name)
     setEntries(seeded)
   }
@@ -271,10 +284,36 @@ export const TeamDraftProvider = ({
     const keys = new Set<string>()
     for (const e of entries) {
       const base = baseline.get(e.key)
-      if (base === undefined || base !== entrySignature(e)) keys.add(e.key)
+      if (base === undefined || entrySignature(base) !== entrySignature(e))
+        keys.add(e.key)
     }
     return keys
   }, [entries])
+
+  const getChangedFields = useCallback(
+    (key: string): EntryFieldChanges | undefined => {
+      const base = baselineByKeyRef.current.get(key)
+      const cur = entries.find((e) => e.key === key)
+      // No baseline → newly added (nothing to diff against); no cur → gone.
+      if (!base || !cur) return undefined
+      const b = base.values.pokemon
+      const c = cur.values.pokemon
+      const moves = new Set<number>()
+      for (let i = 0; i < 4; i++) {
+        if ((b.moves?.[i] ?? '') !== (c.moves?.[i] ?? '')) moves.add(i)
+      }
+      const stats = new Set<StatKey>()
+      for (const k of STAT_KEYS) {
+        if ((b.statPoints?.[k] ?? 0) !== (c.statPoints?.[k] ?? 0)) stats.add(k)
+      }
+      return {
+        ability: (b.ability ?? '') !== (c.ability ?? ''),
+        moves,
+        stats,
+      }
+    },
+    [entries],
+  )
 
   const toSaveRoster = useCallback(() => entries.map(toSaveEntry), [entries])
 
@@ -292,6 +331,7 @@ export const TeamDraftProvider = ({
     findBySlug,
     isDirty,
     dirtyKeys,
+    getChangedFields,
     toSaveRoster,
   }
 
