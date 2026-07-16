@@ -39,18 +39,25 @@ export const Typeahead = ({
   const [query, setQuery] = useState(() => displayValue(value))
   const [open, setOpen] = useState(false)
   const [highlightIndex, setHighlightIndex] = useState(-1)
+  // Whether `query` should filter the list. False right after focusing, so the
+  // current value isn't treated as a filter — the field opens to every option.
+  const [filterActive, setFilterActive] = useState(false)
   const containerReference = useRef<HTMLDivElement>(null)
   const listReference = useRef<HTMLUListElement>(null)
+  // Set on focus so the next mouseup preserves the select-all instead of
+  // collapsing it to a caret (see onMouseUp).
+  const selectAllOnMouseUp = useRef(false)
 
   useEffect(() => {
     setQuery(displayValue(value))
   }, [value, displayValue])
 
-  const filtered = query
-    ? options.filter((o) =>
-        displayValue(o).toLowerCase().includes(query.toLowerCase()),
-      )
-    : options
+  const filtered =
+    filterActive && query
+      ? options.filter((o) =>
+          displayValue(o).toLowerCase().includes(query.toLowerCase()),
+        )
+      : options
 
   const allItems = allowEmpty ? ['', ...filtered] : filtered
 
@@ -60,6 +67,7 @@ export const Typeahead = ({
       setQuery(displayValue(item))
       setOpen(false)
       setHighlightIndex(-1)
+      setFilterActive(false)
     },
     [onChange, displayValue],
   )
@@ -68,11 +76,17 @@ export const Typeahead = ({
     setQuery(e.target.value)
     setOpen(true)
     setHighlightIndex(-1)
+    setFilterActive(true)
   }
 
-  const handleFocus = () => {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (disabled) return
     setOpen(true)
+    // Open to the full list (don't filter by the current value) and select all
+    // so the next keystroke overwrites it — no need to backspace first.
+    setFilterActive(false)
+    selectAllOnMouseUp.current = true
+    e.currentTarget.select()
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -104,8 +118,12 @@ export const Typeahead = ({
         break
       }
       case 'Escape': {
+        // Cancel the edit: revert the input to the current value rather than
+        // leaving the typed text stranded (the value itself never changed).
         setOpen(false)
         setHighlightIndex(-1)
+        setQuery(displayValue(value))
+        setFilterActive(false)
         break
       }
     }
@@ -128,6 +146,7 @@ export const Typeahead = ({
         setOpen(false)
         setHighlightIndex(-1)
         setQuery(displayValue(value))
+        setFilterActive(false)
       }
     }
     document.addEventListener('mousedown', handler)
@@ -150,6 +169,15 @@ export const Typeahead = ({
         onChange={handleInputChange}
         onFocus={handleFocus}
         onKeyDown={handleKeyDown}
+        onMouseUp={(e) => {
+          // A focusing click's mouseup would collapse the onFocus select-all to
+          // a caret; suppress it once so the selection (and overwrite-on-type)
+          // survives. Later clicks place the caret normally.
+          if (selectAllOnMouseUp.current) {
+            e.preventDefault()
+            selectAllOnMouseUp.current = false
+          }
+        }}
       />
       {open && !disabled && (
         <ul
