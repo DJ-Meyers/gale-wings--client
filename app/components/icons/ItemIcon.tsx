@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LOCAL_ITEM_SPRITES, toItemSpriteId } from '~/data/itemSpriteNames'
+import { ITEM_SPRITE_SLUGS, toSlug } from '~/data/itemSpriteNames'
 
 const SPRITE_BASE = 'https://img.pokemondb.net/sprites/items'
 
@@ -8,10 +8,12 @@ const ItemIconInner = ({ item }: { item: string }) => {
 
   if (!item || failed) return null
 
-  const localSprite = LOCAL_ITEM_SPRITES[item]
-  const src = localSprite
-    ? `/assets/items/${localSprite}.png`
-    : `${SPRITE_BASE}/${toItemSpriteId(item)}.png`
+  // Champions-legal items all resolve to a locally-hosted sprite (one
+  // consistent art style); anything unmapped falls back to PokemonDB.
+  const slug = ITEM_SPRITE_SLUGS[item]
+  const src = slug
+    ? `/assets/items/${slug}.png`
+    : `${SPRITE_BASE}/${toSlug(item)}.png`
 
   return (
     <img

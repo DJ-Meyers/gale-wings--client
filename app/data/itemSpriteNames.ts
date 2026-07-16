@@ -1,54 +1,172 @@
 /**
- * Convert an item name (from @smogon/calc) to the PokemonDB item sprite filename.
+ * Item name -> local sprite filename (served from public/assets/items/).
  *
- * PokemonDB hosts item sprites at:
- *   https://img.pokemondb.net/sprites/items/{slug}.png
- *
- * Most items just need lowercasing and space→hyphen conversion.
- *
- * Generated/validated by scripts/check-item-sprites.ts
+ * Every Champions-legal item sprite is hosted locally, sourced from serebii's
+ * Pokemon Champions itemdex (serebii.net/pokemonchampions/items.shtml), so the
+ * whole item picker shares ONE consistent art style rather than mixing
+ * PokemonDB, serebii's Z-A set, etc. Keyed by the item name from the
+ * regulation's legal-item list.
  */
+export const ITEM_SPRITE_SLUGS: Record<string, string> = {
+  "Abomasite": "abomasite",
+  "Absolite": "absolite",
+  "Aerodactylite": "aerodactylite",
+  "Aggronite": "aggronite",
+  "Alakazite": "alakazite",
+  "Altarianite": "altarianite",
+  "Ampharosite": "ampharosite",
+  "Aspear Berry": "aspearberry",
+  "Audinite": "audinite",
+  "Babiri Berry": "babiriberry",
+  "Banettite": "banettite",
+  "Barbaracite": "barbaracite",
+  "Beedrillite": "beedrillite",
+  "Big Root": "bigroot",
+  "Black Belt": "blackbelt",
+  "Black Glasses": "blackglasses",
+  "Blastoisinite": "blastoisinite",
+  "Blazikenite": "blazikenite",
+  "Bright Powder": "brightpowder",
+  "Cameruptite": "cameruptite",
+  "Chandelurite": "chandelurite",
+  "Charcoal": "charcoal",
+  "Charizardite X": "charizarditex",
+  "Charizardite Y": "charizarditey",
+  "Charti Berry": "chartiberry",
+  "Cheri Berry": "cheriberry",
+  "Chesnaughtite": "chesnaughtite",
+  "Chesto Berry": "chestoberry",
+  "Chilan Berry": "chilanberry",
+  "Chimechite": "chimechite",
+  "Choice Scarf": "choicescarf",
+  "Chople Berry": "chopleberry",
+  "Clefablite": "clefablite",
+  "Coba Berry": "cobaberry",
+  "Colbur Berry": "colburberry",
+  "Crabominite": "crabominite",
+  "Damp Rock": "damprock",
+  "Delphoxite": "delphoxite",
+  "Dragalgite": "dragalgite",
+  "Dragon Fang": "dragonfang",
+  "Dragoninite": "dragoninite",
+  "Drampanite": "drampanite",
+  "Eelektrossite": "eelektrossite",
+  "Emboarite": "emboarite",
+  "Excadrite": "excadrite",
+  "Expert Belt": "expertbelt",
+  "Fairy Feather": "fairyfeather",
+  "Falinksite": "falinksite",
+  "Feraligite": "feraligite",
+  "Floettite": "floettite",
+  "Focus Band": "focusband",
+  "Focus Sash": "focussash",
+  "Froslassite": "froslassite",
+  "Galladite": "galladite",
+  "Garchompite": "garchompite",
+  "Gardevoirite": "gardevoirite",
+  "Gengarite": "gengarite",
+  "Glalitite": "glalitite",
+  "Glimmoranite": "glimmoranite",
+  "Golurkite": "golurkite",
+  "Greninjite": "greninjite",
+  "Gyaradosite": "gyaradosite",
+  "Haban Berry": "habanberry",
+  "Hard Stone": "hardstone",
+  "Hawluchanite": "hawluchanite",
+  "Heat Rock": "heatrock",
+  "Heracronite": "heracronite",
+  "Houndoominite": "houndoominite",
+  "Icy Rock": "icyrock",
+  "Iron Ball": "ironball",
+  "Kangaskhanite": "kangaskhanite",
+  "Kasib Berry": "kasibberry",
+  "Kebia Berry": "kebiaberry",
+  "King's Rock": "kingsrock",
+  "Leftovers": "leftovers",
+  "Leppa Berry": "leppaberry",
+  "Life Orb": "lifeorb",
+  "Light Ball": "lightball",
+  "Light Clay": "lightclay",
+  "Lopunnite": "lopunnite",
+  "Lucarionite": "lucarionite",
+  "Lum Berry": "lumberry",
+  "Magnet": "magnet",
+  "Malamarite": "malamarite",
+  "Manectite": "manectite",
+  "Mawilite": "mawilite",
+  "Medichamite": "medichamite",
+  "Meganiumite": "meganiumite",
+  "Mental Herb": "mentalherb",
+  "Meowsticite": "meowsticite",
+  "Metagrossite": "metagrossite",
+  "Metal Coat": "metalcoat",
+  "Metronome": "metronome",
+  "Miracle Seed": "miracleseed",
+  "Muscle Band": "muscleband",
+  "Mystic Water": "mysticwater",
+  "Never-Melt Ice": "never-meltice",
+  "Occa Berry": "occaberry",
+  "Oran Berry": "oranberry",
+  "Passho Berry": "passhoberry",
+  "Payapa Berry": "payapaberry",
+  "Pecha Berry": "pechaberry",
+  "Persim Berry": "persimberry",
+  "Pidgeotite": "pidgeotite",
+  "Pinsirite": "pinsirite",
+  "Poison Barb": "poisonbarb",
+  "Pyroarite": "pyroarite",
+  "Quick Claw": "quickclaw",
+  "Raichunite X": "raichunitex",
+  "Raichunite Y": "raichunitey",
+  "Rawst Berry": "rawstberry",
+  "Rindo Berry": "rindoberry",
+  "Roseli Berry": "roseliberry",
+  "Sablenite": "sablenite",
+  "Sceptilite": "sceptilite",
+  "Scizorite": "scizorite",
+  "Scolipite": "scolipite",
+  "Scope Lens": "scopelens",
+  "Scovillainite": "scovillainite",
+  "Scraftinite": "scraftinite",
+  "Sharp Beak": "sharpbeak",
+  "Sharpedonite": "sharpedonite",
+  "Shed Shell": "shedshell",
+  "Shell Bell": "shellbell",
+  "Shuca Berry": "shucaberry",
+  "Silk Scarf": "silkscarf",
+  "Silver Powder": "silverpowder",
+  "Sitrus Berry": "sitrusberry",
+  "Skarmorite": "skarmorite",
+  "Slowbronite": "slowbronite",
+  "Smooth Rock": "smoothrock",
+  "Soft Sand": "softsand",
+  "Spell Tag": "spelltag",
+  "Staraptite": "staraptite",
+  "Starminite": "starminite",
+  "Steelixite": "steelixite",
+  "Swampertite": "swampertite",
+  "Tanga Berry": "tangaberry",
+  "Twisted Spoon": "twistedspoon",
+  "Tyranitarite": "tyranitarite",
+  "Venusaurite": "venusaurite",
+  "Victreebelite": "victreebelite",
+  "Wacan Berry": "wacanberry",
+  "White Herb": "whiteherb",
+  "Wide Lens": "widelens",
+  "Wise Glasses": "wiseglasses",
+  "Yache Berry": "yacheberry",
+  "Zoom Lens": "zoomlens",
+}
 
-/** Slug an item name: lowercase, spaces→hyphens, strip punctuation. */
-const toSlug = (s: string): string =>
+/**
+ * PokemonDB slug for an item not in the map above (a safety fallback; the
+ * ItemIcon uses it against img.pokemondb.net when a local sprite is absent).
+ */
+export const toSlug = (s: string): string =>
   s
     .toLowerCase()
-    .replaceAll(/['''\u2018\u2019]/g, '') // strip quotes (King's Rock → kings-rock)
-    .replaceAll(/\.\s*/g, '-')
-    .replaceAll(/\s+/g, '-')
-    .replaceAll(/-+/g, '-')
-    .replaceAll(/^-|-$/g, '')
-
-/**
- * Hard overrides for items whose PokemonDB slug can't be derived from the name.
- */
-const ITEM_OVERRIDES: Record<string, string> = {
-  // Mega stones, Z-crystals, and fake items that don't exist on PokemonDB
-  // will simply 404 and the fallback will handle them.
-}
-
-/**
- * Items missing from PokemonDB that we host locally in /assets/items/.
- * Keyed by the item name from @smogon/calc.
- */
-export const LOCAL_ITEM_SPRITES: Record<string, string> = {
-  'Booster Energy': 'boosterenergy',
-  'Ability Shield': 'abilityshield',
-  'Clear Amulet': 'clearamulet',
-  'Mirror Herb': 'mirrorherb',
-  'Punching Glove': 'punchingglove',
-  'Covert Cloak': 'covertcloak',
-  'Loaded Dice': 'loadeddice',
-  'Fairy Feather': 'fairyfeather',
-  'Teal Mask': 'tealmask',
-  'Cornerstone Mask': 'cornerstonemask',
-  'Wellspring Mask': 'wellspringmask',
-  'Hearthflame Mask': 'hearthflamemask',
-}
-
-export const toItemSpriteId = (item: string): string => {
-  if (ITEM_OVERRIDES[item]) {
-    return ITEM_OVERRIDES[item]
-  }
-  return toSlug(item)
-}
+    .replaceAll(/['‘’]/g, "")
+    .replaceAll(/\.\s*/g, "-")
+    .replaceAll(/\s+/g, "-")
+    .replaceAll(/-+/g, "-")
+    .replaceAll(/^-|-$/g, "")
