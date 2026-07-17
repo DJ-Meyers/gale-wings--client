@@ -36,50 +36,32 @@ export const useListPokemonByTeam = (teamId: string | undefined) => {
   )
 }
 
+// The single team-mutation entrypoint (api-types >=1.0.0): one versioned save
+// commits rename + retag + roster edits together. Replaces the former split of
+// a name-only `team.update` and `team.saveLayout` — both collapsed into
+// `team.update`.
 export const useUpdateTeam = () => {
   const trpc = useTRPC()
   return useNamedMutation(
     trpc.team.update.mutationOptions({
-      onSuccess: (updated) => {
-        invalidateTeamsList()
-        if (updated) {
-          // Prime the renamed team's slug lookup so navigating to its new
-          // detail URL resolves from cache instead of dropping the whole page
-          // to a loading state. The stale old-slug entry is dropped by the
-          // caller after it navigates away (see teams_.$slug.tsx) — clearing it
-          // here would refetch a slug the detail page is still observing and
-          // cache the null miss for the 30s staleTime.
-          seedTeamBySlug(updated)
-          invalidateTeamById(updated.id)
-        }
-      },
-    }),
-    'updateTeam',
-  )
-}
-
-export const useSaveTeamLayout = () => {
-  const trpc = useTRPC()
-  return useNamedMutation(
-    trpc.team.saveLayout.mutationOptions({
       // The server returns the committed team + fresh roster, so prime those
       // caches directly — the page (and a rename navigate) resolves from cache
       // without a flash. The caller reseeds its local draft from the same
-      // result. See team.saveLayout in the API for the returned shape.
+      // result. See team.update in the API for the returned shape.
       onSuccess: (result) => {
         invalidateTeamsList()
         seedTeamBySlug(result.team)
         seedPokemonByTeam(result.team.id, result.pokemon)
         invalidateTeamById(result.team.id)
-        // saveLayout writes audit rows (renamed / added / removed / updated),
-        // so refresh this team's history like every other roster mutation.
+        // update writes audit rows (renamed / added / removed / updated), so
+        // refresh this team's history like every other roster mutation.
         invalidateTeamHistory(result.team.id)
         // The library view (detached templates) is unaffected by roster edits:
         // fromLibrary clones the template without mutating it, and removals
         // delete team-owned rows, not templates.
       },
     }),
-    'saveTeamLayout',
+    'updateTeam',
   )
 }
 

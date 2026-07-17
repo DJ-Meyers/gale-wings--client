@@ -135,12 +135,26 @@ const canonicalEntry = (e: DraftEntry) => {
 const entrySignature = (e: DraftEntry) => JSON.stringify(canonicalEntry(e))
 
 // Stable string identity of the draft, for dirty detection (order-sensitive).
-const signature = (name: string, entries: DraftEntry[]) =>
-  JSON.stringify({ name: name.trim(), list: entries.map(canonicalEntry) })
+// Tags are part of the same atomic save, so a tag add/remove/reorder marks the
+// draft dirty exactly like a rename or roster edit.
+const signature = (name: string, tags: string[], entries: DraftEntry[]) =>
+  JSON.stringify({
+    name: name.trim(),
+    tags,
+    list: entries.map(canonicalEntry),
+  })
+
+export const MAX_TEAM_TAGS = 6
+export const MAX_TEAM_TAG_LENGTH = 20
 
 interface TeamDraftContextValue {
   name: string
   setName: (v: string) => void
+  tags: string[]
+  // Add a trimmed tag if it fits the limits and isn't a case-insensitive dupe;
+  // a no-op otherwise. Returns whether it was added, so the input can clear.
+  addTag: (value: string) => boolean
+  removeTag: (value: string) => void
   entries: DraftEntry[]
   canAdd: boolean
   speciesOnTeam: Set<string>
@@ -171,7 +185,7 @@ export const useTeamDraft = () => {
 
 interface TeamDraftProviderProps {
   // The authoritative team (its `version` keys reseeding) and its server roster.
-  team: { name: string; version: number }
+  team: { name: string; version: number; tags: string[] | null }
   serverRoster: { pokemon: PokemonRow; slot: number }[] | undefined
   children: ReactNode
 }
@@ -186,6 +200,7 @@ export const TeamDraftProvider = ({
   children,
 }: TeamDraftProviderProps) => {
   const [name, setName] = useState(team.name)
+  const [tags, setTags] = useState<string[]>(team.tags ?? [])
   const [entries, setEntries] = useState<DraftEntry[]>([])
   const baselineRef = useRef<string>('')
   // The seeded (last-saved) entry per key, so the roster can tell which specific
@@ -206,9 +221,10 @@ export const TeamDraftProvider = ({
       values: rowToValues(r.pokemon),
     }))
     seededVersion.current = team.version
-    baselineRef.current = signature(team.name, seeded)
+    baselineRef.current = signature(team.name, team.tags ?? [], seeded)
     baselineByKeyRef.current = new Map(seeded.map((e) => [e.key, e]))
     setName(team.name)
+    setTags(team.tags ?? [])
     setEntries(seeded)
   }
 
@@ -274,7 +290,23 @@ export const TeamDraftProvider = ({
     [entries],
   )
 
-  const isDirty = signature(name, entries) !== baselineRef.current
+  const addTag = useCallback(
+    (value: string) => {
+      const tag = value.trim()
+      if (!tag || tag.length > MAX_TEAM_TAG_LENGTH) return false
+      if (tags.length >= MAX_TEAM_TAGS) return false
+      if (tags.some((t) => t.toLowerCase() === tag.toLowerCase())) return false
+      setTags((ts) => [...ts, tag])
+      return true
+    },
+    [tags],
+  )
+
+  const removeTag = useCallback((value: string) => {
+    setTags((ts) => ts.filter((t) => t !== value))
+  }, [])
+
+  const isDirty = signature(name, tags, entries) !== baselineRef.current
 
   // Which entries changed since the last save: added this session (no baseline
   // for the key) or edited away from their seeded server signature. Order/slot
@@ -322,6 +354,9 @@ export const TeamDraftProvider = ({
   const value: TeamDraftContextValue = {
     name,
     setName,
+    tags,
+    addTag,
+    removeTag,
     entries,
     canAdd: entries.length < MAX_TEAM_SIZE,
     speciesOnTeam,
