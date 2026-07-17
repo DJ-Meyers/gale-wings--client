@@ -1,8 +1,7 @@
 import { useStore } from '@tanstack/react-form'
-import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 
-import { ChevronUpIcon } from '~/components/icons'
 import {
   PokemonEditorForm,
   usePokemonEditorForm,
@@ -55,33 +54,16 @@ const TeamPokemonEditorPage = () => {
     }
   }, [moved, navigate, slug])
 
-  const backLink = (
-    <Link
-      className="text-primary hover:text-primary-hover mb-4 inline-flex items-center gap-1 text-sm"
-      params={{ slug }}
-      to="/teams/$slug"
-    >
-      <ChevronUpIcon className="h-3.5 w-3.5 -rotate-90" />
-      Back to team
-    </Link>
-  )
-
   if (!entry) {
     return (
-      <div>
-        {backLink}
-        <p className="text-text-dim text-sm">
-          {moved
-            ? 'Loading…'
-            : 'That Pokémon isn’t in this team’s draft.'}
-        </p>
-      </div>
+      <p className="text-text-dim text-sm">
+        {moved ? 'Loading…' : 'That Pokémon isn’t in this team’s draft.'}
+      </p>
     )
   }
 
   return (
     <div>
-      {backLink}
       {/* key on the entry so the form re-initializes when switching pokemon */}
       <TeamPokemonEditorForm
         key={entry.key}
