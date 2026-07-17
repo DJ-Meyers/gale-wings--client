@@ -1,14 +1,16 @@
 import {
+  Link,
   Outlet,
   createFileRoute,
   useBlocker,
+  useMatchRoute,
   useNavigate,
 } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
 
 import { FIELD_LABEL_CLASS } from '~/components/fields/FieldLabel'
 import { TeamTagsEditor } from '~/components/teams/TeamTagsEditor'
-import { CheckIcon, SaveIcon, TrashIcon } from '~/components/icons'
+import { CheckIcon, ChevronUpIcon, SaveIcon, TrashIcon } from '~/components/icons'
 import { Button } from '~/components/ui/Button'
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog'
 import { UnsavedChangesDialog } from '~/components/ui/UnsavedChangesDialog'
@@ -65,6 +67,13 @@ interface TeamDetailChromeProps {
 
 const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
   const navigate = useNavigate()
+  // The nested pokemon editor renders inside this chrome's <Outlet>, so the
+  // back link sits here (above the name field) for both views: it points back
+  // to the roster while editing a pokemon, and back to the teams list otherwise.
+  const matchRoute = useMatchRoute()
+  const onPokemonEditor = Boolean(
+    matchRoute({ to: '/teams/$slug/$pokemonSlug' }),
+  )
   const { name, setName, tags, isDirty, toSaveRoster } = useTeamDraft()
   const { updateTeamAsync, isUpdateTeamPending } = useUpdateTeam()
   const { deleteTeam, isDeleteTeamPending } = useDeleteTeam()
@@ -171,58 +180,77 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
   return (
     <div>
       <form
-        className="mb-6 flex items-end gap-4"
+        className="mb-6"
         onSubmit={(event) => {
           event.preventDefault()
           void handleSave()
         }}
       >
-        <div className="min-w-0 flex-1 space-y-1">
-          <label className={FIELD_LABEL_CLASS} htmlFor="team-name">
-            Team name
-          </label>
-          <input
-            className="bg-slate border-l-primary focus:ring-primary focus:shadow-[0_0_22px_-4px_var(--color-primary)] block w-full max-w-[250px] rounded border-l-4 px-2 py-1.5 text-sm font-semibold transition-shadow duration-150 focus:ring-2 focus:outline-none"
-            id="team-name"
-            maxLength={MAX_TEAM_NAME}
-            value={name}
-            onChange={(event) => {
-              setSaveError(null)
-              setName(event.target.value)
-            }}
-          />
+        <div className="mb-4 flex items-center justify-between gap-4">
+          {onPokemonEditor ? (
+            <Link
+              className="text-primary hover:text-primary-hover inline-flex items-center gap-1 text-sm"
+              params={{ slug }}
+              to="/teams/$slug"
+            >
+              <ChevronUpIcon className="h-3.5 w-3.5 -rotate-90" />
+              Back to team
+            </Link>
+          ) : (
+            <Link
+              className="text-primary hover:text-primary-hover inline-flex items-center gap-1 text-sm"
+              to="/teams"
+            >
+              <ChevronUpIcon className="h-3.5 w-3.5 -rotate-90" />
+              Back to Teams
+            </Link>
+          )}
+          <div className="flex shrink-0 gap-2">
+            <Button
+              aria-label={showDone ? 'Saved' : 'Save'}
+              className={`!bg-green hover:!bg-pale-green !text-white ${showDone ? 'done-pop !opacity-100' : ''}`}
+              disabled={!canSave}
+              icon={showDone ? CheckIcon : SaveIcon}
+              title={showSaving ? 'Saving…' : showDone ? 'Done' : 'Save'}
+              type="submit"
+              variant="tertiary"
+            >
+              <span className="hidden md:inline">
+                {showSaving ? 'Saving…' : showDone ? 'Done' : 'Save'}
+              </span>
+            </Button>
+            <Button
+              aria-label="Delete team"
+              className="!bg-red hover:!bg-red/80 !text-white"
+              icon={TrashIcon}
+              title="Delete Team"
+              type="button"
+              variant="tertiary"
+              onClick={() => setIsConfirmingDelete(true)}
+            >
+              <span className="hidden md:inline">Delete Team</span>
+            </Button>
+          </div>
         </div>
-        <div className="flex shrink-0 gap-2">
-          <Button
-            aria-label={showDone ? 'Saved' : 'Save'}
-            className={`!bg-green hover:!bg-pale-green !text-white ${showDone ? 'done-pop !opacity-100' : ''}`}
-            disabled={!canSave}
-            icon={showDone ? CheckIcon : SaveIcon}
-            title={showSaving ? 'Saving…' : showDone ? 'Done' : 'Save'}
-            type="submit"
-            variant="tertiary"
-          >
-            <span className="hidden md:inline">
-              {showSaving ? 'Saving…' : showDone ? 'Done' : 'Save'}
-            </span>
-          </Button>
-          <Button
-            aria-label="Delete team"
-            className="!bg-red hover:!bg-red/80 !text-white"
-            icon={TrashIcon}
-            title="Delete Team"
-            type="button"
-            variant="tertiary"
-            onClick={() => setIsConfirmingDelete(true)}
-          >
-            <span className="hidden md:inline">Delete Team</span>
-          </Button>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+          <div className="min-w-0 flex-1 space-y-1">
+            <label className={FIELD_LABEL_CLASS} htmlFor="team-name">
+              Team name
+            </label>
+            <input
+              className="bg-slate border-l-primary focus:ring-primary focus:shadow-[0_0_22px_-4px_var(--color-primary)] block w-full rounded border-l-4 px-2 py-1.5 text-sm font-semibold transition-shadow duration-150 focus:ring-2 focus:outline-none"
+              id="team-name"
+              maxLength={MAX_TEAM_NAME}
+              value={name}
+              onChange={(event) => {
+                setSaveError(null)
+                setName(event.target.value)
+              }}
+            />
+          </div>
+          <TeamTagsEditor />
         </div>
       </form>
-
-      <div className="mb-6 max-w-[400px]">
-        <TeamTagsEditor />
-      </div>
 
       {saveError && (
         <p className="border-red/40 bg-red/10 mb-4 rounded border px-3 py-2 text-sm text-red-500">
