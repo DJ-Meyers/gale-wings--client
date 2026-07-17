@@ -7,6 +7,7 @@ import {
 import { useRef, useState } from 'react'
 
 import { FIELD_LABEL_CLASS } from '~/components/fields/FieldLabel'
+import { TeamTagsEditor } from '~/components/teams/TeamTagsEditor'
 import { CheckIcon, SaveIcon, TrashIcon } from '~/components/icons'
 import { Button } from '~/components/ui/Button'
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog'
@@ -16,7 +17,7 @@ import {
   useDeleteTeam,
   useGetTeamBySlug,
   useListPokemonByTeam,
-  useSaveTeamLayout,
+  useUpdateTeam,
 } from '~/hooks/api/teams'
 import { useDelayedFlag } from '~/hooks/useDelayedFlag'
 import { useSuppressUnsavedWarning } from '~/hooks/useSuppressUnsavedWarning'
@@ -64,8 +65,8 @@ interface TeamDetailChromeProps {
 
 const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
   const navigate = useNavigate()
-  const { name, setName, isDirty, toSaveRoster } = useTeamDraft()
-  const { saveTeamLayoutAsync, isSaveTeamLayoutPending } = useSaveTeamLayout()
+  const { name, setName, tags, isDirty, toSaveRoster } = useTeamDraft()
+  const { updateTeamAsync, isUpdateTeamPending } = useUpdateTeam()
   const { deleteTeam, isDeleteTeamPending } = useDeleteTeam()
   const { suppressed } = useSuppressUnsavedWarning()
 
@@ -76,7 +77,7 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
   // unsaved-changes blocker doesn't fire on the programmatic navigate/reseed.
   const savingRef = useRef(false)
 
-  const showSaving = useDelayedFlag(isSaveTeamLayoutPending, 200)
+  const showSaving = useDelayedFlag(isUpdateTeamPending, 200)
   const [justSaved, markSaved] = useTimedFlag(1600)
 
   // Block leaving with unsaved changes — but NOT navigations that stay within
@@ -107,7 +108,7 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
   const showUnsaved = status === 'blocked'
 
   const showDone = justSaved && !isDirty
-  const canSave = isDirty && Boolean(name.trim()) && !isSaveTeamLayoutPending
+  const canSave = isDirty && Boolean(name.trim()) && !isUpdateTeamPending
 
   const handleSave = async () => {
     if (!canSave) return
@@ -115,10 +116,11 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
     savingRef.current = true
     const trimmed = name.trim()
     try {
-      const result = await saveTeamLayoutAsync({
+      const result = await updateTeamAsync({
         teamId: team.id,
         expectedVersion: team.version,
         name: trimmed !== team.name ? trimmed : undefined,
+        tags,
         roster: toSaveRoster(),
       })
       markSaved()
@@ -217,6 +219,10 @@ const TeamDetailChrome = ({ slug, team }: TeamDetailChromeProps) => {
           </Button>
         </div>
       </form>
+
+      <div className="mb-6 max-w-[400px]">
+        <TeamTagsEditor />
+      </div>
 
       {saveError && (
         <p className="border-red/40 bg-red/10 mb-4 rounded border px-3 py-2 text-sm text-red-500">

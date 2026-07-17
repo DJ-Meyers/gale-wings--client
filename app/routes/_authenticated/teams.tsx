@@ -72,6 +72,18 @@ const TeamCard = ({ team }: { team: TeamListItem }) => {
             ),
           )}
         </div>
+        {team.tags && team.tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1">
+            {team.tags.map((tag) => (
+              <span
+                key={tag}
+                className="bg-slate text-text-dim rounded px-1.5 py-0.5 text-[10px] font-medium"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </Link>
     </li>
   )
