@@ -1,20 +1,86 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 
+import { PokemonWithItemIcon } from '~/components/icons'
 import { Button } from '~/components/ui/Button'
-import { ConfirmDialog } from '~/components/ui/ConfirmDialog'
-import { useCreateTeam, useDeleteTeam, useListTeams } from '~/hooks/api/teams'
+import {
+  useCreateTeam,
+  useListPokemonByTeam,
+  useListTeams,
+} from '~/hooks/api/teams'
 
 const MAX_TEAM_NAME = 24
+// A full team is six pokemon; cards always render six slots so their height
+// stays constant and partial teams read as "3 of 6" rather than shrinking.
+const TEAM_SIZE = 6
+
+// Compact last-updated stamp for the card corner: "h:mmam/pm @ m/d/yy".
+const formatUpdatedAt = (value: string | Date) => {
+  const d = new Date(value)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const hours = d.getHours()
+  const meridiem = hours < 12 ? 'am' : 'pm'
+  const hour12 = hours % 12 || 12
+  return `${hour12}:${pad(d.getMinutes())}${meridiem} @ ${
+    d.getMonth() + 1
+  }/${d.getDate()}/${pad(d.getFullYear() % 100)}`
+}
+
+type TeamListItem = NonNullable<ReturnType<typeof useListTeams>['teams']>[number]
+
+// A single team card in the grid. Owns its own roster fetch so each card can
+// preview its pokemon; kept as a component (not an inline map) so the
+// per-team query hook obeys the rules of hooks.
+const TeamCard = ({ team }: { team: TeamListItem }) => {
+  const { teamPokemon } = useListPokemonByTeam(team.id)
+  // Fixed six-length array: filled from the slot-sorted roster, `null` where a
+  // slot is empty so we can reserve space and drop a placeholder in its place.
+  const slots = useMemo(() => {
+    const roster = [...(teamPokemon ?? [])].sort((a, b) => a.slot - b.slot)
+    return Array.from({ length: TEAM_SIZE }, (_, i) => roster[i]?.pokemon ?? null)
+  }, [teamPokemon])
+
+  return (
+    <li className="bg-surface border-border hover:border-primary rounded-lg border transition-colors">
+      <Link className="block p-4" params={{ slug: team.slug }} to="/teams/$slug">
+        <div className="mb-2 flex items-baseline justify-between gap-2">
+          <h2 className="text-text-heading text-lg font-semibold">
+            {team.name}
+          </h2>
+          <span className="text-text-dim shrink-0 text-xs whitespace-nowrap">
+            {formatUpdatedAt(team.updatedAt)}
+          </span>
+        </div>
+        {/* Roster preview: two rows of three larger icons; the grid's own gap
+            owns spacing (the `lg` variant carries no inline margin). Empty
+            slots keep a placeholder so the grid stays a fixed 2×3. */}
+        <div className="mt-3 grid grid-cols-3 justify-items-center gap-2">
+          {slots.map((pokemon, i) =>
+            pokemon ? (
+              <PokemonWithItemIcon
+                key={pokemon.id}
+                item={pokemon.item}
+                size="lg"
+                species={pokemon.species}
+              />
+            ) : (
+              <div
+                key={`empty-${i}`}
+                aria-hidden
+                className="border-border h-[72px] w-[72px] rounded border border-dashed"
+              />
+            ),
+          )}
+        </div>
+      </Link>
+    </li>
+  )
+}
 
 const TeamsPage = () => {
   const { teams, isTeamsPending, teamsError } = useListTeams()
   const { createTeam, isCreateTeamPending } = useCreateTeam()
-  const { deleteTeam, isDeleteTeamPending } = useDeleteTeam()
   const [newName, setNewName] = useState('')
-  const [pendingDelete, setPendingDelete] = useState<
-    { id: string; name: string } | null
-  >(null)
 
   const handleCreate = (event: FormEvent) => {
     event.preventDefault()
@@ -26,16 +92,6 @@ const TeamsPage = () => {
         onSuccess: () => {
           setNewName('')
         },
-      },
-    )
-  }
-
-  const handleConfirmDelete = () => {
-    if (!pendingDelete) return
-    deleteTeam(
-      { id: pendingDelete.id },
-      {
-        onSuccess: () => setPendingDelete(null),
       },
     )
   }
@@ -78,53 +134,10 @@ const TeamsPage = () => {
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {teams.map((team) => (
-            <li
-              key={team.id}
-              className="bg-surface border-border hover:border-primary rounded-lg border transition-colors"
-            >
-              <Link
-                className="block p-4"
-                params={{ slug: team.slug }}
-                to="/teams/$slug"
-              >
-                <div className="mb-2 flex items-start justify-between gap-2">
-                  <h2 className="text-text-heading text-lg font-semibold">
-                    {team.name}
-                  </h2>
-                  <Button
-                    size="sm"
-                    variant="tertiary"
-                    onClick={(event) => {
-                      event.preventDefault()
-                      setPendingDelete({ id: team.id, name: team.name })
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </div>
-                <p className="text-text-dim text-xs">
-                  Updated {new Date(team.updatedAt).toLocaleDateString()}
-                </p>
-              </Link>
-            </li>
+            <TeamCard key={team.id} team={team} />
           ))}
         </ul>
       )}
-
-      <ConfirmDialog
-        cancelLabel="Cancel"
-        confirmLabel={isDeleteTeamPending ? 'Deleting…' : 'Delete team'}
-        description={
-          pendingDelete
-            ? `Delete "${pendingDelete.name}"? Pokémon on this team will stay in your library.`
-            : ''
-        }
-        destructive
-        open={pendingDelete !== null}
-        title="Delete team"
-        onCancel={() => setPendingDelete(null)}
-        onConfirm={handleConfirmDelete}
-      />
     </div>
   )
 }
