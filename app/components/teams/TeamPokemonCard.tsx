@@ -7,6 +7,7 @@ import {
   ChevronUpIcon,
   AddToLibraryIcon,
   EditIcon,
+  MoveTypeIcon,
   PokemonWithItemIcon,
   XIcon,
 } from '~/components/icons'
@@ -205,6 +206,7 @@ export const TeamPokemonCard = ({
                   style={{ '--type-bg': typeColor(type) } as CSSProperties}
                   title={move}
                 >
+                  {type && type !== '???' && <MoveTypeIcon type={type} />}
                   {move}
                 </span>
               )
