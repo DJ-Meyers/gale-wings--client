@@ -177,7 +177,7 @@ export const TeamPokemonCard = ({
         />
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div
-            className={`bg-slate light:bg-light-gray truncate rounded px-1.5 py-1 text-[10px] font-medium text-white ${
+            className={`bg-neutral-chip truncate rounded px-1.5 py-1 text-[10px] font-medium text-white ${
               changes?.ability ? CHANGED_RING : ''
             }`}
             title={pokemon.ability || undefined}
@@ -192,7 +192,7 @@ export const TeamPokemonCard = ({
                 return (
                   <span
                     key={slot}
-                    className={`bg-slate light:bg-light-gray rounded px-1.5 py-1 text-[10px] font-medium text-white ${ring}`}
+                    className={`bg-neutral-chip rounded px-1.5 py-1 text-[10px] font-medium text-white ${ring}`}
                   >
                     —
                   </span>
