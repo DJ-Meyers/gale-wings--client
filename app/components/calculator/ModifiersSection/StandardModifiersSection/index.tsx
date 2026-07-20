@@ -1,7 +1,5 @@
 import { ModifierMoveSelector } from '~/components/calculator/ModifiersSection/StandardModifiersSection/ModifierMoveSelector'
 import { ModifierStatusField } from '~/components/calculator/ModifiersSection/StandardModifiersSection/ModifierStatusField'
-import { ModifierTeraField } from '~/components/calculator/ModifiersSection/StandardModifiersSection/ModifierTeraField'
-import { TERA_ENABLED } from '~/data/mechanics'
 import { useModifiers } from '~/hooks/calc/useModifiers'
 
 interface Properties {
@@ -14,7 +12,6 @@ export const StandardModifiersSection = ({ side }: Properties) => {
   return (
     <div className="flex flex-wrap items-end gap-2">
       {showMove && <ModifierMoveSelector side={side} />}
-      {TERA_ENABLED && <ModifierTeraField side={side} />}
       <ModifierStatusField side={side} />
     </div>
   )
