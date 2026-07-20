@@ -1,9 +1,4 @@
-import { currentRegulation } from '@dj-meyers/gale-wings/constants'
 import { championsAbilitiesSchema } from '@dj-meyers/gale-wings/schemas'
-import type { Mechanic } from '@dj-meyers/gale-wings/types'
-
-const legalMechanics = new Set<Mechanic>(currentRegulation.legalMechanics)
-export const TERA_ENABLED = legalMechanics.has('terastallization')
 
 const RUIN_ABILITIES = [
   'Beads of Ruin',

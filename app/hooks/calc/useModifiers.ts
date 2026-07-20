@@ -28,8 +28,6 @@ export const useModifiers = (side: Side) => {
 
   const setMove = (move: string) =>
     updateParams(calcId, { move: move as CalcParameters['move'] })
-  const setTeraType = (teraType: string) =>
-    updateParams(calcId, { teraType: teraType as CalcParameters['teraType'] })
   const setStatus = (status: string) =>
     updateParams(calcId, { status: status as CalcParameters['status'] })
   const toggleCrit = (checked: boolean) =>
@@ -38,7 +36,6 @@ export const useModifiers = (side: Side) => {
     updateBoost(calcId, stat, value)
 
   return {
-    teraType: params.teraType,
     boosts: params.boosts,
     status: params.status,
     isCrit: params.isCrit,
@@ -46,7 +43,6 @@ export const useModifiers = (side: Side) => {
     showMove: isAttacker,
     showCrit: isAttacker,
     setMove,
-    setTeraType,
     setStatus,
     toggleCrit,
     setBoost,
