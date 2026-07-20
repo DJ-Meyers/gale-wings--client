@@ -10,7 +10,6 @@ import {
   PsychicTerrainIcon,
   ReflectIcon,
   RuinIcon,
-  TypeIcon,
   WeatherIcon,
   WindIcon,
 } from '~/components/icons'
@@ -125,9 +124,6 @@ export const formatSummary = (
           {fieldConditions.defenderSide?.isReflect && <ReflectIcon />}
           {fieldConditions.defenderSide?.isLightScreen && <LightScreenIcon />}
           {fieldConditions.defenderSide?.isAuroraVeil && <AuroraVeilIcon />}
-          {defenderParams.teraType && (
-            <TypeIcon typeName={defenderParams.teraType} />
-          )}
           <PokemonWithItemIcon
             className="-mt-2"
             item={defender.item}
@@ -148,9 +144,6 @@ export const formatSummary = (
         {fieldConditions.defenderSide?.isLightScreen && <LightScreenIcon />}
         {fieldConditions.defenderSide?.isAuroraVeil && <AuroraVeilIcon />}
         {fieldConditions.attackerSide?.isTailwind && <WindIcon />}
-        {attackerParams.teraType && (
-          <TypeIcon typeName={attackerParams.teraType} />
-        )}
         <PokemonWithItemIcon
           className="-mt-2"
           item={attacker.item}
@@ -174,13 +167,7 @@ export const formatSummary = (
   const atkStat: StatKey = isSpecial ? 'spa' : 'atk'
   const defStat: StatKey = isSpecial ? 'spd' : 'def'
 
-  const atkTeraIcon = attackerParams.teraType ? (
-    <TypeIcon key="atk-tera" typeName={attackerParams.teraType} />
-  ) : null
   const atkMods: ReactNode[] = []
-  if (atkTeraIcon && mode === 'offensive') {
-    atkMods.push(atkTeraIcon)
-  }
   const atkBoost = attackerParams.boosts[atkStat as Exclude<StatKey, 'hp'>]
   if (atkBoost !== 0) {
     atkMods.push(`${atkBoost > 0 ? '+' : ''}${atkBoost}`)
@@ -222,9 +209,6 @@ export const formatSummary = (
   const defBoost = defenderParams.boosts[defStat as Exclude<StatKey, 'hp'>]
   const defBoostStr =
     defBoost === 0 ? '' : `${defBoost > 0 ? '+' : ''}${defBoost} `
-  const defTera = defenderParams.teraType ? (
-    <TypeIcon typeName={defenderParams.teraType} />
-  ) : null
   const defStatusLabel =
     defenderParams.status &&
     isStatusRelevantForDefender(defenderParams.status, moveName)
@@ -263,7 +247,6 @@ export const formatSummary = (
         </span>
         <span className="text-text-faint shrink-0">vs</span>
         {defenderScreenIcons}
-        {defTera}
         <PokemonWithItemIcon
           className="-mt-2"
           item={defender.item}
@@ -289,7 +272,6 @@ export const formatSummary = (
       {fieldConditions.defenderSide?.isLightScreen && <LightScreenIcon />}
       {fieldConditions.defenderSide?.isAuroraVeil && <AuroraVeilIcon />}
       {fieldConditions.attackerSide?.isTailwind && <WindIcon />}
-      {atkTeraIcon}
       <PokemonWithItemIcon
         className="-mt-2"
         item={attacker.item}

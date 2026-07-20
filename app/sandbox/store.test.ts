@@ -37,7 +37,6 @@ describe('useSandboxStore', () => {
             item: 'Choice Scarf',
             statPoints: { hp: 32, atk: 32 },
             move: 'Wave Crash',
-            teraType: 'Grass',
             boosts: { atk: 1 },
             isCrit: true,
           },
@@ -71,7 +70,6 @@ describe('useSandboxStore', () => {
     expect(s.attacker.moves).toEqual(['Wave Crash'])
 
     expect(s.attackerCalcParameters.move).toBe('Wave Crash')
-    expect(s.attackerCalcParameters.teraType).toBe('Grass')
     expect(s.attackerCalcParameters.boosts.atk).toBe(1)
     expect(s.attackerCalcParameters.boosts.spe).toBe(0)
     expect(s.attackerCalcParameters.isCrit).toBe(true)
@@ -272,9 +270,9 @@ describe('useSandboxStore', () => {
     expect(get().attackerCalcParameters.isCrit).toBe(true)
     expect(get().defenderCalcParameters.move).toBe('Heat Wave')
 
-    get().setDefenderParams({ teraType: 'Fairy' })
-    expect(get().defenderCalcParameters.teraType).toBe('Fairy')
-    expect(get().attackerCalcParameters.teraType).toBe('')
+    get().setDefenderParams({ status: 'brn' })
+    expect(get().defenderCalcParameters.status).toBe('brn')
+    expect(get().attackerCalcParameters.status).toBe('')
   })
 
   it('setAttackerBoost and setDefenderBoost set per-side stat boosts independently', () => {
@@ -321,7 +319,7 @@ describe('useSandboxStore', () => {
     get().setAttacker({ species: 'Basculegion', item: 'Choice Scarf' })
     get().setDefender({ species: 'Charizard-Mega-Y', item: 'Charizardite Y' })
     get().setAttackerParams({ move: 'Wave Crash' })
-    get().setDefenderParams({ teraType: 'Fire' })
+    get().setDefenderParams({ status: 'brn' })
 
     get().swapAttackerDefender()
 
@@ -329,7 +327,7 @@ describe('useSandboxStore', () => {
     expect(get().attacker.item).toBe('Charizardite Y')
     expect(get().defender.species).toBe('Basculegion')
     expect(get().defender.item).toBe('Choice Scarf')
-    expect(get().attackerCalcParameters.teraType).toBe('Fire')
+    expect(get().attackerCalcParameters.status).toBe('brn')
     expect(get().defenderCalcParameters.move).toBe('Wave Crash')
   })
 })

@@ -4,7 +4,6 @@ import type { Calc, CalcMode } from './types'
 
 export const defaultCalcParameters: CalcParameters = {
   move: '',
-  teraType: '',
   boosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
   status: '',
   isCrit: false,

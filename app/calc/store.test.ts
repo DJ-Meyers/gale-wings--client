@@ -48,9 +48,9 @@ describe('useCalcStore', () => {
     expect(get().calcs[calc.id].playerCalcParameters.isCrit).toBe(true)
     expect(get().calcs[calc.id].opponentCalcParameters.move).toBe('')
 
-    get().setOpponentParams(calc.id, { teraType: 'Fairy' })
-    expect(get().calcs[calc.id].opponentCalcParameters.teraType).toBe('Fairy')
-    expect(get().calcs[calc.id].playerCalcParameters.teraType).toBe('')
+    get().setOpponentParams(calc.id, { status: 'brn' })
+    expect(get().calcs[calc.id].opponentCalcParameters.status).toBe('brn')
+    expect(get().calcs[calc.id].playerCalcParameters.status).toBe('')
   })
 
   it('setPlayerBoost and setOpponentBoost set per-side stat boosts independently', () => {

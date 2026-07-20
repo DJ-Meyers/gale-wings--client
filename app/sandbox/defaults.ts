@@ -62,15 +62,14 @@ export const parsedToPokemon = (
   }
 }
 
-// ParsedPokemon → CalcParameters. Calc-shaped fields (move, teraType, boosts,
-// status, isCrit) come from the parse; missing fields fall back to the
-// regulation defaults.
+// ParsedPokemon → CalcParameters. Calc-shaped fields (move, boosts, status,
+// isCrit) come from the parse; missing fields fall back to the regulation
+// defaults.
 export const parsedToCalcParameters = (
   parsed: ParsedPokemon,
 ): CalcParameters => ({
   ...cloneCalcParameters(),
   move: (parsed.move ?? '') as CalcParameters['move'],
-  teraType: (parsed.teraType ?? '') as CalcParameters['teraType'],
   boosts: {
     atk: 0,
     def: 0,
