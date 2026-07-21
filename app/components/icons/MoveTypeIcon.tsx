@@ -1,4 +1,4 @@
-import type { gen } from '@dj-meyers/gale-wings/calc'
+import type { PokemonType } from '@dj-meyers/gale-wings/constants'
 
 import bugIcon from '~/assets/types/bug.png'
 import darkIcon from '~/assets/types/dark.png'
@@ -20,17 +20,9 @@ import steelIcon from '~/assets/types/steel.png'
 import stellarIcon from '~/assets/types/stellar.png'
 import waterIcon from '~/assets/types/water.png'
 
-// Every type name the move dex yields except the typeless '???' (which has no
-// glyph), derived from `gen` so it can't drift from the source.
-export type MoveType = Exclude<
-  NonNullable<ReturnType<typeof gen.moves.get>>['type'],
-  '???'
->
-
-// Monochrome type glyphs (Bulbagarden). Keyed by the capitalized type names
-// returned from `gen.moves.get(...).type`. A full Record keeps this exhaustive
-// — a missing type won't compile.
-const TYPE_ICONS: Record<MoveType, string> = {
+// Monochrome type glyphs (Bulbagarden), keyed by the shared PokemonType. A full
+// Record keeps this exhaustive — a missing type won't compile.
+const TYPE_ICONS: Record<PokemonType, string> = {
   Normal: normalIcon,
   Fire: fireIcon,
   Fighting: fightingIcon,
@@ -54,7 +46,7 @@ const TYPE_ICONS: Record<MoveType, string> = {
 
 // The glyphs ship as dark silhouettes on transparency; `brightness-0 invert`
 // recolors them white so they read against the type-hued move-chip fill.
-export const MoveTypeIcon = ({ type }: { type: MoveType }) => {
+export const MoveTypeIcon = ({ type }: { type: PokemonType }) => {
   const src = TYPE_ICONS[type]
   return (
     <img
