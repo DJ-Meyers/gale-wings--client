@@ -17,7 +17,7 @@ const sizeClasses: Record<
   sm: { box: 'h-[40px] w-[40px]', item: '-bottom-1', margin: 'mr-2' },
   lg: {
     box: 'h-[72px] w-[72px]',
-    item: 'bottom-0 inline-flex items-center justify-center rounded bg-slate/85 light:bg-light-gray/85 p-px text-base [&_img]:mx-0',
+    item: 'bottom-0 inline-flex items-center justify-center rounded bg-neutral-chip/85 p-px text-base [&_img]:mx-0',
     margin: '',
   },
 }

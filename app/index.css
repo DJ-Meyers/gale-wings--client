@@ -19,6 +19,9 @@
   --color-ash: #837a73;
   --color-slate: #4e4c4c;
   --color-charcoal: #403c3b;
+  /* Neutral chip fill (ability, empty move slot, held-item badge). Mid-gray in
+     dark mode; the light-mode value is overridden below. */
+  --color-neutral-chip: #4e4c4c;
   --color-carbon: #2a2a2a;
 
   --color-bg: var(--color-carbon);
@@ -173,6 +176,10 @@ body {
      light mode it reads as a bright field that pops against the grayer panels
      it usually sits on — lighter than --color-surface, not darker. */
   --color-slate: color-mix(in srgb, var(--color-white) 90%, var(--color-ash));
+  /* A cool slate for the neutral chip fill. The too-light light-gray washed out
+     and a plain gray read as dead next to the vivid move chips; this subtle
+     blue-gray looks intentional and keeps the white label text legible. */
+  --color-neutral-chip: #5b6470;
   /* KO tier colors double as small text (text-ko-*) and panel accents
      (border-l-ko-*). The ramp steps green → greenish-yellow → yellow → orange →
      red. On the gray light panel the dark-mode yellow/yellow-green hues wash out
@@ -229,14 +236,10 @@ body {
   color: #fff;
 }
 
-/* Move chips (TeamPokemonCard). The type-hued fill is set via --type-bg. The
-   vivid type colors read too bright on the light panel, so deepen them toward
-   black in light mode for a calmer fill that keeps the white text legible. */
+/* Move chips (TeamPokemonCard). The type-hued fill is set via --type-bg, used
+   as-is in both modes so the chips carry the full type color. */
 .move-chip {
   background-color: var(--type-bg);
-}
-[data-mode='light'] .move-chip {
-  background-color: color-mix(in srgb, var(--type-bg) 80%, #000);
 }
 
 /* npm `hamburgers` menu button (mobile nav). Tune it for the compact nav slot:
