@@ -14,7 +14,7 @@ import {
 import { StatDisplay } from '~/components/pokemon/StatDisplay'
 import { Button } from '~/components/ui/Button'
 import type { EntryFieldChanges } from '~/context/TeamDraftContext'
-import { typeColor } from '~/data/constants/typeColors'
+import { typeColor, type PokemonType } from '@dj-meyers/gale-wings/constants'
 import { gen } from '@dj-meyers/gale-wings/calc'
 import type { ChampionsPokemon } from '~/types'
 import { natureModifier, rawStatsFor, STAT_KEYS } from '~/utils/pokemonStats'
@@ -198,7 +198,12 @@ export const TeamPokemonCard = ({
                   </span>
                 )
               }
-              const type = gen.moves.get(toID(move))?.type
+              // The move dex types moves with @smogon/calc's wider TypeName;
+              // narrow the never-used typeless '???' away to the shared
+              // PokemonType so both typeColor and MoveTypeIcon consume one value.
+              const rawType = gen.moves.get(toID(move))?.type
+              const type: PokemonType | undefined =
+                rawType && rawType !== '???' ? rawType : undefined
               return (
                 <span
                   key={slot}
@@ -206,7 +211,7 @@ export const TeamPokemonCard = ({
                   style={{ '--type-bg': typeColor(type) } as CSSProperties}
                   title={move}
                 >
-                  {type && type !== '???' && <MoveTypeIcon type={type} />}
+                  {type && <MoveTypeIcon type={type} />}
                   {move}
                 </span>
               )
