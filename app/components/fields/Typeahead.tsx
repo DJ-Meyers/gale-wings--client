@@ -5,6 +5,19 @@ import { FieldLabel } from '~/components/fields/FieldLabel'
 const INPUT_CLASS =
   'block w-full rounded px-2 py-1.5 text-sm font-normal focus:ring-2 focus:outline-none bg-slate border-l-(--field-accent) border-l-4 focus:ring-(--field-accent)/30'
 
+// Normalize a query or an option label for matching: strip diacritics,
+// lowercase, and drop everything that is not a letter or a digit. Champions
+// names carry punctuation that users rarely type exactly — "Farfetch’d" (U+2019)
+// vs "Farfetch'd" vs "farfetchd", "Mr. Rime", "Kommo-o", "Flabébé" — so both
+// sides go through it before the substring test. Same idea as @smogon/calc's
+// toID. (The first step is the built-in String#normalize, NFD form.)
+const normalizeQuery = (s: string): string =>
+  s
+    .normalize('NFD')
+    .replaceAll(/[\u0300-\u036F]/g, '')
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]/g, '')
+
 interface Properties {
   label: string
   value: string
@@ -52,10 +65,11 @@ export const Typeahead = ({
     setQuery(displayValue(value))
   }, [value, displayValue])
 
+  const normalizedQuery = normalizeQuery(query)
   const filtered =
-    filterActive && query
+    filterActive && normalizedQuery
       ? options.filter((o) =>
-          displayValue(o).toLowerCase().includes(query.toLowerCase()),
+          normalizeQuery(displayValue(o)).includes(normalizedQuery),
         )
       : options
 
