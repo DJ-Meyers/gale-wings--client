@@ -99,6 +99,20 @@ describe('computeEffectiveSpeed', () => {
     expect(scarf).toBe(Math.floor((base * 3) / 2))
   })
 
+  it('Iron Ball halves speed', () => {
+    const base = computeEffectiveSpeed(
+      { pokemon: garchomp, params: baseParams },
+      emptyField,
+      false,
+    )
+    const ironBall = computeEffectiveSpeed(
+      { pokemon: { ...garchomp, item: 'Iron Ball' }, params: baseParams },
+      emptyField,
+      false,
+    )
+    expect(ironBall).toBe(Math.floor(base / 2))
+  })
+
   it('Chlorophyll doubles speed in Sun', () => {
     const chloropuff: ChampionsPokemon = {
       ...garchomp,
