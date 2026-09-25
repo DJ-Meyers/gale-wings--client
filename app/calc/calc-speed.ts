@@ -41,11 +41,11 @@ export const computeEffectiveSpeed = (
       speed = Math.floor((speed * 3) / 2)
     }
 
-    // Iron Ball halves speed; re-enable when the item returns to
-    // vgc-2026-m-a legalItems (currently the regulation literal omits it).
-    // if (pokemon.item === 'Iron Ball') {
-    //   speed = Math.floor((speed * 2048) / 4096)
-    // }
+    // Iron Ball halves speed (legal since Regulation M-B; a common Sneasler
+    // Fling item).
+    if (pokemon.item === 'Iron Ball') {
+      speed = Math.floor((speed * 2048) / 4096)
+    }
 
     const weatherMatch = WEATHER_SPEED_ABILITIES[pokemon.ability]
     if (weatherMatch && fieldConditions.weather === weatherMatch) {
